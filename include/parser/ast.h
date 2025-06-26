@@ -1,0 +1,93 @@
+#ifndef AST_H
+#define AST_H
+
+typedef enum { EXPR, STMT } NodeType;
+typedef enum { PROGRAM_STMT } StmtType;
+typedef enum { INT_EXPR, DOUBLE_EXPR, IDENTIFIER_EXPR, BIN_EXPR } ExprType;
+
+typedef struct Node Node;
+typedef struct NodeList NodeList;
+
+typedef struct Expr Expr;
+typedef struct BinaryExpr BinaryExpr;
+typedef struct IdentifierExpr IdentifierExpr;
+typedef struct IntExpr IntExpr;
+typedef struct DoubleExpr DoubleExpr;
+
+typedef struct Stmt Stmt;
+typedef struct NodeList NodeList;
+typedef struct ProgramStmt ProgramStmt;
+
+struct Node {
+  NodeType type;
+  union {
+    Stmt *stmt;
+    Expr *expr;
+  };
+};
+
+struct Stmt {
+  StmtType type;
+  union {
+    ProgramStmt *programStmt;
+  };
+};
+
+struct Expr {
+  ExprType type;
+  union {
+    BinaryExpr *bin_expr;
+    IdentifierExpr *identifier_expr;
+    IntExpr *int_expr;
+    DoubleExpr *double_expr;
+  };
+};
+
+struct NodeList {
+  int capacity;
+  int size;
+  Node
+      nodes[100]; // simply to visualize in debug mode [CHANGE LATER] to pointer
+};
+
+struct ProgramStmt {
+  NodeList *body;
+};
+
+struct BinaryExpr {
+  Expr *left;
+  Expr *right;
+  char *op;
+};
+
+struct IdentifierExpr {
+  char *symbol;
+};
+
+struct IntExpr {
+  int value;
+};
+
+struct DoubleExpr {
+  double value;
+};
+
+NodeList *create_node_list(int init_size);
+
+void add_node_to_node_list(NodeList *nodes, Node *node);
+
+Node *create_stmt_node(Stmt *stmt);
+
+Node *create_expr_node(Expr *expr);
+
+Stmt *create_program();
+
+Expr *create_bin_expr(Expr *left, Expr *right, char *op);
+
+Expr *create_int_expr(int value);
+
+Expr *create_double_expr(double value);
+
+Expr *create_identifier_expr(char *symbol);
+
+#endif
