@@ -6,7 +6,6 @@ NodeList *create_node_list(int init_size) {
   nodes->size = 0;
   nodes->capacity = init_size;
   // nodes->nodes = malloc(init_size * sizeof(Node));
-  // simply to visualize in debug mode [CHANGE LATER] to pointer
 
   return nodes;
 }
