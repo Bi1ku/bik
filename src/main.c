@@ -2,14 +2,19 @@
 #include "../include/lexer/lexer.h"
 #include "../include/lexer/tokens.h"
 #include "../include/parser/ast.h"
+#include "../include/parser/env.h"
 #include "../include/parser/parser.h"
 #include <stdio.h>
 
 int main() {
-  TokenList *tokens = tokenize("x = 10 + 1; y = x * 2;$");
+  TokenList *tokens = tokenize("x = 10 + 1; y = x * 2;");
   print_tokens(tokens);
 
-  ProgramStmt *program = parse(tokens, NULL);
+  Env *env = create_env(NULL, 10);
+
+  ProgramStmt *program = parse(tokens, env);
+  eat_token(tokens);
+  program = parse(tokens, env);
 
   return 0;
 }
