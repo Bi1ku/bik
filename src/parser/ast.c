@@ -17,7 +17,7 @@ void resize_node_list(NodeList *nodes) {
 }
 
 void add_node_to_node_list(NodeList *nodes, Node *node) {
-  if (nodes->size < nodes->capacity)
+  if (nodes->size >= nodes->capacity)
     resize_node_list(nodes);
 
   nodes->nodes[nodes->size] = *node;
@@ -30,6 +30,19 @@ Node *create_stmt_node(Stmt *stmt) {
   node->stmt = stmt;
 
   return node;
+}
+
+Stmt *create_assign_stmt(char *symbol, Expr *expr) { // work on this
+  Stmt *stmt = malloc(sizeof(Stmt));
+  stmt->type = ASSIGN_STMT;
+
+  AssignStmt *assign = malloc(sizeof(AssignStmt));
+  assign->symbol = symbol;
+  assign->expr = expr;
+
+  stmt->assignStmt = assign;
+
+  return stmt;
 }
 
 Node *create_expr_node(Expr *expr) {

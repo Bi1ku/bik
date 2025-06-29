@@ -29,6 +29,8 @@ struct Env {
   ItemList *items;
 };
 
+E_Value get_item(Env *env, char *key);
+
 Env *create_env(Env *parent, int init_size);
 
 E_Value create_double_value(double value);

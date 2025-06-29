@@ -2,6 +2,7 @@
 #define EVAL_H
 
 #include "../parser/ast.h"
+#include "../parser/env.h"
 
 typedef enum { V_INT, V_DOUBLE } ValueType;
 
@@ -13,7 +14,7 @@ typedef struct {
   };
 } Value;
 
-double eval(BinaryExpr *bin_expr);
+double eval(BinaryExpr *bin_expr, Env *env);
 
 Value normalize(double num);
 
