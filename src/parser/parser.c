@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-ProgramStmt *parse(TokenList *tokens);
+ProgramStmt *parse(TokenList *tokens, Env *env);
 
 Token peek(TokenList *tokens) { return (tokens->tokens)[0]; }
 
@@ -86,11 +86,12 @@ Node *parse_stmt(TokenList *tokens, Env *env) {
     if (tokens->tokens[1].type == ASSIGNMENT) {
       char *name = eat_token(tokens).value;
       eat_token(tokens);
-      add_to_env(env->items,
-                 create_item(
-                     name, create_double_value(eval(
-                               parse(tokens)->body->nodes[0].expr->bin_expr))));
-      return parse_additive(tokens);
+
+      Expr *expr = parse(tokens, env)->body->nodes[0].expr;
+      add_to_env(env->items, create_item(name, create_double_value(
+                                                   eval(expr->bin_expr, env))));
+
+      return create_stmt_node(create_assign_stmt(name, expr));
     }
 
     return parse_additive(tokens);
@@ -100,9 +101,10 @@ Node *parse_stmt(TokenList *tokens, Env *env) {
   }
 }
 
-ProgramStmt *parse(TokenList *tokens) {
+ProgramStmt *parse(TokenList *tokens, Env *env) {
   Stmt *program = create_program();
-  Env *env = create_env(NULL, 10); // Null for now, figure out scopes later
+  if (env == NULL)
+    env = create_env(NULL, 10); // Null for now, figure out scopes later
 
   while (peek(tokens).type != NEWLINE) {
     add_node_to_node_list(program->programStmt->body, parse_stmt(tokens, env));

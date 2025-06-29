@@ -6,10 +6,10 @@
 #include <stdio.h>
 
 int main() {
-  TokenList *tokens = tokenize("x = 10;");
+  TokenList *tokens = tokenize("x = 10 + 1; y = x * 2;$");
   print_tokens(tokens);
 
-  ProgramStmt *program = parse(tokens); // use debugger to see
+  ProgramStmt *program = parse(tokens, NULL);
 
   return 0;
 }

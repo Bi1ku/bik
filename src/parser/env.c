@@ -1,6 +1,7 @@
 #include "../../include/parser/env.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 Env *create_env(Env *parent, int init_size) {
   Env *env = malloc(sizeof(Env));
@@ -11,6 +12,17 @@ Env *create_env(Env *parent, int init_size) {
   env->items->size = 0;
 
   return env;
+}
+
+E_Value get_item(Env *env, char *key) {
+  for (int i = 0; i < env->items->size; i++) {
+    if (strcmp(key, env->items->items[i].key) == 0) {
+      return env->items->items[i].value;
+    }
+  }
+
+  printf("Couldn't find key: %s", key);
+  exit(1);
 }
 
 E_Value create_double_value(double value) {
