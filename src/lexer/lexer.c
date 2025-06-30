@@ -119,5 +119,6 @@ TokenList *tokenize(char *path) {
     }
   }
 
+  add_to_token_list(tokens, create_token(END, "END"));
   return tokens;
 }

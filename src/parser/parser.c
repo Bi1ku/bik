@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-ProgramStmt *parse(TokenList *tokens, Env *env);
+NodeList *parse_line(NodeList *nodes, TokenList *tokens, Env *env);
 
 Token peek(TokenList *tokens) { return (tokens->tokens)[0]; }
 
@@ -83,16 +83,29 @@ Node *parse_additive(TokenList *tokens) {
   return left;
 }
 
-Node *parse_stmt(TokenList *tokens, Env *env) {
+Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
   switch (peek(tokens).type) {
   case IDENTIFIER:
     if (tokens->tokens[1].type == ASSIGNMENT) {
       char *name = eat_token(tokens).value;
       eat_token(tokens);
 
-      Expr *expr = parse(tokens, env)->body->nodes[0].expr;
-      add_to_env(env->items,
-                 create_double_var(name, eval(expr->bin_expr, env)));
+      Expr *expr = parse_line(nodes, tokens, env)->nodes[0].expr;
+      Var val = normalize(eval(expr->bin_expr, env));
+
+      switch (val.type) {
+      case INT:
+        add_to_env(env->items, create_int_var(name, val.int_val));
+        break;
+
+      case DOUBLE:
+        add_to_env(env->items, create_double_var(name, val.double_val));
+        break;
+
+      default:
+        printf("CANNOT HANDLE TYPE");
+        break;
+      }
 
       return create_stmt_node(create_assign_stmt(name, expr));
     }
@@ -104,14 +117,24 @@ Node *parse_stmt(TokenList *tokens, Env *env) {
   }
 }
 
-ProgramStmt *parse(TokenList *tokens, Env *env) {
-  Stmt *program = create_program();
-  if (env == NULL)
-    env = create_env(NULL, 10); // Null for now, figure out scopes later
-
+NodeList *parse_line(NodeList *nodes, TokenList *tokens, Env *env) {
   while (peek(tokens).type != NEWLINE) {
-    add_node_to_node_list(program->programStmt->body, parse_stmt(tokens, env));
+    add_node_to_node_list(nodes, parse_stmt(nodes, tokens, env));
   }
 
-  return program->programStmt;
+  return nodes;
+}
+
+ProgramStmt *parse(TokenList *tokens, Env *env) {
+  ProgramStmt *program = create_program()->programStmt;
+
+  if (env == NULL)
+    env = create_env(NULL, 10);
+
+  while (tokens->tokens[0].type != END) {
+    parse_line(program->body, tokens, env);
+    eat_token(tokens);
+  }
+
+  return program;
 }
