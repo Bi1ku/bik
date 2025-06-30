@@ -14,16 +14,24 @@ Env *create_env(Env *parent, int init_size) {
   return env;
 }
 
-Var get_var(Env *env, char *key) {
-  for (int i = 0; i < env->items->size; i++) {
-    if (strcmp(key, env->items->items[i].key) == 0) {
-      return env->items->items[i].value;
+Var *get_var(ItemList *items, char *key) {
+  for (int i = 0; i < items->size; i++) {
+    if (strcmp(key, items->items[i].key) == 0) {
+      return &(items->items[i].value);
     }
   }
 
-  // fix
-  printf("Couldn't find key: %s", key);
-  exit(1);
+  return NULL;
+}
+
+int get_index_of_var(ItemList *items, char *key) {
+  for (int i = 0; i < items->size; i++) {
+    if (strcmp(key, items->items[i].key) == 0) {
+      return i;
+    }
+  }
+
+  return -1;
 }
 
 Item create_item(char *key, Var val) {
@@ -65,6 +73,12 @@ void resize_items(ItemList *items) {
 }
 
 void add_to_env(ItemList *items, Item item) {
+  int check = get_index_of_var(items, item.key);
+  if (check != -1) {
+    items->items[check] = item;
+    return;
+  }
+
   if (items->size >= items->capacity)
     resize_items(items);
 

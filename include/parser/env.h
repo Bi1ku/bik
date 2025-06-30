@@ -29,7 +29,7 @@ struct Env {
   ItemList *items;
 };
 
-Var get_var(Env *env, char *key);
+Var *get_var(ItemList *items, char *key);
 
 Env *create_env(Env *parent, int init_size);
 

@@ -14,12 +14,12 @@ double get_val(Expr *expr, Env *env) {
     return expr->int_expr->value;
 
   else if (expr->type == IDENTIFIER_EXPR) {
-    Var var = get_var(env, expr->identifier_expr->symbol);
+    Var *var = get_var(env->items, expr->identifier_expr->symbol);
 
-    if (var.type == DOUBLE)
-      return var.double_val;
+    if (var->type == DOUBLE)
+      return var->double_val;
 
-    return var.int_val;
+    return var->int_val;
   }
 
   return expr->double_expr->value;

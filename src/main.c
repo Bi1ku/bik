@@ -7,7 +7,9 @@
 #include <stdio.h>
 
 int main() {
-  TokenList *tokens = tokenize("x = 10 + 1; y = x * 2; z = y + (7 - 2) * 2;");
+  // TODO: Better error handling for lexer
+  TokenList *tokens =
+      tokenize("x = 10 + 1; y = x * 2; z = y + (7 - 2) * 2; y = x - x;");
   print_tokens(tokens);
 
   ProgramStmt *program = parse(tokens, NULL);

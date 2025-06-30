@@ -90,7 +90,8 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
       char *name = eat_token(tokens).value;
       eat_token(tokens);
 
-      Expr *expr = parse_line(nodes, tokens, env)->nodes[0].expr;
+      NodeList *temp = parse_line(nodes, tokens, env);
+      Expr *expr = temp->nodes[temp->size - 1].expr;
       Var val = normalize(eval(expr->bin_expr, env));
 
       switch (val.type) {
