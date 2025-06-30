@@ -2,20 +2,20 @@
 #define ENV_H
 
 typedef struct Env Env;
-typedef enum { E_STRING, E_INT, E_DOUBLE } ValueTypes;
+typedef enum { STRING, INT, DOUBLE } VarTypes;
 
 typedef struct {
-  ValueTypes type;
+  VarTypes type;
   union {
     char *str_val;
     int int_val;
     double double_val;
   };
-} E_Value;
+} Var;
 
 typedef struct {
   char *key;
-  E_Value value;
+  Var value;
 } Item;
 
 typedef struct {
@@ -29,17 +29,15 @@ struct Env {
   ItemList *items;
 };
 
-E_Value get_item(Env *env, char *key);
+Var get_var(Env *env, char *key);
 
 Env *create_env(Env *parent, int init_size);
 
-E_Value create_double_value(double value);
+Item create_double_var(char *key, double value);
 
-E_Value create_int_value(int value);
+Item create_int_var(char *key, int val);
 
-E_Value create_string_value(char *value);
-
-Item create_item(char *key, E_Value val);
+Item create_str_var(char *key, char *val);
 
 void add_to_env(ItemList *items, Item item);
 

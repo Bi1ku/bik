@@ -12,7 +12,7 @@ double get_value(Expr *expr, Env *env) {
   else if (expr->type == INT_EXPR)
     return expr->int_expr->value;
   else if (expr->type == IDENTIFIER_EXPR)
-    return get_item(env, expr->identifier_expr->symbol)
+    return get_var(env, expr->identifier_expr->symbol)
         .double_val; // FIX LATER, NOT ONLY DOUBLE
   else               // DOUBLE EXPR
     return expr->double_expr->value;
@@ -37,14 +37,14 @@ double eval(BinaryExpr *bin_expr, Env *env) {
   return res;
 }
 
-Value normalize(double num) {
-  Value val;
+Var normalize(double num) {
+  Var val;
   if (num == (int)num) {
-    val.type = V_INT;
-    val.int_value = num;
+    val.type = INT;
+    val.int_val = num;
   } else {
-    val.type = V_DOUBLE;
-    val.double_value = num;
+    val.type = DOUBLE;
+    val.double_val = num;
   }
 
   return val;

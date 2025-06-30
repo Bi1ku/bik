@@ -27,11 +27,14 @@ Node *parse_additive(TokenList *tokens);
 // when we see an assignment
 Node *parse_values(TokenList *tokens) {
   switch (peek(tokens).type) {
-  case INT:
-    return create_expr_node(create_int_expr(atoi(eat_token(tokens).value)));
+  case NUM: {
+    char *value = eat_token(tokens).value;
 
-  case DOUBLE:
-    return create_expr_node(create_double_expr(atof(eat_token(tokens).value)));
+    if (strchr(value, '.') != NULL)
+      return create_expr_node(create_double_expr(atoi(value)));
+
+    return create_expr_node(create_int_expr(atoi(value)));
+  }
 
   case IDENTIFIER:
     return create_expr_node(create_identifier_expr(eat_token(tokens).value));
@@ -88,8 +91,8 @@ Node *parse_stmt(TokenList *tokens, Env *env) {
       eat_token(tokens);
 
       Expr *expr = parse(tokens, env)->body->nodes[0].expr;
-      add_to_env(env->items, create_item(name, create_double_value(
-                                                   eval(expr->bin_expr, env))));
+      add_to_env(env->items,
+                 create_double_var(name, eval(expr->bin_expr, env)));
 
       return create_stmt_node(create_assign_stmt(name, expr));
     }

@@ -7,12 +7,14 @@
 #include <stdio.h>
 
 int main() {
-  TokenList *tokens = tokenize("x = 10 + 1; y = x * 2;");
+  TokenList *tokens = tokenize("x = 10 + 1; y = x * 2; z = y + (7 - 2) * 2;");
   print_tokens(tokens);
 
   Env *env = create_env(NULL, 10);
 
   ProgramStmt *program = parse(tokens, env);
+  eat_token(tokens);
+  program = parse(tokens, env);
   eat_token(tokens);
   program = parse(tokens, env);
 

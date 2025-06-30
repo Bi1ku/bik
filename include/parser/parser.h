@@ -7,6 +7,6 @@
 
 ProgramStmt *parse(TokenList *tokens, Env *env);
 
-Token eat_token(TokenList *tokens);
+Token eat_token(TokenList *tokens); // can remove after
 
 #endif

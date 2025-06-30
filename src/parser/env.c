@@ -14,47 +14,48 @@ Env *create_env(Env *parent, int init_size) {
   return env;
 }
 
-E_Value get_item(Env *env, char *key) {
+Var get_var(Env *env, char *key) {
   for (int i = 0; i < env->items->size; i++) {
     if (strcmp(key, env->items->items[i].key) == 0) {
       return env->items->items[i].value;
     }
   }
 
+  // fix
   printf("Couldn't find key: %s", key);
   exit(1);
 }
 
-E_Value create_double_value(double value) {
-  E_Value val;
-  val.type = E_DOUBLE;
-  val.double_val = value;
-
-  return val;
-}
-
-E_Value create_int_value(int value) {
-  E_Value val;
-  val.type = E_DOUBLE;
-  val.int_val = value;
-
-  return val;
-}
-
-E_Value create_string_value(char *value) {
-  E_Value val;
-  val.type = E_DOUBLE;
-  val.str_val = value;
-
-  return val;
-}
-
-Item create_item(char *key, E_Value val) {
+Item create_item(char *key, Var val) {
   Item item;
   item.key = key;
   item.value = val;
 
   return item;
+}
+
+Item create_double_var(char *key, double value) {
+  Var val;
+  val.type = DOUBLE;
+  val.double_val = value;
+
+  return create_item(key, val);
+}
+
+Item create_int_var(char *key, int val) {
+  Var var;
+  var.type = INT;
+  var.int_val = val;
+
+  return create_item(key, var);
+}
+
+Item create_str_var(char *key, char *val) {
+  Var var;
+  var.type = STRING;
+  var.str_val = val;
+
+  return create_item(key, var);
 }
 
 void resize_items(ItemList *items) {

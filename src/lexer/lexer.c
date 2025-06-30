@@ -82,20 +82,13 @@ TokenList *tokenize(char *path) {
 
       // doubles & ints
       if (isnumber(mutable[0]) != 0) {
-        int is_decimal = -1;
         while (isnumber(mutable[0]) != 0 || mutable[0] == '.') {
-          if (mutable[0] == '.')
-            is_decimal = 0;
-
           buffer[i] = mutable[0];
           i++;
           eat(mutable);
         }
 
-        if (is_decimal == 0)
-          add_to_token_list(tokens, create_token(DOUBLE, buffer));
-        else
-          add_to_token_list(tokens, create_token(INT, buffer));
+        add_to_token_list(tokens, create_token(NUM, buffer));
       }
 
       //  keywords
