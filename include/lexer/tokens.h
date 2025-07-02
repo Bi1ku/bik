@@ -5,12 +5,12 @@ typedef enum {
   BIN_OP,
   PAREN_R,
   PAREN_L,
-  INT,
-  DOUBLE,
+  NUM,
   KEYWORD,
   IDENTIFIER,
   NEWLINE,
-  ASSIGNMENT
+  ASSIGNMENT,
+  END
 } TokenType;
 
 typedef struct {

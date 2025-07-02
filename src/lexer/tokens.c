@@ -45,17 +45,17 @@ char *get_string_token_type(int index) {
   case 2:
     return "PAREN_R";
   case 3:
-    return "INT";
+    return "NUM";
   case 4:
-    return "DOUBLE";
-  case 5:
     return "KEYWORD";
-  case 6:
+  case 5:
     return "IDENTIFIER";
-  case 7:
+  case 6:
     return "NEWLINE";
-  case 8:
+  case 7:
     return "ASSIGNMENT";
+  case 8:
+    return "END";
   default:
     return "UNKNOWN";
   }

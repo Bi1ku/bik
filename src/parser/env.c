@@ -1,6 +1,7 @@
 #include "../../include/parser/env.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 Env *create_env(Env *parent, int init_size) {
   Env *env = malloc(sizeof(Env));
@@ -13,36 +14,56 @@ Env *create_env(Env *parent, int init_size) {
   return env;
 }
 
-E_Value create_double_value(double value) {
-  E_Value val;
-  val.type = E_DOUBLE;
-  val.double_val = value;
+Var *get_var(ItemList *items, char *key) {
+  for (int i = 0; i < items->size; i++) {
+    if (strcmp(key, items->items[i].key) == 0) {
+      return &(items->items[i].value);
+    }
+  }
 
-  return val;
+  return NULL;
 }
 
-E_Value create_int_value(int value) {
-  E_Value val;
-  val.type = E_DOUBLE;
-  val.int_val = value;
+int get_index_of_var(ItemList *items, char *key) {
+  for (int i = 0; i < items->size; i++) {
+    if (strcmp(key, items->items[i].key) == 0) {
+      return i;
+    }
+  }
 
-  return val;
+  return -1;
 }
 
-E_Value create_string_value(char *value) {
-  E_Value val;
-  val.type = E_DOUBLE;
-  val.str_val = value;
-
-  return val;
-}
-
-Item create_item(char *key, E_Value val) {
+Item create_item(char *key, Var val) {
   Item item;
   item.key = key;
   item.value = val;
 
   return item;
+}
+
+Item create_double_var(char *key, double value) {
+  Var val;
+  val.type = DOUBLE;
+  val.double_val = value;
+
+  return create_item(key, val);
+}
+
+Item create_int_var(char *key, int val) {
+  Var var;
+  var.type = INT;
+  var.int_val = val;
+
+  return create_item(key, var);
+}
+
+Item create_str_var(char *key, char *val) {
+  Var var;
+  var.type = STRING;
+  var.str_val = val;
+
+  return create_item(key, var);
 }
 
 void resize_items(ItemList *items) {
@@ -52,6 +73,12 @@ void resize_items(ItemList *items) {
 }
 
 void add_to_env(ItemList *items, Item item) {
+  int check = get_index_of_var(items, item.key);
+  if (check != -1) {
+    items->items[check] = item;
+    return;
+  }
+
   if (items->size >= items->capacity)
     resize_items(items);
 

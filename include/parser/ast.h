@@ -2,7 +2,7 @@
 #define AST_H
 
 typedef enum { EXPR, STMT } NodeType;
-typedef enum { PROGRAM_STMT } StmtType;
+typedef enum { PROGRAM_STMT, ASSIGN_STMT } StmtType;
 typedef enum { INT_EXPR, DOUBLE_EXPR, IDENTIFIER_EXPR, BIN_EXPR } ExprType;
 
 typedef struct Node Node;
@@ -15,9 +15,10 @@ typedef struct IntExpr IntExpr;
 typedef struct DoubleExpr DoubleExpr;
 
 typedef struct Stmt Stmt;
-typedef struct NodeList NodeList;
 typedef struct ProgramStmt ProgramStmt;
+typedef struct AssignStmt AssignStmt;
 
+typedef struct NodeList NodeList;
 struct Node {
   NodeType type;
   union {
@@ -30,6 +31,7 @@ struct Stmt {
   StmtType type;
   union {
     ProgramStmt *programStmt;
+    AssignStmt *assignStmt;
   };
 };
 
@@ -52,6 +54,11 @@ struct NodeList {
 
 struct ProgramStmt {
   NodeList *body;
+};
+
+struct AssignStmt {
+  char *symbol;
+  Expr *expr;
 };
 
 struct BinaryExpr {
@@ -79,6 +86,8 @@ void add_node_to_node_list(NodeList *nodes, Node *node);
 Node *create_stmt_node(Stmt *stmt);
 
 Node *create_expr_node(Expr *expr);
+
+Stmt *create_assign_stmt(char *symbol, Expr *expr);
 
 Stmt *create_program();
 
