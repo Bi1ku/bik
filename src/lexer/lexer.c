@@ -62,6 +62,12 @@ TokenList *tokenize(char *path) {
       break;
 
     case '/':
+      if (mutable[1] == '/') {
+        while (mutable[0] != '\n' && mutable[0] != '\0') {
+          eat(mutable);
+        }
+        continue;
+      }
       add_to_token_list(tokens, create_token(BIN_OP, "/"));
       eat(mutable);
       break;

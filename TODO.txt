@@ -1,6 +1,6 @@
 - String addition (e.g., "Hello, " + 1 + "!") [DONE]
 - Better error handling [50/50]
-- Comments
+- Comments [DONE]
 - Objects & arrays
 - Functions & scopes
 - Generate ASM Code
