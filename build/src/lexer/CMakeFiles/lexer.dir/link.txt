@@ -1,0 +1,2 @@
+/usr/bin/ar qc liblexer.a CMakeFiles/lexer.dir/lexer.c.o CMakeFiles/lexer.dir/tokens.c.o
+/usr/bin/ranlib liblexer.a

@@ -1,0 +1,12 @@
+/Users/biiku/code/projects/bik/build/CMakeFiles/execute.dir
+/Users/biiku/code/projects/bik/build/CMakeFiles/edit_cache.dir
+/Users/biiku/code/projects/bik/build/CMakeFiles/rebuild_cache.dir
+/Users/biiku/code/projects/bik/build/src/lexer/CMakeFiles/lexer.dir
+/Users/biiku/code/projects/bik/build/src/lexer/CMakeFiles/edit_cache.dir
+/Users/biiku/code/projects/bik/build/src/lexer/CMakeFiles/rebuild_cache.dir
+/Users/biiku/code/projects/bik/build/src/generator/CMakeFiles/generator.dir
+/Users/biiku/code/projects/bik/build/src/generator/CMakeFiles/edit_cache.dir
+/Users/biiku/code/projects/bik/build/src/generator/CMakeFiles/rebuild_cache.dir
+/Users/biiku/code/projects/bik/build/src/parser/CMakeFiles/parser.dir
+/Users/biiku/code/projects/bik/build/src/parser/CMakeFiles/edit_cache.dir
+/Users/biiku/code/projects/bik/build/src/parser/CMakeFiles/rebuild_cache.dir

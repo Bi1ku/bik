@@ -1,0 +1,10 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/biiku/code/projects/bik/build/cmake_install.cmake",
+		"/Users/biiku/code/projects/bik/build/src/lexer/cmake_install.cmake",
+		"/Users/biiku/code/projects/bik/build/src/generator/cmake_install.cmake",
+		"/Users/biiku/code/projects/bik/build/src/parser/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
