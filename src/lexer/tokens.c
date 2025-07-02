@@ -56,6 +56,8 @@ char *get_string_token_type(int index) {
     return "ASSIGNMENT";
   case 8:
     return "END";
+  case 9:
+    return "STRING";
   default:
     return "UNKNOWN";
   }

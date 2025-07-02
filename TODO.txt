@@ -1,1 +1,5 @@
-FloatExpr vs NumericExpr
+- String addition (e.g., "Hello, " + 1 + "!")
+- Comments
+- Objects & arrays
+- Functions & scopes
+- Generate ASM Code

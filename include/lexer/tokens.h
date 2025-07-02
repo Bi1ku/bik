@@ -10,7 +10,8 @@ typedef enum {
   IDENTIFIER,
   NEWLINE,
   ASSIGNMENT,
-  END
+  END,
+  STR,
 } TokenType;
 
 typedef struct {

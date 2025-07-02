@@ -8,8 +8,7 @@
 
 int main() {
   // TODO: Better error handling for lexer
-  TokenList *tokens =
-      tokenize("x = 10 + 1; y = x * 2; z = y + (7 - 2) * 2; y = x - x;");
+  TokenList *tokens = tokenize("x = 1 + 2 + \"Hello!\";");
   print_tokens(tokens);
 
   ProgramStmt *program = parse(tokens, NULL);
