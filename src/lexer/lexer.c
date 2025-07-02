@@ -1,5 +1,6 @@
 #include "../../include/lexer/lexer.h"
 #include <ctype.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -93,21 +94,41 @@ TokenList *tokenize(char *path) {
 
       //  keywords
       else if (is_skippable(mutable[0]) != 0) {
-        while (mutable[0] != ' ' && mutable[0] != ';') {
-          buffer[i] = mutable[0];
-          i++;
+        bool quotes = false;
+        bool is_str = false;
+        while ((mutable[0] != ' ' || quotes) && mutable[0] != ';') {
+          if (mutable[0] == '"') {
+            quotes = !quotes;
+            is_str = true;
+          }
+
+          else {
+            buffer[i] = mutable[0];
+            i++;
+          }
+
           eat(mutable);
         }
 
-        int found = -1;
+        if (quotes) {
+          printf("Quotes are wrong");
+          exit(EXIT_FAILURE);
+        }
+
+        if (is_str) {
+          add_to_token_list(tokens, create_token(STR, buffer));
+          break;
+        }
+
+        bool found = false;
         for (int i = 0; i < sizeof(keywords) / sizeof(keywords[0]); i++) {
           if (strcmp(keywords[i], buffer) == 0) {
-            found = 0;
+            found = true;
             break;
           }
         }
 
-        if (found == 0)
+        if (found)
           add_to_token_list(tokens, create_token(KEYWORD, buffer));
         else
           add_to_token_list(tokens, create_token(IDENTIFIER, buffer));

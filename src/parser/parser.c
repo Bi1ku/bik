@@ -31,10 +31,13 @@ Node *parse_values(TokenList *tokens) {
     char *value = eat_token(tokens).value;
 
     if (strchr(value, '.') != NULL)
-      return create_expr_node(create_double_expr(atoi(value)));
+      return create_expr_node(create_double_expr(atof(value)));
 
     return create_expr_node(create_int_expr(atoi(value)));
   }
+
+  case STR:
+    return create_expr_node(create_string_expr(eat_token(tokens).value));
 
   case IDENTIFIER:
     return create_expr_node(create_identifier_expr(eat_token(tokens).value));
@@ -92,7 +95,7 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
 
       NodeList *temp = parse_line(nodes, tokens, env);
       Expr *expr = temp->nodes[temp->size - 1].expr;
-      Var val = normalize(eval(expr->bin_expr, env));
+      Var val = eval(expr->bin_expr, env);
 
       switch (val.type) {
       case INT:
@@ -103,9 +106,14 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
         add_to_env(env->items, create_double_var(name, val.double_val));
         break;
 
-      default:
-        printf("CANNOT HANDLE TYPE");
+      case STRING:
+        add_to_env(env->items, create_str_var(name, val.str_val));
         break;
+
+      default:
+        printf("ERROR: Cannot assign value of type %d to variable %s\n",
+               val.type, name);
+        exit(EXIT_FAILURE);
       }
 
       return create_stmt_node(create_assign_stmt(name, expr));

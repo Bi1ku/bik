@@ -106,3 +106,13 @@ Expr *create_identifier_expr(char *symbol) {
 
   return expr;
 }
+
+Expr *create_string_expr(char *value) {
+  Expr *expr = malloc(sizeof(Expr));
+  expr->type = STRING_EXPR;
+
+  expr->string_expr = malloc(sizeof(StringExpr));
+  expr->string_expr->value = value;
+
+  return expr;
+}

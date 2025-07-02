@@ -4,8 +4,6 @@
 #include "../parser/ast.h"
 #include "../parser/env.h"
 
-double eval(BinaryExpr *bin_expr, Env *env);
-
-Var normalize(double num);
+Var eval(BinaryExpr *bin_expr, Env *env);
 
 #endif
