@@ -94,22 +94,28 @@ TokenList *tokenize(char *path) {
 
       //  keywords
       else if (is_skippable(mutable[0]) != 0) {
+        bool quotes = false;
         bool is_str = false;
-        while ((mutable[0] != ' ' || is_str) && mutable[0] != ';') {
-          if (mutable[0] == '"')
-            is_str = !is_str;
+        while ((mutable[0] != ' ' || quotes) && mutable[0] != ';') {
+          if (mutable[0] == '"') {
+            quotes = !quotes;
+            is_str = true;
+          }
 
-          buffer[i] = mutable[0];
-          i++;
+          else {
+            buffer[i] = mutable[0];
+            i++;
+          }
+
           eat(mutable);
         }
 
-        if (is_str) {
+        if (quotes) {
           printf("Quotes are wrong");
           exit(EXIT_FAILURE);
         }
 
-        if (strchr(buffer, '"')) {
+        if (is_str) {
           add_to_token_list(tokens, create_token(STR, buffer));
           break;
         }

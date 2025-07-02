@@ -3,7 +3,13 @@
 
 typedef enum { EXPR, STMT } NodeType;
 typedef enum { PROGRAM_STMT, ASSIGN_STMT } StmtType;
-typedef enum { INT_EXPR, DOUBLE_EXPR, IDENTIFIER_EXPR, BIN_EXPR } ExprType;
+typedef enum {
+  INT_EXPR,
+  DOUBLE_EXPR,
+  IDENTIFIER_EXPR,
+  BIN_EXPR,
+  STRING_EXPR
+} ExprType;
 
 typedef struct Node Node;
 typedef struct NodeList NodeList;
@@ -13,6 +19,7 @@ typedef struct BinaryExpr BinaryExpr;
 typedef struct IdentifierExpr IdentifierExpr;
 typedef struct IntExpr IntExpr;
 typedef struct DoubleExpr DoubleExpr;
+typedef struct StringExpr StringExpr;
 
 typedef struct Stmt Stmt;
 typedef struct ProgramStmt ProgramStmt;
@@ -42,6 +49,7 @@ struct Expr {
     IdentifierExpr *identifier_expr;
     IntExpr *int_expr;
     DoubleExpr *double_expr;
+    StringExpr *string_expr;
   };
 };
 
@@ -79,6 +87,10 @@ struct DoubleExpr {
   double value;
 };
 
+struct StringExpr {
+  char *value;
+};
+
 NodeList *create_node_list(int init_size);
 
 void add_node_to_node_list(NodeList *nodes, Node *node);
@@ -98,5 +110,7 @@ Expr *create_int_expr(int value);
 Expr *create_double_expr(double value);
 
 Expr *create_identifier_expr(char *symbol);
+
+Expr *create_string_expr(char *value);
 
 #endif

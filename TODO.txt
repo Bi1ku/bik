@@ -1,4 +1,5 @@
-- String addition (e.g., "Hello, " + 1 + "!")
+- String addition (e.g., "Hello, " + 1 + "!") [DONE]
+- Better error handling [50/50]
 - Comments
 - Objects & arrays
 - Functions & scopes
