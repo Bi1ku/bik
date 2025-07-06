@@ -1,12 +1,8 @@
 CMakeFiles/execute.dir/src/main.c.o: \
   /Users/biiku/code/projects/bik/src/main.c \
-  /Users/biiku/code/projects/bik/src/../include/generator/eval.h \
-  /Users/biiku/code/projects/bik/src/../include/generator/../parser/ast.h \
-  /Users/biiku/code/projects/bik/src/../include/generator/../parser/env.h \
   /Users/biiku/code/projects/bik/src/../include/lexer/lexer.h \
   /Users/biiku/code/projects/bik/src/../include/lexer/tokens.h \
   /Users/biiku/code/projects/bik/src/../include/parser/ast.h \
-  /Users/biiku/code/projects/bik/src/../include/parser/env.h \
   /Users/biiku/code/projects/bik/src/../include/parser/parser.h \
   /Users/biiku/code/projects/bik/src/../include/parser/../lexer/tokens.h \
   /Users/biiku/code/projects/bik/src/../include/parser/../parser/env.h \
