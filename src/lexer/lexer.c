@@ -7,16 +7,18 @@
 
 char *keywords[] = {"var", "func"};
 
-int eat(char *str) {
-  if (str == NULL)
-    return -1;
+int shift(char *str) {
+  if (str == NULL) {
+    printf("ERROR: Cannot shift NULL string\n");
+    exit(EXIT_FAILURE);
+  }
 
   for (int i = 1; i < strlen(str); i++) {
     str[i - 1] = str[i];
   }
   str[strlen(str) - 1] = '\0';
 
-  return 0;
+  return EXIT_SUCCESS;
 }
 
 int is_skippable(char c) {
@@ -38,48 +40,48 @@ TokenList *tokenize(char *path) {
     switch (mutable[0]) {
     case '(':
       add_to_token_list(tokens, create_token(PAREN_L, "("));
-      eat(mutable);
+      shift(mutable);
       break;
 
     case ')':
       add_to_token_list(tokens, create_token(PAREN_R, ")"));
-      eat(mutable);
+      shift(mutable);
       break;
 
     case '+':
       add_to_token_list(tokens, create_token(BIN_OP, "+"));
-      eat(mutable);
+      shift(mutable);
       break;
 
     case '-':
       add_to_token_list(tokens, create_token(BIN_OP, "-"));
-      eat(mutable);
+      shift(mutable);
       break;
 
     case '*':
       add_to_token_list(tokens, create_token(BIN_OP, "*"));
-      eat(mutable);
+      shift(mutable);
       break;
 
     case '/':
       if (mutable[1] == '/') {
         while (mutable[0] != '\n' && mutable[0] != '\0') {
-          eat(mutable);
+          shift(mutable);
         }
         continue;
       }
       add_to_token_list(tokens, create_token(BIN_OP, "/"));
-      eat(mutable);
+      shift(mutable);
       break;
 
     case '=':
       add_to_token_list(tokens, create_token(ASSIGNMENT, "="));
-      eat(mutable);
+      shift(mutable);
       break;
 
     case ';':
       add_to_token_list(tokens, create_token(NEWLINE, "newline"));
-      eat(mutable);
+      shift(mutable);
       break;
 
     // More than one char long tokens
@@ -92,7 +94,7 @@ TokenList *tokenize(char *path) {
         while (isnumber(mutable[0]) != 0 || mutable[0] == '.') {
           buffer[i] = mutable[0];
           i++;
-          eat(mutable);
+          shift(mutable);
         }
 
         add_to_token_list(tokens, create_token(NUM, buffer));
@@ -113,7 +115,7 @@ TokenList *tokenize(char *path) {
             i++;
           }
 
-          eat(mutable);
+          shift(mutable);
         }
 
         if (quotes) {
@@ -139,7 +141,7 @@ TokenList *tokenize(char *path) {
         else
           add_to_token_list(tokens, create_token(IDENTIFIER, buffer));
       } else
-        eat(mutable);
+        shift(mutable);
 
       break;
     }
@@ -148,4 +150,21 @@ TokenList *tokenize(char *path) {
 
   add_to_token_list(tokens, create_token(END, "END"));
   return tokens;
+}
+
+char *read(char *path) {
+  FILE *file = fopen(path, "r");
+
+  if (file == NULL) {
+    printf("ERROR: Cannot open file %s\n", path);
+    exit(EXIT_FAILURE);
+  }
+
+  char *buffer = malloc(sizeof(char) * 100); // todo: realloc later?
+  char line[100];
+  while (fgets(line, sizeof(line), file) != NULL) {
+    strcat(buffer, line);
+  }
+
+  return buffer;
 }

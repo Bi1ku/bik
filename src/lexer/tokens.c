@@ -4,12 +4,9 @@
 #include <string.h>
 
 Token create_token(TokenType type, char *value) {
-  char *copy = malloc(strlen(value));
-  strcpy(copy, value);
-
   Token token;
   token.type = type;
-  token.value = copy; // don't reference the original
+  token.value = strdup(value); // don't reference the original
 
   return token;
 }

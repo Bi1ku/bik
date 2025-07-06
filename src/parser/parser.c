@@ -10,7 +10,7 @@ NodeList *parse_line(NodeList *nodes, TokenList *tokens, Env *env);
 
 Token peek(TokenList *tokens) { return (tokens->tokens)[0]; }
 
-Token eat_token(TokenList *tokens) {
+Token eat(TokenList *tokens) {
   Token token = peek(tokens);
 
   for (int i = 1; i < tokens->size; i++) {
@@ -28,7 +28,7 @@ Node *parse_additive(TokenList *tokens);
 Node *parse_values(TokenList *tokens) {
   switch (peek(tokens).type) {
   case NUM: {
-    char *value = eat_token(tokens).value;
+    char *value = eat(tokens).value;
 
     if (strchr(value, '.') != NULL)
       return create_expr_node(create_double_expr(atof(value)));
@@ -37,16 +37,16 @@ Node *parse_values(TokenList *tokens) {
   }
 
   case STR:
-    return create_expr_node(create_string_expr(eat_token(tokens).value));
+    return create_expr_node(create_string_expr(eat(tokens).value));
 
   case IDENTIFIER:
-    return create_expr_node(create_identifier_expr(eat_token(tokens).value));
+    return create_expr_node(create_identifier_expr(eat(tokens).value));
 
   case PAREN_L:
-    eat_token(tokens);
+    eat(tokens);
     Node *sub_expr = parse_additive(tokens);
     if (peek(tokens).type == PAREN_R)
-      eat_token(tokens);
+      eat(tokens);
     else {
       printf("Expected ')'");
       exit(0);
@@ -54,7 +54,7 @@ Node *parse_values(TokenList *tokens) {
     return sub_expr;
 
   default:
-    printf("UNEXPECTED TOKEN: %s", peek(tokens).value);
+    printf("ERROR: Unexpected token \"%s\"", peek(tokens).value);
     exit(1);
   }
 }
@@ -65,7 +65,7 @@ Node *parse_multiplicative(TokenList *tokens) {
   while (strcmp(peek(tokens).value, "*") == 0 ||
          strcmp(peek(tokens).value, "/") == 0 ||
          strcmp(peek(tokens).value, "%") == 0) {
-    char *op = eat_token(tokens).value;
+    char *op = eat(tokens).value;
     Node *right = parse_values(tokens);
     left = create_expr_node(create_bin_expr(left->expr, right->expr, op));
   }
@@ -78,7 +78,7 @@ Node *parse_additive(TokenList *tokens) {
 
   while (strcmp(peek(tokens).value, "+") == 0 ||
          strcmp(peek(tokens).value, "-") == 0) {
-    char *op = eat_token(tokens).value;
+    char *op = eat(tokens).value;
     Node *right = parse_multiplicative(tokens);
     left = create_expr_node(create_bin_expr(left->expr, right->expr, op));
   }
@@ -90,8 +90,8 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
   switch (peek(tokens).type) {
   case IDENTIFIER:
     if (tokens->tokens[1].type == ASSIGNMENT) {
-      char *name = eat_token(tokens).value;
-      eat_token(tokens);
+      char *name = eat(tokens).value;
+      eat(tokens);
 
       NodeList *temp = parse_line(nodes, tokens, env);
       Expr *expr = temp->nodes[temp->size - 1].expr;
@@ -116,6 +116,8 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
         exit(EXIT_FAILURE);
       }
 
+      remove_node_from_node_list(temp, temp->size -
+                                           1); // remove bin_expr added before
       return create_stmt_node(create_assign_stmt(name, expr));
     }
 
@@ -142,7 +144,7 @@ ProgramStmt *parse(TokenList *tokens, Env *env) {
 
   while (tokens->tokens[0].type != END) {
     parse_line(program->body, tokens, env);
-    eat_token(tokens);
+    eat(tokens);
   }
 
   return program;

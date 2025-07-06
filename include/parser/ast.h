@@ -93,6 +93,8 @@ struct StringExpr {
 
 NodeList *create_node_list(int init_size);
 
+void remove_node_from_node_list(NodeList *nodes, int index);
+
 void add_node_to_node_list(NodeList *nodes, Node *node);
 
 Node *create_stmt_node(Stmt *stmt);

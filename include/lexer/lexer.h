@@ -4,4 +4,6 @@
 
 TokenList *tokenize(char *path);
 
+char *read(char *path);
+
 #endif

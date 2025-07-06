@@ -1,4 +1,5 @@
 #include "../../include/parser/ast.h"
+#include <stdio.h>
 #include <stdlib.h>
 
 NodeList *create_node_list(int init_size) {
@@ -30,6 +31,18 @@ Node *create_stmt_node(Stmt *stmt) {
   node->stmt = stmt;
 
   return node;
+}
+
+void remove_node_from_node_list(NodeList *nodes, int index) {
+  if (index < 0 || index >= nodes->size) {
+    printf("ERROR: Index out of bounds\n");
+    exit(EXIT_FAILURE);
+  }
+
+  for (int i = index; i < nodes->size - 1; i++) {
+    nodes->nodes[i] = nodes->nodes[i + 1];
+  }
+  nodes->size--;
 }
 
 Stmt *create_assign_stmt(char *symbol, Expr *expr) { // work on this
