@@ -45,10 +45,10 @@ Item create_item(char *key, Var val) {
   return item;
 }
 
-Item create_double_var(char *key, double value) {
+Item create_float_var(char *key, float value) {
   Var val;
-  val.type = DOUBLE;
-  val.double_val = value;
+  val.type = FLOAT;
+  val.float_val = value;
 
   return create_item(key, val);
 }

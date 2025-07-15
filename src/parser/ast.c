@@ -100,12 +100,12 @@ Expr *create_int_expr(int value) {
   return expr;
 }
 
-Expr *create_double_expr(double value) {
+Expr *create_float_expr(float value) {
   Expr *expr = malloc(sizeof(Expr));
-  expr->type = DOUBLE_EXPR;
+  expr->type = FLOAT_EXPR;
 
-  expr->double_expr = malloc(sizeof(DoubleExpr));
-  expr->double_expr->value = value;
+  expr->float_expr = malloc(sizeof(FloatExpr));
+  expr->float_expr->value = value;
 
   return expr;
 }

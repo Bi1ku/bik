@@ -16,8 +16,8 @@ Var calculate(Var x, Var y, char op) {
         x.str_val = strcat(x.str_val, buffer);
       }
 
-      else if (y.type == DOUBLE) {
-        sprintf(buffer, "%f", y.double_val);
+      else if (y.type == FLOAT) {
+        sprintf(buffer, "%f", y.float_val);
         x.str_val = strcat(x.str_val, buffer);
       }
 
@@ -31,8 +31,8 @@ Var calculate(Var x, Var y, char op) {
         x.str_val = strcat(buffer, y.str_val);
       }
 
-      else if (x.type == DOUBLE) {
-        sprintf(buffer, "%f", x.double_val);
+      else if (x.type == FLOAT) {
+        sprintf(buffer, "%f", x.float_val);
         x.str_val = strcat(buffer, y.str_val);
       }
 
@@ -40,15 +40,15 @@ Var calculate(Var x, Var y, char op) {
     }
 
     else {
-      if (x.type == INT && y.type == DOUBLE) {
-        x.double_val = x.int_val + y.double_val;
-        x.type = DOUBLE;
-      } else if (x.type == DOUBLE && y.type == INT) {
-        x.double_val = x.double_val + y.int_val;
-        x.type = DOUBLE;
-      } else if (x.type == DOUBLE && y.type == DOUBLE) {
-        x.double_val = x.double_val + y.double_val;
-        x.type = DOUBLE;
+      if (x.type == INT && y.type == FLOAT) {
+        x.float_val = x.int_val + y.float_val;
+        x.type = FLOAT;
+      } else if (x.type == FLOAT && y.type == INT) {
+        x.float_val = x.float_val + y.int_val;
+        x.type = FLOAT;
+      } else if (x.type == FLOAT && y.type == FLOAT) {
+        x.float_val = x.float_val + y.float_val;
+        x.type = FLOAT;
       } else {
         x.int_val = x.int_val + y.int_val;
         x.type = INT;
@@ -59,15 +59,15 @@ Var calculate(Var x, Var y, char op) {
   }
 
   case '-':
-    if (x.type == INT && y.type == DOUBLE) {
-      x.double_val = x.int_val - y.double_val;
-      x.type = DOUBLE;
-    } else if (x.type == DOUBLE && y.type == INT) {
-      x.double_val = x.double_val - y.int_val;
-      x.type = DOUBLE;
-    } else if (x.type == DOUBLE && y.type == DOUBLE) {
-      x.double_val = x.double_val - y.double_val;
-      x.type = DOUBLE;
+    if (x.type == INT && y.type == FLOAT) {
+      x.float_val = x.int_val - y.float_val;
+      x.type = FLOAT;
+    } else if (x.type == FLOAT && y.type == INT) {
+      x.float_val = x.float_val - y.int_val;
+      x.type = FLOAT;
+    } else if (x.type == FLOAT && y.type == FLOAT) {
+      x.float_val = x.float_val - y.float_val;
+      x.type = FLOAT;
     } else if (x.type == INT && y.type == INT) {
       x.int_val = x.int_val - y.int_val;
       x.type = INT;
@@ -81,15 +81,15 @@ Var calculate(Var x, Var y, char op) {
     return x;
 
   case '*':
-    if (x.type == INT && y.type == DOUBLE) {
-      x.double_val = x.int_val * y.double_val;
-      x.type = DOUBLE;
-    } else if (x.type == DOUBLE && y.type == INT) {
-      x.double_val = x.double_val * y.int_val;
-      x.type = DOUBLE;
-    } else if (x.type == DOUBLE && y.type == DOUBLE) {
-      x.double_val = x.double_val * y.double_val;
-      x.type = DOUBLE;
+    if (x.type == INT && y.type == FLOAT) {
+      x.float_val = x.int_val * y.float_val;
+      x.type = FLOAT;
+    } else if (x.type == FLOAT && y.type == INT) {
+      x.float_val = x.float_val * y.int_val;
+      x.type = FLOAT;
+    } else if (x.type == FLOAT && y.type == FLOAT) {
+      x.float_val = x.float_val * y.float_val;
+      x.type = FLOAT;
     } else if (x.type == INT && y.type == INT) {
       x.int_val = x.int_val * y.int_val;
       x.type = INT;
@@ -103,15 +103,15 @@ Var calculate(Var x, Var y, char op) {
     return x;
 
   case '/':
-    if (x.type == INT && y.type == DOUBLE) {
-      x.double_val = x.int_val / y.double_val;
-      x.type = DOUBLE;
-    } else if (x.type == DOUBLE && y.type == INT) {
-      x.double_val = x.double_val / y.int_val;
-      x.type = DOUBLE;
-    } else if (x.type == DOUBLE && y.type == DOUBLE) {
-      x.double_val = x.double_val / y.double_val;
-      x.type = DOUBLE;
+    if (x.type == INT && y.type == FLOAT) {
+      x.float_val = x.int_val / y.float_val;
+      x.type = FLOAT;
+    } else if (x.type == FLOAT && y.type == INT) {
+      x.float_val = x.float_val / y.int_val;
+      x.type = FLOAT;
+    } else if (x.type == FLOAT && y.type == FLOAT) {
+      x.float_val = x.float_val / y.float_val;
+      x.type = FLOAT;
     } else if (x.type == INT && y.type == INT) {
       x.int_val = x.int_val / y.int_val;
       x.type = INT;
@@ -146,7 +146,7 @@ Var get_val(Expr *expr, Env *env) {
     return create_str_var("temp", expr->string_expr->value).value;
   }
 
-  return create_double_var("temp", expr->double_expr->value).value;
+  return create_float_var("temp", expr->float_expr->value).value;
 }
 
 Var eval(BinaryExpr *bin_expr, Env *env) {

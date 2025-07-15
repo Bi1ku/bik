@@ -2,14 +2,14 @@
 #define ENV_H
 
 typedef struct Env Env;
-typedef enum { STRING, INT, DOUBLE } VarTypes;
+typedef enum { STRING, INT, FLOAT } VarTypes;
 
 typedef struct {
   VarTypes type;
   union {
     char *str_val;
     int int_val;
-    double double_val;
+    float float_val;
   };
 } Var;
 
@@ -33,7 +33,7 @@ Var *get_var(ItemList *items, char *key);
 
 Env *create_env(Env *parent, int init_size);
 
-Item create_double_var(char *key, double value);
+Item create_float_var(char *key, float value);
 
 Item create_int_var(char *key, int val);
 

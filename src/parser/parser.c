@@ -31,7 +31,7 @@ Node *parse_values(TokenList *tokens) {
     char *value = eat(tokens).value;
 
     if (strchr(value, '.') != NULL)
-      return create_expr_node(create_double_expr(atof(value)));
+      return create_expr_node(create_float_expr(atof(value)));
 
     return create_expr_node(create_int_expr(atoi(value)));
   }
@@ -102,8 +102,8 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
         add_to_env(env->items, create_int_var(name, val.int_val));
         break;
 
-      case DOUBLE:
-        add_to_env(env->items, create_double_var(name, val.double_val));
+      case FLOAT:
+        add_to_env(env->items, create_float_var(name, val.float_val));
         break;
 
       case STRING:

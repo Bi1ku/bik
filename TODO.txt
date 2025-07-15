@@ -2,12 +2,12 @@
 - Comments [DONE]
 - Better error handling [DONE]
 - Read from file [DONE]
+- change double -> float [DONE]
 - Generate basic ASM code [IN PROGRESS]
 - learn more about cmakelists
 - ENV items list to pointer
 - NodeList to pointer
 - rename item -> var, var -> VarValue
-- change double -> float
 - Objects & arrays -> ASM
 - Functions & scopes -> ASM
 - Native functions -> ASM

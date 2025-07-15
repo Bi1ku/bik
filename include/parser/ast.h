@@ -5,7 +5,7 @@ typedef enum { EXPR, STMT } NodeType;
 typedef enum { PROGRAM_STMT, ASSIGN_STMT } StmtType;
 typedef enum {
   INT_EXPR,
-  DOUBLE_EXPR,
+  FLOAT_EXPR,
   IDENTIFIER_EXPR,
   BIN_EXPR,
   STRING_EXPR
@@ -18,7 +18,7 @@ typedef struct Expr Expr;
 typedef struct BinaryExpr BinaryExpr;
 typedef struct IdentifierExpr IdentifierExpr;
 typedef struct IntExpr IntExpr;
-typedef struct DoubleExpr DoubleExpr;
+typedef struct FloatExpr FloatExpr;
 typedef struct StringExpr StringExpr;
 
 typedef struct Stmt Stmt;
@@ -48,7 +48,7 @@ struct Expr {
     BinaryExpr *bin_expr;
     IdentifierExpr *identifier_expr;
     IntExpr *int_expr;
-    DoubleExpr *double_expr;
+    FloatExpr *float_expr;
     StringExpr *string_expr;
   };
 };
@@ -83,8 +83,8 @@ struct IntExpr {
   int value;
 };
 
-struct DoubleExpr {
-  double value;
+struct FloatExpr {
+  float value;
 };
 
 struct StringExpr {
@@ -109,7 +109,7 @@ Expr *create_bin_expr(Expr *left, Expr *right, char *op);
 
 Expr *create_int_expr(int value);
 
-Expr *create_double_expr(double value);
+Expr *create_float_expr(float value);
 
 Expr *create_identifier_expr(char *symbol);
 

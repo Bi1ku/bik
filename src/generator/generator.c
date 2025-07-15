@@ -28,8 +28,8 @@ void generate_asm(char *filename, Env *env) {
         fprintf(file, "%s: .word %d\n", name, value.int_val);
         break;
 
-      case DOUBLE:
-        fprintf(file, "%s: .word %lf\n", name, value.double_val);
+      case FLOAT:
+        fprintf(file, "%s: .word %lf\n", name, value.float_val);
         break;
       }
     }

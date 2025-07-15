@@ -89,7 +89,7 @@ TokenList *tokenize(char *path) {
       char buffer[100] = "";
       int i = 0;
 
-      // doubles & ints
+      // floats & ints
       if (isnumber(mutable[0]) != 0) {
         while (isnumber(mutable[0]) != 0 || mutable[0] == '.') {
           buffer[i] = mutable[0];
