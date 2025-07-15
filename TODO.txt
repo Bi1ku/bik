@@ -4,10 +4,12 @@
 - Read from file [DONE]
 - change double -> float [DONE]
 - Generate basic ASM code [IN PROGRESS]
+- rename item -> var, var -> VarValue
 - learn more about cmakelists
 - ENV items list to pointer
 - NodeList to pointer
-- rename item -> var, var -> VarValue
+- functions
+- standard library
 - Objects & arrays -> ASM
 - Functions & scopes -> ASM
 - Native functions -> ASM

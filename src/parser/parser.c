@@ -95,24 +95,37 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
 
       NodeList *temp = parse_line(nodes, tokens, env);
       Expr *expr = temp->nodes[temp->size - 1].expr;
-      Var val = eval(expr->bin_expr, env);
 
-      switch (val.type) {
-      case INT:
-        add_to_env(env->items, create_int_var(name, val.int_val));
-        break;
+      if (expr->type == BIN_EXPR) {
+        Var val = eval(expr->bin_expr, env);
 
-      case FLOAT:
-        add_to_env(env->items, create_float_var(name, val.float_val));
-        break;
+        switch (val.type) {
+        case INT:
+          add_to_env(env->items, create_int_var(name, val.int_val));
+          break;
 
-      case STRING:
-        add_to_env(env->items, create_str_var(name, val.str_val));
-        break;
+        case FLOAT:
+          add_to_env(env->items, create_float_var(name, val.float_val));
+          break;
 
-      default:
+        case STRING:
+          add_to_env(env->items, create_str_var(name, val.str_val));
+          break;
+
+        default:
+          printf("ERROR: Cannot assign value of type %d to variable %s\n",
+                 val.type, name);
+          exit(EXIT_FAILURE);
+        }
+      } else if (expr->type == INT_EXPR) {
+        add_to_env(env->items, create_int_var(name, expr->int_expr->value));
+      } else if (expr->type == FLOAT_EXPR) {
+        add_to_env(env->items, create_float_var(name, expr->float_expr->value));
+      } else if (expr->type == STRING_EXPR) {
+        add_to_env(env->items, create_str_var(name, expr->string_expr->value));
+      } else {
         printf("ERROR: Cannot assign value of type %d to variable %s\n",
-               val.type, name);
+               expr->type, name);
         exit(EXIT_FAILURE);
       }
 
