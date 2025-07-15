@@ -8,6 +8,9 @@ Env *create_env(Env *parent, int init_size) {
   env->parent = parent;
 
   env->items = malloc(sizeof(ItemList));
+
+  // env->items->items = malloc(sizeof(Item) * init_size); // when changing to
+  // pointer
   env->items->capacity = init_size;
   env->items->size = 0;
 

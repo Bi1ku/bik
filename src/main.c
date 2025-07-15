@@ -1,3 +1,4 @@
+#include "../include/generator/generator.h"
 #include "../include/lexer/lexer.h"
 #include "../include/lexer/tokens.h"
 #include "../include/parser/ast.h"
@@ -8,7 +9,10 @@ int main() {
   TokenList *tokens = tokenize(read("../tests/test1.bik"));
   print_tokens(tokens);
 
-  ProgramStmt *program = parse(tokens, NULL);
+  Env *env = create_env(NULL, 10);
+  ProgramStmt *program = parse(tokens, env);
+
+  generate_asm("output.asm", env);
 
   return 0;
 }

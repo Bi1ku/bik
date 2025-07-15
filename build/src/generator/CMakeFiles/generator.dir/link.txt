@@ -1,2 +1,2 @@
-/usr/bin/ar qc libgenerator.a CMakeFiles/generator.dir/eval.c.o
+/usr/bin/ar qc libgenerator.a CMakeFiles/generator.dir/generator.c.o CMakeFiles/generator.dir/eval.c.o
 /usr/bin/ranlib libgenerator.a

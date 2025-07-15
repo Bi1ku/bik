@@ -1,0 +1,4 @@
+INTS - 4 bytes
+FLOATS - 4 bytes
+STRINGS - infinite
+

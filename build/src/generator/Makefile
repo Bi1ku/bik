@@ -154,6 +154,30 @@ eval.c.s:
 	cd /Users/biiku/code/projects/bik/build && $(MAKE) $(MAKESILENT) -f src/generator/CMakeFiles/generator.dir/build.make src/generator/CMakeFiles/generator.dir/eval.c.s
 .PHONY : eval.c.s
 
+generator.o: generator.c.o
+.PHONY : generator.o
+
+# target to build an object file
+generator.c.o:
+	cd /Users/biiku/code/projects/bik/build && $(MAKE) $(MAKESILENT) -f src/generator/CMakeFiles/generator.dir/build.make src/generator/CMakeFiles/generator.dir/generator.c.o
+.PHONY : generator.c.o
+
+generator.i: generator.c.i
+.PHONY : generator.i
+
+# target to preprocess a source file
+generator.c.i:
+	cd /Users/biiku/code/projects/bik/build && $(MAKE) $(MAKESILENT) -f src/generator/CMakeFiles/generator.dir/build.make src/generator/CMakeFiles/generator.dir/generator.c.i
+.PHONY : generator.c.i
+
+generator.s: generator.c.s
+.PHONY : generator.s
+
+# target to generate assembly for a file
+generator.c.s:
+	cd /Users/biiku/code/projects/bik/build && $(MAKE) $(MAKESILENT) -f src/generator/CMakeFiles/generator.dir/build.make src/generator/CMakeFiles/generator.dir/generator.c.s
+.PHONY : generator.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -166,6 +190,9 @@ help:
 	@echo "... eval.o"
 	@echo "... eval.i"
 	@echo "... eval.s"
+	@echo "... generator.o"
+	@echo "... generator.i"
+	@echo "... generator.s"
 .PHONY : help
 
 

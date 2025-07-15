@@ -72,10 +72,24 @@ include src/generator/CMakeFiles/generator.dir/flags.make
 src/generator/CMakeFiles/generator.dir/codegen:
 .PHONY : src/generator/CMakeFiles/generator.dir/codegen
 
+src/generator/CMakeFiles/generator.dir/generator.c.o: src/generator/CMakeFiles/generator.dir/flags.make
+src/generator/CMakeFiles/generator.dir/generator.c.o: /Users/biiku/code/projects/bik/src/generator/generator.c
+src/generator/CMakeFiles/generator.dir/generator.c.o: src/generator/CMakeFiles/generator.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/biiku/code/projects/bik/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object src/generator/CMakeFiles/generator.dir/generator.c.o"
+	cd /Users/biiku/code/projects/bik/build/src/generator && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT src/generator/CMakeFiles/generator.dir/generator.c.o -MF CMakeFiles/generator.dir/generator.c.o.d -o CMakeFiles/generator.dir/generator.c.o -c /Users/biiku/code/projects/bik/src/generator/generator.c
+
+src/generator/CMakeFiles/generator.dir/generator.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/generator.dir/generator.c.i"
+	cd /Users/biiku/code/projects/bik/build/src/generator && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/biiku/code/projects/bik/src/generator/generator.c > CMakeFiles/generator.dir/generator.c.i
+
+src/generator/CMakeFiles/generator.dir/generator.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/generator.dir/generator.c.s"
+	cd /Users/biiku/code/projects/bik/build/src/generator && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/biiku/code/projects/bik/src/generator/generator.c -o CMakeFiles/generator.dir/generator.c.s
+
 src/generator/CMakeFiles/generator.dir/eval.c.o: src/generator/CMakeFiles/generator.dir/flags.make
 src/generator/CMakeFiles/generator.dir/eval.c.o: /Users/biiku/code/projects/bik/src/generator/eval.c
 src/generator/CMakeFiles/generator.dir/eval.c.o: src/generator/CMakeFiles/generator.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/biiku/code/projects/bik/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object src/generator/CMakeFiles/generator.dir/eval.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/biiku/code/projects/bik/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object src/generator/CMakeFiles/generator.dir/eval.c.o"
 	cd /Users/biiku/code/projects/bik/build/src/generator && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT src/generator/CMakeFiles/generator.dir/eval.c.o -MF CMakeFiles/generator.dir/eval.c.o.d -o CMakeFiles/generator.dir/eval.c.o -c /Users/biiku/code/projects/bik/src/generator/eval.c
 
 src/generator/CMakeFiles/generator.dir/eval.c.i: cmake_force
@@ -88,15 +102,17 @@ src/generator/CMakeFiles/generator.dir/eval.c.s: cmake_force
 
 # Object files for target generator
 generator_OBJECTS = \
+"CMakeFiles/generator.dir/generator.c.o" \
 "CMakeFiles/generator.dir/eval.c.o"
 
 # External object files for target generator
 generator_EXTERNAL_OBJECTS =
 
+src/generator/libgenerator.a: src/generator/CMakeFiles/generator.dir/generator.c.o
 src/generator/libgenerator.a: src/generator/CMakeFiles/generator.dir/eval.c.o
 src/generator/libgenerator.a: src/generator/CMakeFiles/generator.dir/build.make
 src/generator/libgenerator.a: src/generator/CMakeFiles/generator.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/biiku/code/projects/bik/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C static library libgenerator.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/biiku/code/projects/bik/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C static library libgenerator.a"
 	cd /Users/biiku/code/projects/bik/build/src/generator && $(CMAKE_COMMAND) -P CMakeFiles/generator.dir/cmake_clean_target.cmake
 	cd /Users/biiku/code/projects/bik/build/src/generator && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/generator.dir/link.txt --verbose=$(VERBOSE)
 
