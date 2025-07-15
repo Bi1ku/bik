@@ -3,6 +3,8 @@
 - Better error handling [DONE]
 - Read from file [DONE]
 - Generate basic ASM code
+- learn more about cmakelists
+- change double -> float
 - Objects & arrays -> ASM
 - Functions & scopes -> ASM
 - Native functions -> ASM
