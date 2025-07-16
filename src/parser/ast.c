@@ -58,6 +58,28 @@ Stmt *create_assign_stmt(char *symbol, Expr *expr) { // work on this
   return stmt;
 }
 
+Stmt *create_func_stmt(char *name, NodeList *params, NodeList *body) {
+  Stmt *stmt = malloc(sizeof(Stmt));
+  stmt->type = FUNC_STMT;
+
+  stmt->funcStmt = malloc(sizeof(FuncStmt));
+  stmt->funcStmt->name = name;
+  stmt->funcStmt->params = params;
+  stmt->funcStmt->body = body;
+
+  return stmt;
+}
+
+Stmt *create_param_stmt(char *symbol) {
+  Stmt *stmt = malloc(sizeof(Stmt));
+  stmt->type = PARAM_STMT;
+
+  stmt->paramStmt = malloc(sizeof(ParamStmt));
+  stmt->paramStmt->symbol = symbol;
+
+  return stmt;
+}
+
 Node *create_expr_node(Expr *expr) {
   Node *node = malloc(sizeof(Node));
   node->type = EXPR;

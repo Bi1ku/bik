@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-char *keywords[] = {"var", "func"};
+char *keywords[] = {"func"};
 
 int shift(char *str) {
   if (str == NULL) {
@@ -79,6 +79,16 @@ TokenList *tokenize(char *path) {
       shift(mutable);
       break;
 
+    case '{':
+      add_to_token_list(tokens, create_token(BLOCK_START, "{"));
+      shift(mutable);
+      break;
+
+    case '}':
+      add_to_token_list(tokens, create_token(BLOCK_END, "}"));
+      shift(mutable);
+      break;
+
     case ';':
       add_to_token_list(tokens, create_token(NEWLINE, "newline"));
       shift(mutable);
@@ -104,10 +114,24 @@ TokenList *tokenize(char *path) {
       else if (is_skippable(mutable[0]) != 0) {
         bool quotes = false;
         bool is_str = false;
+        bool comma = false;
+
         while ((mutable[0] != ' ' || quotes) && mutable[0] != ';') {
           if (mutable[0] == '"') {
             quotes = !quotes;
             is_str = true;
+          }
+
+          // for params
+          else if (mutable[0] == ',' || mutable[0] == ')') {
+            comma = true;
+            add_to_token_list(tokens, create_token(IDENTIFIER, buffer));
+            if (mutable[0] == ',')
+              add_to_token_list(tokens, create_token(COMMA, ","));
+            else
+              add_to_token_list(tokens, create_token(PAREN_R, ")"));
+            shift(mutable);
+            break;
           }
 
           else {
@@ -118,28 +142,30 @@ TokenList *tokenize(char *path) {
           shift(mutable);
         }
 
-        if (quotes) {
-          printf("Quotes are wrong");
-          exit(EXIT_FAILURE);
-        }
+        if (!comma) {
+          if (quotes) {
+            printf("Quotes are wrong");
+            exit(EXIT_FAILURE);
+          }
 
-        if (is_str) {
-          add_to_token_list(tokens, create_token(STR, buffer));
-          break;
-        }
-
-        bool found = false;
-        for (int i = 0; i < sizeof(keywords) / sizeof(keywords[0]); i++) {
-          if (strcmp(keywords[i], buffer) == 0) {
-            found = true;
+          if (is_str) {
+            add_to_token_list(tokens, create_token(STR, buffer));
             break;
           }
-        }
 
-        if (found)
-          add_to_token_list(tokens, create_token(KEYWORD, buffer));
-        else
-          add_to_token_list(tokens, create_token(IDENTIFIER, buffer));
+          bool found = false;
+          for (int i = 0; i < sizeof(keywords) / sizeof(keywords[0]); i++) {
+            if (strcmp(keywords[i], buffer) == 0) {
+              found = true;
+              break;
+            }
+          }
+
+          if (found)
+            add_to_token_list(tokens, create_token(KEYWORD, buffer));
+          else
+            add_to_token_list(tokens, create_token(IDENTIFIER, buffer));
+        }
       } else
         shift(mutable);
 

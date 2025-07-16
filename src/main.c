@@ -11,8 +11,8 @@ int main() {
 
   Env *env = create_env(NULL, 10);
   ProgramStmt *program = parse(tokens, env);
-
-  generate_asm("output.asm", env);
+  //
+  //  generate_asm("output.asm", env);
 
   return 0;
 }

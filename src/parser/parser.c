@@ -21,6 +21,15 @@ Token eat(TokenList *tokens) {
   return token;
 }
 
+Token expect(TokenList *tokens, TokenType type) {
+  Token token = eat(tokens);
+  if (token.type != type) {
+    printf("ERROR: Expected token of type %d but got %d\n", type, token.type);
+    exit(EXIT_FAILURE);
+  }
+  return token;
+}
+
 Node *parse_additive(TokenList *tokens);
 
 // parse actual values like 5, foo(), x, 3.5
@@ -39,9 +48,6 @@ Node *parse_values(TokenList *tokens) {
   case STR:
     return create_expr_node(create_string_expr(eat(tokens).value));
 
-  case IDENTIFIER:
-    return create_expr_node(create_identifier_expr(eat(tokens).value));
-
   case PAREN_L:
     eat(tokens);
     Node *sub_expr = parse_additive(tokens);
@@ -53,9 +59,16 @@ Node *parse_values(TokenList *tokens) {
     }
     return sub_expr;
 
+  case KEYWORD:
+    if (strcmp(peek(tokens).value, "func") == 0) {
+    }
+
+    exit(EXIT_FAILURE);
+    break;
+
   default:
     printf("ERROR: Unexpected token \"%s\"", peek(tokens).value);
-    exit(1);
+    exit(EXIT_FAILURE);
   }
 }
 
@@ -86,8 +99,31 @@ Node *parse_additive(TokenList *tokens) {
   return left;
 }
 
+NodeList *parse_func_args(TokenList *tokens) {
+  NodeList *nodes = create_node_list(5);
+
+  while (strcmp(peek(tokens).value, ")") != 0) {
+    if (peek(tokens).type == IDENTIFIER)
+      add_node_to_node_list(
+          nodes, create_stmt_node(create_param_stmt(eat(tokens).value)));
+    else
+      expect(tokens, COMMA);
+  }
+
+  return nodes;
+}
+
 Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
   switch (peek(tokens).type) {
+  case KEYWORD:
+    if (strcmp(peek(tokens).value, "func") == 0) {
+      eat(tokens);
+      expect(tokens, PAREN_L);
+      parse_func_args(tokens);
+      printf("func detected");
+      exit(EXIT_FAILURE);
+    }
+
   case IDENTIFIER:
     if (tokens->tokens[1].type == ASSIGNMENT) {
       char *name = eat(tokens).value;
@@ -129,8 +165,8 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
         exit(EXIT_FAILURE);
       }
 
-      remove_node_from_node_list(temp, temp->size -
-                                           1); // remove bin_expr added before
+      remove_node_from_node_list(
+          temp, temp->size - 1); // remove bin_expr added before in parse_line
       return create_stmt_node(create_assign_stmt(name, expr));
     }
 

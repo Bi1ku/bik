@@ -12,6 +12,10 @@ typedef enum {
   ASSIGNMENT,
   END,
   STR,
+  BLOCK_START,
+  BLOCK_END,
+  COMMA,
+
 } TokenType;
 
 typedef struct {
