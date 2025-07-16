@@ -15,7 +15,7 @@ void generate_asm(char *filename, Env *env) {
   fprintf(file, ".data\n");
 
   for (int i = 0; i < env->items->size; i++) {
-    Var value = env->items->items[i].value;
+    VarValue value = env->items->items[i].value;
     char *name = env->items->items[i].key;
 
     if (name != NULL) {

@@ -11,34 +11,38 @@ typedef struct {
     int int_val;
     float float_val;
   };
-} Var;
+} VarValue;
 
 typedef struct {
   char *key;
-  Var value;
-} Item;
+  VarValue value;
+} Var;
 
 typedef struct {
   int capacity;
   int size;
-  Item items[100]; // for now, switch to pointer later
-} ItemList;
+  Var items[100]; // for now, switch to pointer later
+} VarList;
 
 struct Env {
   Env *parent;
-  ItemList *items;
+  VarList *items;
 };
-
-Var *get_var(ItemList *items, char *key);
 
 Env *create_env(Env *parent, int init_size);
 
-Item create_float_var(char *key, float value);
+VarValue *get_var(VarList *items, char *key);
 
-Item create_int_var(char *key, int val);
+int get_index_of_var(VarList *items, char *key);
 
-Item create_str_var(char *key, char *val);
+Var create_var(char *key, VarValue val);
 
-void add_to_env(ItemList *items, Item item);
+Var create_float_var(char *key, float value);
+
+Var create_int_var(char *key, int value);
+
+Var create_str_var(char *key, char *value);
+
+void add_to_env(VarList *var_list, Var var);
 
 #endif

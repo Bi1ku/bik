@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-Var calculate(Var x, Var y, char op) {
+VarValue calculate(VarValue x, VarValue y, char op) {
   switch (op) {
   case '+': {
     char buffer[100];
@@ -130,7 +130,7 @@ Var calculate(Var x, Var y, char op) {
   }
 }
 
-Var get_val(Expr *expr, Env *env) {
+VarValue get_val(Expr *expr, Env *env) {
   if (expr->type == BIN_EXPR)
     return eval(expr->bin_expr, env);
 
@@ -149,9 +149,9 @@ Var get_val(Expr *expr, Env *env) {
   return create_float_var("temp", expr->float_expr->value).value;
 }
 
-Var eval(BinaryExpr *bin_expr, Env *env) {
-  Var res;
-  Var right = get_val(bin_expr->right, env);
+VarValue eval(BinaryExpr *bin_expr, Env *env) {
+  VarValue res;
+  VarValue right = get_val(bin_expr->right, env);
 
   res = get_val(bin_expr->left, env);
   if (strcmp(bin_expr->op, "+") == 0)

@@ -7,7 +7,7 @@ Env *create_env(Env *parent, int init_size) {
   Env *env = malloc(sizeof(Env));
   env->parent = parent;
 
-  env->items = malloc(sizeof(ItemList));
+  env->items = malloc(sizeof(VarList));
 
   // env->items->items = malloc(sizeof(Item) * init_size); // when changing to
   // pointer
@@ -17,7 +17,7 @@ Env *create_env(Env *parent, int init_size) {
   return env;
 }
 
-Var *get_var(ItemList *items, char *key) {
+VarValue *get_var(VarList *items, char *key) {
   for (int i = 0; i < items->size; i++) {
     if (strcmp(key, items->items[i].key) == 0) {
       return &(items->items[i].value);
@@ -27,7 +27,7 @@ Var *get_var(ItemList *items, char *key) {
   return NULL;
 }
 
-int get_index_of_var(ItemList *items, char *key) {
+int get_index_of_var(VarList *items, char *key) {
   for (int i = 0; i < items->size; i++) {
     if (strcmp(key, items->items[i].key) == 0) {
       return i;
@@ -37,54 +37,54 @@ int get_index_of_var(ItemList *items, char *key) {
   return -1;
 }
 
-Item create_item(char *key, Var val) {
-  Item item;
-  item.key = key;
-  item.value = val;
+Var create_var(char *key, VarValue val) {
+  Var var;
+  var.key = key;
+  var.value = val;
 
-  return item;
+  return var;
 }
 
-Item create_float_var(char *key, float value) {
-  Var val;
+Var create_float_var(char *key, float value) {
+  VarValue val;
   val.type = FLOAT;
   val.float_val = value;
 
-  return create_item(key, val);
+  return create_var(key, val);
 }
 
-Item create_int_var(char *key, int val) {
-  Var var;
-  var.type = INT;
-  var.int_val = val;
+Var create_int_var(char *key, int value) {
+  VarValue val;
+  val.type = INT;
+  val.int_val = value;
 
-  return create_item(key, var);
+  return create_var(key, val);
 }
 
-Item create_str_var(char *key, char *val) {
-  Var var;
-  var.type = STRING;
-  var.str_val = val;
+Var create_str_var(char *key, char *value) {
+  VarValue val;
+  val.type = STRING;
+  val.str_val = value;
 
-  return create_item(key, var);
+  return create_var(key, val);
 }
 
-void resize_items(ItemList *items) {
+void resize_items(VarList *items) {
   items->capacity *= 2;
   // items->items = realloc(items->items, items->capacity * sizeof(Item)); //
   //  put back in when pointer
 }
 
-void add_to_env(ItemList *items, Item item) {
-  int check = get_index_of_var(items, item.key);
+void add_to_env(VarList *var_list, Var var) {
+  int check = get_index_of_var(var_list, var.key);
   if (check != -1) {
-    items->items[check] = item;
+    var_list->items[check] = var;
     return;
   }
 
-  if (items->size >= items->capacity)
-    resize_items(items);
+  if (var_list->size >= var_list->capacity)
+    resize_items(var_list);
 
-  items->items[items->size] = item;
-  items->size++;
+  var_list->items[var_list->size] = var;
+  var_list->size++;
 }

@@ -97,7 +97,7 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
       Expr *expr = temp->nodes[temp->size - 1].expr;
 
       if (expr->type == BIN_EXPR) {
-        Var val = eval(expr->bin_expr, env);
+        VarValue val = eval(expr->bin_expr, env);
 
         switch (val.type) {
         case INT:
