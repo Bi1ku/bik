@@ -48,6 +48,9 @@ Node *parse_values(TokenList *tokens) {
   case STR:
     return create_expr_node(create_string_expr(eat(tokens).value));
 
+  case IDENTIFIER:
+    return create_expr_node(create_identifier_expr(eat(tokens).value));
+
   case PAREN_L:
     eat(tokens);
     Node *sub_expr = parse_additive(tokens);
@@ -58,13 +61,6 @@ Node *parse_values(TokenList *tokens) {
       exit(0);
     }
     return sub_expr;
-
-  case KEYWORD:
-    if (strcmp(peek(tokens).value, "func") == 0) {
-    }
-
-    exit(EXIT_FAILURE);
-    break;
 
   default:
     printf("ERROR: Unexpected token \"%s\"", peek(tokens).value);
@@ -132,6 +128,10 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
 
       return create_stmt_node(create_func_stmt("test", params, program->body));
 
+    } else if (strcmp(peek(tokens).value, "ret") == 0) {
+      eat(tokens);
+      Node *expr = parse_additive(tokens);
+      return create_stmt_node(create_ret_stmt(expr->expr));
     } else {
       exit(EXIT_FAILURE);
     }
@@ -163,14 +163,10 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
             break;
 
           default:
-            printf("ERROR: Cannot assign value of type %d to variable %s\n",
-                   val.type, name);
+            printf("ERROR: Cannot assign value of type %s to variable %s\n",
+                   get_string_token_type(val.type), name);
             exit(EXIT_FAILURE);
           }
-
-          remove_node_from_node_list(
-              temp,
-              temp->size - 1); // remove bin_expr added before in parse_line
 
         } else if (node->expr->type == INT_EXPR) {
           add_to_env(env->items,
@@ -181,11 +177,17 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
         } else if (node->expr->type == STRING_EXPR) {
           add_to_env(env->items,
                      create_str_var(name, node->expr->string_expr->value));
+        } else if (node->expr->type == IDENTIFIER_EXPR) {
+          // get var from identifier, and assign it to the new variable
         } else {
-          printf("ERROR: Cannot assign value of type %d to variable %s\n",
-                 node->expr->type, name);
+          printf("ERROR: Cannot assign value of type %s to variable %s\n",
+                 get_string_token_type(node->expr->type), name);
           exit(EXIT_FAILURE);
         }
+
+        remove_node_from_node_list(
+            temp,
+            temp->size - 1); // remove bin_expr added before in parse_line
 
         return create_stmt_node(create_assign_stmt(name, node->expr));
       } else if (node->type == STMT) {

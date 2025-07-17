@@ -7,5 +7,6 @@ solve = func (a, b, c) {
 
 ligma = func (zoo, wee, mama) {
   p = 9;
-  suiiiiii = "complex mathz" + 1;
+  suiiiiii = yo_mama + "complex mathz" + "\n";
+  ret suiiiiii;
 };

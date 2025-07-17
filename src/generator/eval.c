@@ -166,7 +166,5 @@ VarValue eval(BinaryExpr *bin_expr, Env *env) {
   else if (strcmp(bin_expr->op, "/") == 0)
     res = calculate(res, right, '/');
 
-  // TODO: modulo
-
   return res;
 }

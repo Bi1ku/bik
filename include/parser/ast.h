@@ -2,7 +2,13 @@
 #define AST_H
 
 typedef enum { EXPR, STMT } NodeType;
-typedef enum { PROGRAM_STMT, ASSIGN_STMT, FUNC_STMT, PARAM_STMT } StmtType;
+typedef enum {
+  PROGRAM_STMT,
+  ASSIGN_STMT,
+  FUNC_STMT,
+  PARAM_STMT,
+  RET_STMT
+} StmtType;
 typedef enum {
   INT_EXPR,
   FLOAT_EXPR,
@@ -26,6 +32,7 @@ typedef struct ProgramStmt ProgramStmt;
 typedef struct FuncStmt FuncStmt;
 typedef struct ParamStmt ParamStmt;
 typedef struct AssignStmt AssignStmt;
+typedef struct RetStmt RetStmt;
 
 typedef struct NodeList NodeList;
 struct Node {
@@ -39,6 +46,7 @@ struct Node {
 struct Stmt {
   StmtType type;
   union {
+    RetStmt *retStmt;
     ProgramStmt *programStmt;
     AssignStmt *assignStmt;
     FuncStmt *funcStmt;
@@ -62,6 +70,10 @@ struct NodeList {
   int size;
   Node
       nodes[100]; // simply to visualize in debug mode [CHANGE LATER] to pointer
+};
+
+struct RetStmt {
+  Expr *expr;
 };
 
 struct ParamStmt {
@@ -132,5 +144,7 @@ Expr *create_string_expr(char *value);
 Stmt *create_param_stmt(char *symbol);
 
 Stmt *create_func_stmt(char *name, NodeList *params, NodeList *body);
+
+Stmt *create_ret_stmt(Expr *expr);
 
 #endif

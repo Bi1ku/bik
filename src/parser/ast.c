@@ -58,6 +58,16 @@ Stmt *create_assign_stmt(char *symbol, Expr *expr) { // work on this
   return stmt;
 }
 
+Stmt *create_ret_stmt(Expr *expr) {
+  Stmt *stmt = malloc(sizeof(Stmt));
+  stmt->type = RET_STMT;
+
+  stmt->retStmt = malloc(sizeof(RetStmt));
+  stmt->retStmt->expr = expr;
+
+  return stmt;
+}
+
 Stmt *create_func_stmt(char *name, NodeList *params, NodeList *body) {
   Stmt *stmt = malloc(sizeof(Stmt));
   stmt->type = FUNC_STMT;
