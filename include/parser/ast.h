@@ -131,4 +131,6 @@ Expr *create_string_expr(char *value);
 
 Stmt *create_param_stmt(char *symbol);
 
+Stmt *create_func_stmt(char *name, NodeList *params, NodeList *body);
+
 #endif
