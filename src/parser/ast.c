@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// NODE LIST DYNAMIC ARRAY
 NodeList *create_node_list(int init_size) {
   NodeList *nodes = malloc(sizeof(NodeList));
   nodes->size = 0;
@@ -47,46 +48,40 @@ void remove_node_from_node_list(NodeList *nodes, int index) {
 
 Stmt *create_assign_stmt(char *symbol, Expr *expr) { // work on this
   Stmt *stmt = malloc(sizeof(Stmt));
-  stmt->type = ASSIGN_STMT;
+  stmt->type = ASSIGN;
 
-  AssignStmt *assign = malloc(sizeof(AssignStmt));
+  Assign *assign = malloc(sizeof(Assign));
   assign->symbol = symbol;
   assign->expr = expr;
 
-  stmt->assignStmt = assign;
+  stmt->assign = assign;
 
   return stmt;
 }
 
 Stmt *create_ret_stmt(Expr *expr) {
   Stmt *stmt = malloc(sizeof(Stmt));
-  stmt->type = RET_STMT;
-
-  stmt->retStmt = malloc(sizeof(RetStmt));
-  stmt->retStmt->expr = expr;
-
+  stmt->type = RET;
+  stmt->ret = expr;
   return stmt;
 }
 
 Stmt *create_func_stmt(char *name, NodeList *params, NodeList *body) {
   Stmt *stmt = malloc(sizeof(Stmt));
-  stmt->type = FUNC_STMT;
+  stmt->type = FUNC;
 
-  stmt->funcStmt = malloc(sizeof(FuncStmt));
-  stmt->funcStmt->name = name;
-  stmt->funcStmt->params = params;
-  stmt->funcStmt->body = body;
+  stmt->func = malloc(sizeof(Func));
+  stmt->func->name = name;
+  stmt->func->params = params;
+  stmt->func->body = body;
 
   return stmt;
 }
 
 Stmt *create_param_stmt(char *symbol) {
   Stmt *stmt = malloc(sizeof(Stmt));
-  stmt->type = PARAM_STMT;
-
-  stmt->paramStmt = malloc(sizeof(ParamStmt));
-  stmt->paramStmt->symbol = symbol;
-
+  stmt->type = PARAM;
+  stmt->param = symbol;
   return stmt;
 }
 
@@ -94,70 +89,52 @@ Node *create_expr_node(Expr *expr) {
   Node *node = malloc(sizeof(Node));
   node->type = EXPR;
   node->expr = expr;
-
   return node;
 }
 
 Stmt *create_program() {
   Stmt *stmt = malloc(sizeof(Stmt));
-  stmt->type = PROGRAM_STMT;
-
-  ProgramStmt *program = malloc(sizeof(ProgramStmt));
-  program->body = create_node_list(10);
-
-  stmt->programStmt = program;
-
+  stmt->type = PROGRAM;
+  stmt->program = create_node_list(10);
   return stmt;
 }
 
 Expr *create_bin_expr(Expr *left, Expr *right, char *op) {
   Expr *expr = malloc(sizeof(Expr));
-  expr->type = BIN_EXPR;
+  expr->type = BIN;
 
-  expr->bin_expr = malloc(sizeof(BinaryExpr));
-  expr->bin_expr->left = left;
-  expr->bin_expr->right = right;
-  expr->bin_expr->op = op;
+  expr->bin = malloc(sizeof(Bin));
+  expr->bin->left = left;
+  expr->bin->right = right;
+  expr->bin->op = op;
 
   return expr;
 }
 
 Expr *create_int_expr(int value) {
   Expr *expr = malloc(sizeof(Expr));
-  expr->type = INT_EXPR;
-
-  expr->int_expr = malloc(sizeof(IntExpr));
-  expr->int_expr->value = value;
-
+  expr->type = INT_EX;
+  expr->integer = value;
   return expr;
 }
 
 Expr *create_float_expr(float value) {
   Expr *expr = malloc(sizeof(Expr));
-  expr->type = FLOAT_EXPR;
-
-  expr->float_expr = malloc(sizeof(FloatExpr));
-  expr->float_expr->value = value;
-
+  expr->type = FLOAT_EX;
+  expr->floating = value;
   return expr;
 }
 
 Expr *create_identifier_expr(char *symbol) {
   Expr *expr = malloc(sizeof(Expr));
-  expr->type = IDENTIFIER_EXPR;
-
-  expr->identifier_expr = malloc(sizeof(IdentifierExpr));
-  expr->identifier_expr->symbol = symbol;
-
+  expr->type = IDENTIFIER_EX;
+  expr->identifier = symbol;
   return expr;
 }
 
 Expr *create_string_expr(char *value) {
   Expr *expr = malloc(sizeof(Expr));
-  expr->type = STRING_EXPR;
-
-  expr->string_expr = malloc(sizeof(StringExpr));
-  expr->string_expr->value = value;
-
+  expr->type = STRING_EX;
+  expr->str = value;
   return expr;
 }

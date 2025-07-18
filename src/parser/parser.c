@@ -119,14 +119,14 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
       NodeList *params = parse_func_args(tokens);
       expect(tokens, BLOCK_START);
 
-      ProgramStmt *program = create_program()->programStmt;
+      NodeList *program = create_program()->program;
       while (peek(tokens).type != BLOCK_END) {
-        parse_line(program->body, tokens, env);
+        parse_line(program, tokens, env);
         expect(tokens, NEWLINE);
       }
       expect(tokens, BLOCK_END);
 
-      return create_stmt_node(create_func_stmt("test", params, program->body));
+      return create_stmt_node(create_func_stmt("test", params, program));
 
     } else if (strcmp(peek(tokens).value, "ret") == 0) {
       eat(tokens);
@@ -146,8 +146,8 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
       Node *node = &(temp->nodes[temp->size - 1]);
 
       if (node->type == EXPR) {
-        if (node->expr->type == BIN_EXPR) {
-          VarValue val = eval(node->expr->bin_expr, env);
+        if (node->expr->type == BIN) {
+          VarValue val = eval(node->expr->bin, env);
 
           switch (val.type) {
           case INT:
@@ -168,16 +168,13 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
             exit(EXIT_FAILURE);
           }
 
-        } else if (node->expr->type == INT_EXPR) {
-          add_to_env(env->items,
-                     create_int_var(name, node->expr->int_expr->value));
-        } else if (node->expr->type == FLOAT_EXPR) {
-          add_to_env(env->items,
-                     create_float_var(name, node->expr->float_expr->value));
-        } else if (node->expr->type == STRING_EXPR) {
-          add_to_env(env->items,
-                     create_str_var(name, node->expr->string_expr->value));
-        } else if (node->expr->type == IDENTIFIER_EXPR) {
+        } else if (node->expr->type == INT_EX) {
+          add_to_env(env->items, create_int_var(name, node->expr->integer));
+        } else if (node->expr->type == FLOAT_EX) {
+          add_to_env(env->items, create_float_var(name, node->expr->floating));
+        } else if (node->expr->type == STRING_EX) {
+          add_to_env(env->items, create_str_var(name, node->expr->str));
+        } else if (node->expr->type == IDENTIFIER_EX) {
           // get var from identifier, and assign it to the new variable
         } else {
           printf("ERROR: Cannot assign value of type %s to variable %s\n",
@@ -191,8 +188,8 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
 
         return create_stmt_node(create_assign_stmt(name, node->expr));
       } else if (node->type == STMT) {
-        if (node->stmt->type == FUNC_STMT) {
-          node->stmt->funcStmt->name = strdup(name);
+        if (node->stmt->type == FUNC) {
+          node->stmt->func->name = strdup(name);
           remove_node_from_node_list(
               temp,
               temp->size - 1); // remove bin_expr added before in parse_line
@@ -215,14 +212,14 @@ NodeList *parse_line(NodeList *nodes, TokenList *tokens, Env *env) {
   return nodes;
 }
 
-ProgramStmt *parse(TokenList *tokens, Env *env) {
-  ProgramStmt *program = create_program()->programStmt;
+NodeList *parse(TokenList *tokens, Env *env) {
+  NodeList *program = create_program()->program;
 
   if (env == NULL)
     env = create_env(NULL, 10);
 
   while (tokens->tokens[0].type != END) {
-    parse_line(program->body, tokens, env);
+    parse_line(program, tokens, env);
     eat(tokens);
   }
 

@@ -4,6 +4,6 @@
 #include "../parser/ast.h"
 #include "../parser/env.h"
 
-VarValue eval(BinaryExpr *bin_expr, Env *env);
+VarValue eval(Bin *bin, Env *env);
 
 #endif

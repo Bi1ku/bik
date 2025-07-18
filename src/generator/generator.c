@@ -41,8 +41,8 @@ void generate_asm(char *filename, Env *env, NodeList *program) {
   for (int i = 0; i < program->size; i++) {
     Node node = program->nodes[i];
 
-    if (node.stmt->type == FUNC_STMT) {
-      FuncStmt *func = node.stmt->funcStmt;
+    if (node.stmt->type == FUNC) {
+      Func *func = node.stmt->func;
       fprintf(file, "%s:\n", func->name);
 
       for (int i = 0; i < func->body->size; i++) {

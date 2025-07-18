@@ -10,9 +10,9 @@ int main() {
   print_tokens(tokens);
 
   Env *env = create_env(NULL, 10);
-  ProgramStmt *program = parse(tokens, env);
+  NodeList *program = parse(tokens, env);
 
-  generate_asm("output.asm", env, program->body);
+  generate_asm("output.asm", env, program);
 
   return 0;
 }

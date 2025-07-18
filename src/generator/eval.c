@@ -131,25 +131,22 @@ VarValue calculate(VarValue x, VarValue y, char op) {
 }
 
 VarValue get_val(Expr *expr, Env *env) {
-  if (expr->type == BIN_EXPR)
-    return eval(expr->bin_expr, env);
+  if (expr->type == BIN)
+    return eval(expr->bin, env);
 
-  else if (expr->type == INT_EXPR) {
-    return create_int_var("temp", expr->int_expr->value).value;
-  }
+  else if (expr->type == INT_EX)
+    return create_int_var("temp", expr->integer).value;
 
-  else if (expr->type == IDENTIFIER_EXPR) {
-    return *get_var(env->items, expr->identifier_expr->symbol);
-  }
+  else if (expr->type == IDENTIFIER_EX)
+    return *get_var(env->items, expr->identifier);
 
-  else if (expr->type == STRING_EXPR) {
-    return create_str_var("temp", expr->string_expr->value).value;
-  }
+  else if (expr->type == STRING_EX)
+    return create_str_var("temp", expr->str).value;
 
-  return create_float_var("temp", expr->float_expr->value).value;
+  return create_float_var("temp", expr->floating).value;
 }
 
-VarValue eval(BinaryExpr *bin_expr, Env *env) {
+VarValue eval(Bin *bin_expr, Env *env) {
   VarValue res;
   VarValue right = get_val(bin_expr->right, env);
 

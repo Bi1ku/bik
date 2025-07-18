@@ -1,11 +1,11 @@
 #ifndef ENV_H
 #define ENV_H
 
+#include "ast.h"
 typedef struct Env Env;
-typedef enum { STRING, INT, FLOAT } VarTypes;
 
 typedef struct {
-  VarTypes type;
+  DataType type;
   union {
     char *str_val;
     int int_val;
@@ -21,7 +21,7 @@ typedef struct {
 typedef struct {
   int capacity;
   int size;
-  Var items[100]; // for now, switch to pointer later
+  Var items[100]; // switch to pointer later
 } VarList;
 
 struct Env {
