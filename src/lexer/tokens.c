@@ -55,6 +55,12 @@ char *get_string_token_type(int index) {
     return "END";
   case 9:
     return "STRING";
+  case 10:
+    return "BLOCK_START";
+  case 11:
+    return "BLOCK_END";
+  case 12:
+    return "COMMA";
   default:
     return "UNKNOWN";
   }

@@ -1,6 +1,7 @@
 src/parser/CMakeFiles/parser.dir/env.c.o: \
   /Users/biiku/code/projects/bik/src/parser/env.c \
   /Users/biiku/code/projects/bik/src/parser/../../include/parser/env.h \
+  /Users/biiku/code/projects/bik/src/parser/../../include/parser/ast.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdio.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_stdio.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_bounds.h \

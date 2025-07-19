@@ -14,3 +14,5 @@
 - Functions & scopes -> ASM
 - Native functions -> ASM
 - env scopes
+- fix placeholder
+- moduluo?

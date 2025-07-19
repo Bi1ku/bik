@@ -5,6 +5,6 @@
 #include "../parser/env.h"
 #include "ast.h"
 
-ProgramStmt *parse(TokenList *tokens, Env *env);
+NodeList *parse(TokenList *tokens, Env *env);
 
 #endif
