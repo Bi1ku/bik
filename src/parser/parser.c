@@ -147,24 +147,24 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
 
       if (node->type == EXPR) {
         if (node->expr->type == BIN) {
-          VarValue val = eval(node->expr->bin, env);
+          Expr *val = eval(node->expr->bin, env);
 
-          switch (val.type) {
+          switch (val->type) {
           case INT:
-            add_to_env(env->items, create_int_var(name, val.int_val));
+            add_to_env(env->items, create_int_var(name, val->integer));
             break;
 
           case FLOAT:
-            add_to_env(env->items, create_float_var(name, val.float_val));
+            add_to_env(env->items, create_float_var(name, val->floating));
             break;
 
           case STRING:
-            add_to_env(env->items, create_str_var(name, val.str_val));
+            add_to_env(env->items, create_str_var(name, val->str));
             break;
 
           default:
             printf("ERROR: Cannot assign value of type %s to variable %s\n",
-                   get_string_token_type(val.type), name);
+                   get_string_token_type(val->type), name);
             exit(EXIT_FAILURE);
           }
 

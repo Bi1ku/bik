@@ -16,22 +16,26 @@ void generate_asm(char *filename, Env *env, NodeList *program) {
   fprintf(file, "section .data\n");
 
   for (int i = 0; i < env->items->size; i++) {
-    VarValue value = env->items->items[i].value;
-    char *name = env->items->items[i].key;
+    Expr *value = env->items->items[i]->value;
+    char *name = env->items->items[i]->key;
 
     if (name != NULL) {
-      switch (value.type) {
+      switch (value->type) {
       case STRING:
-        fprintf(file, "\t%s: .asciz \"%s\"\n", name, value.str_val);
+        fprintf(file, "\t%s: .asciz \"%s\"\n", name, value->str);
         break;
 
       case INT:
-        fprintf(file, "\t%s: .word %d\n", name, value.int_val);
+        fprintf(file, "\t%s: .word %d\n", name, value->integer);
         break;
 
       case FLOAT:
-        fprintf(file, "\t%s: .word %lf\n", name, value.float_val);
+        fprintf(file, "\t%s: .word %lf\n", name, value->floating);
         break;
+
+      default:
+        printf("ERROR: Not Valid!");
+        exit(EXIT_FAILURE);
       }
     }
   }

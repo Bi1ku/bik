@@ -5,53 +5,53 @@
 #include <stdlib.h>
 #include <string.h>
 
-VarValue calculate(VarValue x, VarValue y, char op) {
+Expr *calculate(Expr *x, Expr *y, char op) {
   switch (op) {
   case '+': {
     char buffer[100];
 
-    if (x.type == STRING) {
-      if (y.type == INT) {
-        sprintf(buffer, "%d", y.int_val);
-        x.str_val = strcat(x.str_val, buffer);
+    if (x->type == STRING_EX) {
+      if (y->type == INT_EX) {
+        sprintf(buffer, "%d", y->integer);
+        x->str = strcat(x->str, buffer);
       }
 
-      else if (y.type == FLOAT) {
-        sprintf(buffer, "%f", y.float_val);
-        x.str_val = strcat(x.str_val, buffer);
+      else if (y->type == FLOAT_EX) {
+        sprintf(buffer, "%f", y->floating);
+        x->str = strcat(x->str, buffer);
       }
 
       else
-        strcat(x.str_val, y.str_val);
+        strcat(x->str, y->str);
     }
 
-    else if (y.type == STRING) {
-      if (x.type == INT) {
-        sprintf(buffer, "%d", x.int_val);
-        x.str_val = strcat(buffer, y.str_val);
+    else if (y->type == STRING_EX) {
+      if (x->type == INT_EX) {
+        sprintf(buffer, "%d", x->integer);
+        x->str = strcat(buffer, y->str);
       }
 
-      else if (x.type == FLOAT) {
-        sprintf(buffer, "%f", x.float_val);
-        x.str_val = strcat(buffer, y.str_val);
+      else if (x->type == FLOAT_EX) {
+        sprintf(buffer, "%f", x->floating);
+        x->str = strcat(buffer, y->str);
       }
 
-      x.type = STRING;
+      x->type = STRING_EX;
     }
 
     else {
-      if (x.type == INT && y.type == FLOAT) {
-        x.float_val = x.int_val + y.float_val;
-        x.type = FLOAT;
-      } else if (x.type == FLOAT && y.type == INT) {
-        x.float_val = x.float_val + y.int_val;
-        x.type = FLOAT;
-      } else if (x.type == FLOAT && y.type == FLOAT) {
-        x.float_val = x.float_val + y.float_val;
-        x.type = FLOAT;
+      if (x->type == INT_EX && y->type == FLOAT_EX) {
+        x->floating = x->integer + y->floating;
+        x->type = FLOAT_EX;
+      } else if (x->type == FLOAT_EX && y->type == INT_EX) {
+        x->floating = x->floating + y->integer;
+        x->type = FLOAT_EX;
+      } else if (x->type == FLOAT_EX && y->type == FLOAT_EX) {
+        x->floating = x->floating + y->floating;
+        x->type = FLOAT_EX;
       } else {
-        x.int_val = x.int_val + y.int_val;
-        x.type = INT;
+        x->integer = x->integer + y->integer;
+        x->type = INT_EX;
       }
     }
 
@@ -59,18 +59,18 @@ VarValue calculate(VarValue x, VarValue y, char op) {
   }
 
   case '-':
-    if (x.type == INT && y.type == FLOAT) {
-      x.float_val = x.int_val - y.float_val;
-      x.type = FLOAT;
-    } else if (x.type == FLOAT && y.type == INT) {
-      x.float_val = x.float_val - y.int_val;
-      x.type = FLOAT;
-    } else if (x.type == FLOAT && y.type == FLOAT) {
-      x.float_val = x.float_val - y.float_val;
-      x.type = FLOAT;
-    } else if (x.type == INT && y.type == INT) {
-      x.int_val = x.int_val - y.int_val;
-      x.type = INT;
+    if (x->type == INT_EX && y->type == FLOAT_EX) {
+      x->floating = x->integer - y->floating;
+      x->type = FLOAT_EX;
+    } else if (x->type == FLOAT_EX && y->type == INT_EX) {
+      x->floating = x->floating - y->integer;
+      x->type = FLOAT_EX;
+    } else if (x->type == FLOAT_EX && y->type == FLOAT_EX) {
+      x->floating = x->floating - y->floating;
+      x->type = FLOAT_EX;
+    } else if (x->type == INT_EX && y->type == INT_EX) {
+      x->integer = x->integer - y->integer;
+      x->type = INT_EX;
     }
 
     else {
@@ -81,18 +81,18 @@ VarValue calculate(VarValue x, VarValue y, char op) {
     return x;
 
   case '*':
-    if (x.type == INT && y.type == FLOAT) {
-      x.float_val = x.int_val * y.float_val;
-      x.type = FLOAT;
-    } else if (x.type == FLOAT && y.type == INT) {
-      x.float_val = x.float_val * y.int_val;
-      x.type = FLOAT;
-    } else if (x.type == FLOAT && y.type == FLOAT) {
-      x.float_val = x.float_val * y.float_val;
-      x.type = FLOAT;
-    } else if (x.type == INT && y.type == INT) {
-      x.int_val = x.int_val * y.int_val;
-      x.type = INT;
+    if (x->type == INT_EX && y->type == FLOAT_EX) {
+      x->floating = x->integer * y->floating;
+      x->type = FLOAT_EX;
+    } else if (x->type == FLOAT_EX && y->type == INT_EX) {
+      x->floating = x->floating * y->integer;
+      x->type = FLOAT_EX;
+    } else if (x->type == FLOAT_EX && y->type == FLOAT_EX) {
+      x->floating = x->floating * y->floating;
+      x->type = FLOAT_EX;
+    } else if (x->type == INT_EX && y->type == INT_EX) {
+      x->integer = x->integer * y->integer;
+      x->type = INT_EX;
     }
 
     else {
@@ -103,18 +103,18 @@ VarValue calculate(VarValue x, VarValue y, char op) {
     return x;
 
   case '/':
-    if (x.type == INT && y.type == FLOAT) {
-      x.float_val = x.int_val / y.float_val;
-      x.type = FLOAT;
-    } else if (x.type == FLOAT && y.type == INT) {
-      x.float_val = x.float_val / y.int_val;
-      x.type = FLOAT;
-    } else if (x.type == FLOAT && y.type == FLOAT) {
-      x.float_val = x.float_val / y.float_val;
-      x.type = FLOAT;
-    } else if (x.type == INT && y.type == INT) {
-      x.int_val = x.int_val / y.int_val;
-      x.type = INT;
+    if (x->type == INT_EX && y->type == FLOAT_EX) {
+      x->floating = x->integer / y->floating;
+      x->type = FLOAT_EX;
+    } else if (x->type == FLOAT_EX && y->type == INT_EX) {
+      x->floating = x->floating / y->integer;
+      x->type = FLOAT_EX;
+    } else if (x->type == FLOAT_EX && y->type == FLOAT_EX) {
+      x->floating = x->floating / y->floating;
+      x->type = FLOAT_EX;
+    } else if (x->type == INT_EX && y->type == INT_EX) {
+      x->integer = x->integer / y->integer;
+      x->type = INT_EX;
     }
 
     else {
@@ -130,25 +130,26 @@ VarValue calculate(VarValue x, VarValue y, char op) {
   }
 }
 
-VarValue get_val(Expr *expr, Env *env) {
-  if (expr->type == BIN)
-    return eval(expr->bin, env);
-
-  else if (expr->type == INT_EX)
-    return create_int_var("temp", expr->integer).value;
+Expr *get_val(Expr *expr, Env *env) {
+  if (expr->type == INT_EX || expr->type == FLOAT_EX || expr->type == STRING_EX)
+    return expr;
 
   else if (expr->type == IDENTIFIER_EX)
-    return *get_var(env->items, expr->identifier);
+    return get_var(env->items, expr->identifier);
 
-  else if (expr->type == STRING_EX)
-    return create_str_var("temp", expr->str).value;
+  else if (expr->type == BIN)
+    return eval(expr->bin, env);
 
-  return create_float_var("temp", expr->floating).value;
+  else {
+
+    printf("ERROR: Trying to get invalid expression type!");
+    exit(EXIT_FAILURE);
+  }
 }
 
-VarValue eval(Bin *bin_expr, Env *env) {
-  VarValue res;
-  VarValue right = get_val(bin_expr->right, env);
+Expr *eval(Bin *bin_expr, Env *env) {
+  Expr *res;
+  Expr *right = get_val(bin_expr->right, env);
 
   res = get_val(bin_expr->left, env);
   if (strcmp(bin_expr->op, "+") == 0)
