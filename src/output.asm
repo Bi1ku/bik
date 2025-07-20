@@ -1,9 +1,9 @@
 section .data
-	yo_mama: .word -15.000000
+	yo_mama: .asciz "-15.êDÍ"
 	suggo_my_eggos: .word -36
 	x: .word 7
 	p: .word 9
-	suiiiiii: .asciz "-15.000000complex mathz\n"
+	suiiiiii: .asciz "-15.êDÍ"
 
 section .text
 solve:

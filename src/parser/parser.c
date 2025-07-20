@@ -32,8 +32,6 @@ Token expect(TokenList *tokens, TokenType type) {
 
 Node *parse_additive(TokenList *tokens);
 
-// parse actual values like 5, foo(), x, 3.5
-// when we see an assignment
 Node *parse_values(TokenList *tokens) {
   switch (peek(tokens).type) {
   case NUM: {
@@ -143,62 +141,25 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
       eat(tokens);
 
       NodeList *temp = parse_line(nodes, tokens, env);
-      Node *node = &(temp->nodes[temp->size - 1]);
+      Node *rest = &temp->nodes[temp->size - 1];
 
-      if (node->type == EXPR) {
-        if (node->expr->type == BIN) {
-          Expr *val = eval(node->expr->bin, env);
-
-          switch (val->type) {
-          case INT:
-            add_to_env(env->items, create_int_var(name, val->integer));
-            break;
-
-          case FLOAT:
-            add_to_env(env->items, create_float_var(name, val->floating));
-            break;
-
-          case STRING:
-            add_to_env(env->items, create_str_var(name, val->str));
-            break;
-
-          default:
-            printf("ERROR: Cannot assign value of type %s to variable %s\n",
-                   get_string_token_type(val->type), name);
-            exit(EXIT_FAILURE);
-          }
-
-        } else if (node->expr->type == INT_EX) {
-          add_to_env(env->items, create_int_var(name, node->expr->integer));
-        } else if (node->expr->type == FLOAT_EX) {
-          add_to_env(env->items, create_float_var(name, node->expr->floating));
-        } else if (node->expr->type == STRING_EX) {
-          add_to_env(env->items, create_str_var(name, node->expr->str));
-        } else if (node->expr->type == IDENTIFIER_EX) {
-          // get var from identifier, and assign it to the new variable
-        } else {
-          printf("ERROR: Cannot assign value of type %s to variable %s\n",
-                 get_string_token_type(node->expr->type), name);
-          exit(EXIT_FAILURE);
-        }
-
-        remove_node_from_node_list(
-            temp,
-            temp->size - 1); // remove bin_expr added before in parse_line
-
-        return create_stmt_node(create_assign_stmt(name, node->expr));
-      } else if (node->type == STMT) {
-        if (node->stmt->type == FUNC) {
-          node->stmt->func->name = strdup(name);
-          remove_node_from_node_list(
-              temp,
-              temp->size - 1); // remove bin_expr added before in parse_line
-          return node;
-        }
+      if (rest->type == EXPR) {
+        create_var(name, rest->expr, env->items);
+        // expr node must be at end after assignment
+        remove_node_from_node_list(nodes, temp->size - 1);
+        return create_stmt_node(create_assign_stmt(name, rest->expr));
       }
 
+      else if (rest->stmt->type == FUNC) {
+        rest->stmt->func->name = strdup(name);
+        remove_node_from_node_list(nodes, temp->size - 1);
+        return rest;
+      }
+
+      remove_node_from_node_list(nodes, temp->size - 1);
       return parse_additive(tokens);
     }
+
   default:
     return parse_additive(tokens);
   }

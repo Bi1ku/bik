@@ -4,8 +4,7 @@
 typedef enum { EXPR, STMT } NodeType;
 
 typedef enum { PROGRAM, ASSIGN, FUNC, PARAM, RET } StmtType;
-typedef enum { INT, FLOAT, STRING } DataType;
-typedef enum { INT_EX, FLOAT_EX, STRING_EX, BIN, IDENTIFIER_EX } ExprType;
+typedef enum { INT, FLOAT, STRING, BIN, IDENTIFIER_EX } ExprType;
 
 typedef struct NodeList NodeList;
 typedef struct Expr Expr;

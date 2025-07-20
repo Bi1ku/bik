@@ -1,4 +1,5 @@
 #include "../../include/parser/env.h"
+#include "../../include/generator/eval.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -37,26 +38,30 @@ int get_index_of_var(VarList *items, char *key) {
   return -1;
 }
 
-Var *create_var(char *key, Expr *val) {
-  Var *var = malloc(sizeof(Var));
-  var->key = key;
-  var->value = val;
-  return var;
-}
+Var *create_var(char *key, Expr *expr, VarList *vars) {
+  switch (expr->type) {
+  case BIN: {
+    Expr *res = eval(expr->bin, vars);
+    Var *var = create_var(key, res, vars);
+    add_to_env(vars, var);
+    return var;
+  }
 
-Var *create_float_var(char *key, float value) {
-  Expr *val = create_float_expr(value);
-  return create_var(key, val);
-}
+  case IDENTIFIER_EX: {
+    Expr *expr = get_var(vars, expr->identifier);
+    Var *var = create_var(key, expr, vars);
+    add_to_env(vars, var);
+    return var;
+  }
 
-Var *create_int_var(char *key, int value) {
-  Expr *val = create_int_expr(value);
-  return create_var(key, val);
-}
-
-Var *create_str_var(char *key, char *value) {
-  Expr *val = create_string_expr(value);
-  return create_var(key, val);
+  default: {
+    Var *var = malloc(sizeof(Var));
+    var->key = key;
+    var->value = expr;
+    add_to_env(vars, var);
+    return var;
+  }
+  }
 }
 
 void resize_items(VarList *items) {

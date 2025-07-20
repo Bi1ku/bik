@@ -25,10 +25,6 @@ void add_to_env(VarList *var_list, Var *var);
 
 Expr *get_var(VarList *items, char *key);
 int get_index_of_var(VarList *items, char *key);
-
-Var *create_var(char *key, Expr *val);
-Var *create_float_var(char *key, float value);
-Var *create_int_var(char *key, int value);
-Var *create_str_var(char *key, char *value);
+Var *create_var(char *key, Expr *expr, VarList *vars);
 
 #endif

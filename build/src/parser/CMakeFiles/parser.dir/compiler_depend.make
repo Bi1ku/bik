@@ -183,6 +183,9 @@ src/parser/CMakeFiles/parser.dir/env.c.o: /Users/biiku/code/projects/bik/src/par
   /Library/Developer/CommandLineTools/usr/lib/clang/17/include/ptrcheck.h \
   /Library/Developer/CommandLineTools/usr/lib/clang/17/include/stdint.h \
   /Users/biiku/code/projects/bik/include/parser/ast.h \
+  /Users/biiku/code/projects/bik/include/parser/env.h \
+  /Users/biiku/code/projects/bik/include/generator/eval.h \
+  /Users/biiku/code/projects/bik/include/parser/ast.h \
   /Users/biiku/code/projects/bik/include/parser/env.h
 
 src/parser/CMakeFiles/parser.dir/parser.c.o: /Users/biiku/code/projects/bik/src/parser/parser.c \
@@ -288,10 +291,6 @@ src/parser/CMakeFiles/parser.dir/parser.c.o: /Users/biiku/code/projects/bik/src/
 
 /Users/biiku/code/projects/bik/include/generator/eval.h:
 
-/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_intptr_t.h:
-
-/Users/biiku/code/projects/bik/src/parser/parser.c:
-
 /Users/biiku/code/projects/bik/include/parser/env.h:
 
 /Users/biiku/code/projects/bik/src/parser/ast.c:
@@ -379,6 +378,10 @@ src/parser/CMakeFiles/parser.dir/parser.c.o: /Users/biiku/code/projects/bik/src/
 /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/machine/types.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/machine/_types.h:
+
+/Users/biiku/code/projects/bik/src/parser/parser.c:
+
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_intptr_t.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/machine/signal.h:
 

@@ -113,14 +113,14 @@ Expr *create_bin_expr(Expr *left, Expr *right, char *op) {
 
 Expr *create_int_expr(int value) {
   Expr *expr = malloc(sizeof(Expr));
-  expr->type = INT_EX;
+  expr->type = INT;
   expr->integer = value;
   return expr;
 }
 
 Expr *create_float_expr(float value) {
   Expr *expr = malloc(sizeof(Expr));
-  expr->type = FLOAT_EX;
+  expr->type = FLOAT;
   expr->floating = value;
   return expr;
 }
@@ -134,7 +134,7 @@ Expr *create_identifier_expr(char *symbol) {
 
 Expr *create_string_expr(char *value) {
   Expr *expr = malloc(sizeof(Expr));
-  expr->type = STRING_EX;
+  expr->type = STRING;
   expr->str = value;
   return expr;
 }
