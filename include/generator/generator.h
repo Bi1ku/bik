@@ -4,6 +4,6 @@
 #include "../parser/ast.h"
 #include "../parser/env.h"
 
-void generate_asm(char *filename, Env *env, NodeList *program);
+void generate(char *filename, Env *env, NodeList *program);
 
 #endif

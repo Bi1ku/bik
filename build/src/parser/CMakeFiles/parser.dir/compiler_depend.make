@@ -285,6 +285,7 @@ src/parser/CMakeFiles/parser.dir/parser.c.o: /Users/biiku/code/projects/bik/src/
   /Users/biiku/code/projects/bik/include/lexer/tokens.h \
   /Users/biiku/code/projects/bik/include/parser/ast.h \
   /Users/biiku/code/projects/bik/include/parser/env.h \
+  /Users/biiku/code/projects/bik/include/parser/expr.h \
   /Users/biiku/code/projects/bik/include/parser/utils.h
 
 src/parser/CMakeFiles/parser.dir/utils.c.o: /Users/biiku/code/projects/bik/src/parser/utils.c \
@@ -502,6 +503,8 @@ src/parser/CMakeFiles/parser.dir/utils.c.o: /Users/biiku/code/projects/bik/src/p
 /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/machine/_endian.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/libkern/arm/_OSByteOrder.h:
+
+/Users/biiku/code/projects/bik/include/parser/expr.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/malloc/_malloc.h:
 

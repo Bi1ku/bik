@@ -12,7 +12,7 @@ int main() {
   Env *env = create_env(NULL, 10);
   NodeList *program = parse(tokens, env);
 
-  generate_asm("output.asm", env, program);
+  generate("output.asm", env, program);
 
   return 0;
 }

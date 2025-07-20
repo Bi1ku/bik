@@ -4,17 +4,30 @@
 #include <stdlib.h>
 #include <string.h>
 
-void generate_asm(char *filename, Env *env, NodeList *program) {
-  FILE *file;
+int t_reg = 0;
+int f_reg = 0;
 
-  file = fopen("output.asm", "w");
-  if (file == NULL) {
-    printf("ERROR: Could not open file %s for writing\n", filename);
-    exit(EXIT_FAILURE);
+void generate_expr(FILE *out, Expr *expr, Env *env) {
+  switch (expr->type) {
+  case INT:
+    fprintf(out, "li $t%d, %d", t_reg, expr->integer);
+    t_reg++;
+    break;
+
+  case FLOAT:
+    fprintf(out, "l.d $f%d, %f", f_reg, expr->floating);
+    f_reg++;
+    break;
   }
+}
 
-  fprintf(file, "section .data\n");
+void generate_stmt(FILE *out, Stmt *stmt, Env *env) {
+  switch (stmt->type) {
+    // ...
+  }
+}
 
+void generate_vars(FILE *out, Env *env) {
   for (int i = 0; i < env->items->size; i++) {
     Expr *value = env->items->items[i]->value;
     char *name = env->items->items[i]->key;
@@ -22,15 +35,15 @@ void generate_asm(char *filename, Env *env, NodeList *program) {
     if (name != NULL) {
       switch (value->type) {
       case STRING:
-        fprintf(file, "\t%s: .asciz \"%s\"\n", name, value->str);
+        fprintf(out, "\t%s: .asciz \"%s\"\n", name, value->str);
         break;
 
       case INT:
-        fprintf(file, "\t%s: .word %d\n", name, value->integer);
+        fprintf(out, "\t%s: .word %d\n", name, value->integer);
         break;
 
       case FLOAT:
-        fprintf(file, "\t%s: .word %lf\n", name, value->floating);
+        fprintf(out, "\t%s: .word %lf\n", name, value->floating);
         break;
 
       default:
@@ -39,21 +52,28 @@ void generate_asm(char *filename, Env *env, NodeList *program) {
       }
     }
   }
+}
 
-  fprintf(file, "\nsection .text\n");
+void generate(char *filename, Env *env, NodeList *program) {
+  FILE *out = fopen("output.asm", "w");
 
+  if (out == NULL) {
+    printf("ERROR: Could not open file %s for writing\n", filename);
+    exit(EXIT_FAILURE);
+  }
+
+  fprintf(out, "section .data\n");
+  generate_vars(out, env);
+
+  fprintf(out, "\nsection .text\n");
   for (int i = 0; i < program->size; i++) {
     Node node = program->nodes[i];
 
-    if (node.stmt->type == FUNC) {
-      Func *func = node.stmt->func;
-      fprintf(file, "%s:\n", func->name);
-
-      for (int i = 0; i < func->body->size; i++) {
-        // ..
-      }
-    }
+    if (node.type == EXPR)
+      generate_expr(out, node.expr, env);
+    else
+      generate_stmt(out, node.stmt, env);
   }
 
-  fclose(file);
+  fclose(out);
 }

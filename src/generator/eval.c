@@ -5,7 +5,23 @@
 #include <stdlib.h>
 #include <string.h>
 
-Expr *calculate(Expr *x, Expr *y, char op) {
+Expr *copy_expr(Expr *src) {
+  Expr *expr = malloc(sizeof(Expr));
+
+  *expr = *src;
+  if (expr->type == STRING)
+
+    expr->str = strdup(src->str);
+  else if (expr->type == IDENTIFIER_EX)
+    expr->identifier = strdup(src->identifier);
+
+  return expr;
+}
+
+Expr *calculate(Expr *left, Expr *right, char op) {
+  Expr *x = copy_expr(left);
+  Expr *y = copy_expr(right);
+
   switch (op) {
   case '+': {
     char buffer[100];
@@ -55,6 +71,7 @@ Expr *calculate(Expr *x, Expr *y, char op) {
       }
     }
 
+    free(y);
     return x;
   }
 
@@ -78,6 +95,7 @@ Expr *calculate(Expr *x, Expr *y, char op) {
       exit(EXIT_FAILURE);
     }
 
+    free(y);
     return x;
 
   case '*':
@@ -100,6 +118,7 @@ Expr *calculate(Expr *x, Expr *y, char op) {
       exit(EXIT_FAILURE);
     }
 
+    free(y);
     return x;
 
   case '/':
@@ -122,6 +141,7 @@ Expr *calculate(Expr *x, Expr *y, char op) {
       exit(EXIT_FAILURE);
     }
 
+    free(y);
     return x;
 
   default:
