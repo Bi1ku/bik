@@ -1,5 +1,10 @@
-.data
-s: .asciz ""
-d: .word 3.400000
+section .data
+	yo_mama: .asciz "-15.ê≈"
+	suggo_my_eggos: .word -36
+	x: .word 7
+	p: .word 9
+	suiiiiii: .asciz "-15.ê≈"
 
-.text
+section .text
+solve:
+ligma:

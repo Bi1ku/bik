@@ -178,6 +178,30 @@ env.c.s:
 	cd /Users/biiku/code/projects/bik/build && $(MAKE) $(MAKESILENT) -f src/parser/CMakeFiles/parser.dir/build.make src/parser/CMakeFiles/parser.dir/env.c.s
 .PHONY : env.c.s
 
+expr.o: expr.c.o
+.PHONY : expr.o
+
+# target to build an object file
+expr.c.o:
+	cd /Users/biiku/code/projects/bik/build && $(MAKE) $(MAKESILENT) -f src/parser/CMakeFiles/parser.dir/build.make src/parser/CMakeFiles/parser.dir/expr.c.o
+.PHONY : expr.c.o
+
+expr.i: expr.c.i
+.PHONY : expr.i
+
+# target to preprocess a source file
+expr.c.i:
+	cd /Users/biiku/code/projects/bik/build && $(MAKE) $(MAKESILENT) -f src/parser/CMakeFiles/parser.dir/build.make src/parser/CMakeFiles/parser.dir/expr.c.i
+.PHONY : expr.c.i
+
+expr.s: expr.c.s
+.PHONY : expr.s
+
+# target to generate assembly for a file
+expr.c.s:
+	cd /Users/biiku/code/projects/bik/build && $(MAKE) $(MAKESILENT) -f src/parser/CMakeFiles/parser.dir/build.make src/parser/CMakeFiles/parser.dir/expr.c.s
+.PHONY : expr.c.s
+
 parser.o: parser.c.o
 .PHONY : parser.o
 
@@ -202,6 +226,30 @@ parser.c.s:
 	cd /Users/biiku/code/projects/bik/build && $(MAKE) $(MAKESILENT) -f src/parser/CMakeFiles/parser.dir/build.make src/parser/CMakeFiles/parser.dir/parser.c.s
 .PHONY : parser.c.s
 
+utils.o: utils.c.o
+.PHONY : utils.o
+
+# target to build an object file
+utils.c.o:
+	cd /Users/biiku/code/projects/bik/build && $(MAKE) $(MAKESILENT) -f src/parser/CMakeFiles/parser.dir/build.make src/parser/CMakeFiles/parser.dir/utils.c.o
+.PHONY : utils.c.o
+
+utils.i: utils.c.i
+.PHONY : utils.i
+
+# target to preprocess a source file
+utils.c.i:
+	cd /Users/biiku/code/projects/bik/build && $(MAKE) $(MAKESILENT) -f src/parser/CMakeFiles/parser.dir/build.make src/parser/CMakeFiles/parser.dir/utils.c.i
+.PHONY : utils.c.i
+
+utils.s: utils.c.s
+.PHONY : utils.s
+
+# target to generate assembly for a file
+utils.c.s:
+	cd /Users/biiku/code/projects/bik/build && $(MAKE) $(MAKESILENT) -f src/parser/CMakeFiles/parser.dir/build.make src/parser/CMakeFiles/parser.dir/utils.c.s
+.PHONY : utils.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -217,9 +265,15 @@ help:
 	@echo "... env.o"
 	@echo "... env.i"
 	@echo "... env.s"
+	@echo "... expr.o"
+	@echo "... expr.i"
+	@echo "... expr.s"
 	@echo "... parser.o"
 	@echo "... parser.i"
 	@echo "... parser.s"
+	@echo "... utils.o"
+	@echo "... utils.i"
+	@echo "... utils.s"
 .PHONY : help
 
 

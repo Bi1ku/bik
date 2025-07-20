@@ -114,11 +114,41 @@ src/parser/CMakeFiles/parser.dir/env.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/parser.dir/env.c.s"
 	cd /Users/biiku/code/projects/bik/build/src/parser && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/biiku/code/projects/bik/src/parser/env.c -o CMakeFiles/parser.dir/env.c.s
 
+src/parser/CMakeFiles/parser.dir/utils.c.o: src/parser/CMakeFiles/parser.dir/flags.make
+src/parser/CMakeFiles/parser.dir/utils.c.o: /Users/biiku/code/projects/bik/src/parser/utils.c
+src/parser/CMakeFiles/parser.dir/utils.c.o: src/parser/CMakeFiles/parser.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/biiku/code/projects/bik/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object src/parser/CMakeFiles/parser.dir/utils.c.o"
+	cd /Users/biiku/code/projects/bik/build/src/parser && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT src/parser/CMakeFiles/parser.dir/utils.c.o -MF CMakeFiles/parser.dir/utils.c.o.d -o CMakeFiles/parser.dir/utils.c.o -c /Users/biiku/code/projects/bik/src/parser/utils.c
+
+src/parser/CMakeFiles/parser.dir/utils.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/parser.dir/utils.c.i"
+	cd /Users/biiku/code/projects/bik/build/src/parser && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/biiku/code/projects/bik/src/parser/utils.c > CMakeFiles/parser.dir/utils.c.i
+
+src/parser/CMakeFiles/parser.dir/utils.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/parser.dir/utils.c.s"
+	cd /Users/biiku/code/projects/bik/build/src/parser && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/biiku/code/projects/bik/src/parser/utils.c -o CMakeFiles/parser.dir/utils.c.s
+
+src/parser/CMakeFiles/parser.dir/expr.c.o: src/parser/CMakeFiles/parser.dir/flags.make
+src/parser/CMakeFiles/parser.dir/expr.c.o: /Users/biiku/code/projects/bik/src/parser/expr.c
+src/parser/CMakeFiles/parser.dir/expr.c.o: src/parser/CMakeFiles/parser.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/biiku/code/projects/bik/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object src/parser/CMakeFiles/parser.dir/expr.c.o"
+	cd /Users/biiku/code/projects/bik/build/src/parser && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT src/parser/CMakeFiles/parser.dir/expr.c.o -MF CMakeFiles/parser.dir/expr.c.o.d -o CMakeFiles/parser.dir/expr.c.o -c /Users/biiku/code/projects/bik/src/parser/expr.c
+
+src/parser/CMakeFiles/parser.dir/expr.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/parser.dir/expr.c.i"
+	cd /Users/biiku/code/projects/bik/build/src/parser && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/biiku/code/projects/bik/src/parser/expr.c > CMakeFiles/parser.dir/expr.c.i
+
+src/parser/CMakeFiles/parser.dir/expr.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/parser.dir/expr.c.s"
+	cd /Users/biiku/code/projects/bik/build/src/parser && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/biiku/code/projects/bik/src/parser/expr.c -o CMakeFiles/parser.dir/expr.c.s
+
 # Object files for target parser
 parser_OBJECTS = \
 "CMakeFiles/parser.dir/parser.c.o" \
 "CMakeFiles/parser.dir/ast.c.o" \
-"CMakeFiles/parser.dir/env.c.o"
+"CMakeFiles/parser.dir/env.c.o" \
+"CMakeFiles/parser.dir/utils.c.o" \
+"CMakeFiles/parser.dir/expr.c.o"
 
 # External object files for target parser
 parser_EXTERNAL_OBJECTS =
@@ -126,9 +156,11 @@ parser_EXTERNAL_OBJECTS =
 src/parser/libparser.a: src/parser/CMakeFiles/parser.dir/parser.c.o
 src/parser/libparser.a: src/parser/CMakeFiles/parser.dir/ast.c.o
 src/parser/libparser.a: src/parser/CMakeFiles/parser.dir/env.c.o
+src/parser/libparser.a: src/parser/CMakeFiles/parser.dir/utils.c.o
+src/parser/libparser.a: src/parser/CMakeFiles/parser.dir/expr.c.o
 src/parser/libparser.a: src/parser/CMakeFiles/parser.dir/build.make
 src/parser/libparser.a: src/parser/CMakeFiles/parser.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/biiku/code/projects/bik/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking C static library libparser.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/biiku/code/projects/bik/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking C static library libparser.a"
 	cd /Users/biiku/code/projects/bik/build/src/parser && $(CMAKE_COMMAND) -P CMakeFiles/parser.dir/cmake_clean_target.cmake
 	cd /Users/biiku/code/projects/bik/build/src/parser && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/parser.dir/link.txt --verbose=$(VERBOSE)
 

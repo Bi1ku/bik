@@ -41,6 +41,7 @@ CMakeFiles/execute.dir/src/main.c.o: /Users/biiku/code/projects/bik/src/main.c \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/cdefs.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/stdio.h \
   /Library/Developer/CommandLineTools/usr/lib/clang/17/include/ptrcheck.h \
+  /Users/biiku/code/projects/bik/include/parser/ast.h \
   /Users/biiku/code/projects/bik/include/parser/env.h \
   /Users/biiku/code/projects/bik/include/generator/generator.h \
   /Users/biiku/code/projects/bik/include/lexer/lexer.h \

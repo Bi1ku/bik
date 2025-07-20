@@ -12,6 +12,9 @@ typedef enum {
   ASSIGNMENT,
   END,
   STR,
+  BLOCK_START,
+  BLOCK_END,
+  COMMA,
 } TokenType;
 
 typedef struct {
@@ -32,5 +35,7 @@ TokenList *create_token_list(int init_size);
 void add_to_token_list(TokenList *tokens, Token token);
 
 void print_tokens(TokenList *tokens);
+
+char *get_string_token_type(int index);
 
 #endif

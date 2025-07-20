@@ -1,4 +1,5 @@
 #include "../../include/parser/env.h"
+#include "../../include/generator/eval.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,10 +18,10 @@ Env *create_env(Env *parent, int init_size) {
   return env;
 }
 
-VarValue *get_var(VarList *items, char *key) {
-  for (int i = 0; i < items->size; i++) {
-    if (strcmp(key, items->items[i].key) == 0) {
-      return &(items->items[i].value);
+Expr *get_var(VarList *vars, char *key) {
+  for (int i = 0; i < vars->size; i++) {
+    if (strcmp(key, vars->items[i]->key) == 0) {
+      return vars->items[i]->value;
     }
   }
 
@@ -29,7 +30,7 @@ VarValue *get_var(VarList *items, char *key) {
 
 int get_index_of_var(VarList *items, char *key) {
   for (int i = 0; i < items->size; i++) {
-    if (strcmp(key, items->items[i].key) == 0) {
+    if (strcmp(key, items->items[i]->key) == 0) {
       return i;
     }
   }
@@ -37,36 +38,30 @@ int get_index_of_var(VarList *items, char *key) {
   return -1;
 }
 
-Var create_var(char *key, VarValue val) {
-  Var var;
-  var.key = key;
-  var.value = val;
+Var *create_var(char *key, Expr *expr, VarList *vars) {
+  switch (expr->type) {
+  case BIN: {
+    Expr *res = eval(expr->bin, vars);
+    Var *var = create_var(key, res, vars);
+    add_to_env(vars, var);
+    return var;
+  }
 
-  return var;
-}
+  case IDENTIFIER_EX: {
+    Expr *expr = get_var(vars, expr->identifier);
+    Var *var = create_var(key, expr, vars);
+    add_to_env(vars, var);
+    return var;
+  }
 
-Var create_float_var(char *key, float value) {
-  VarValue val;
-  val.type = FLOAT;
-  val.float_val = value;
-
-  return create_var(key, val);
-}
-
-Var create_int_var(char *key, int value) {
-  VarValue val;
-  val.type = INT;
-  val.int_val = value;
-
-  return create_var(key, val);
-}
-
-Var create_str_var(char *key, char *value) {
-  VarValue val;
-  val.type = STRING;
-  val.str_val = value;
-
-  return create_var(key, val);
+  default: {
+    Var *var = malloc(sizeof(Var));
+    var->key = key;
+    var->value = expr;
+    add_to_env(vars, var);
+    return var;
+  }
+  }
 }
 
 void resize_items(VarList *items) {
@@ -75,8 +70,8 @@ void resize_items(VarList *items) {
   //  put back in when pointer
 }
 
-void add_to_env(VarList *var_list, Var var) {
-  int check = get_index_of_var(var_list, var.key);
+void add_to_env(VarList *var_list, Var *var) {
+  int check = get_index_of_var(var_list, var->key);
   if (check != -1) {
     var_list->items[check] = var;
     return;
