@@ -10,7 +10,9 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/Users/biiku/code/projects/bik/src/parser/ast.c" "src/parser/CMakeFiles/parser.dir/ast.c.o" "gcc" "src/parser/CMakeFiles/parser.dir/ast.c.o.d"
   "/Users/biiku/code/projects/bik/src/parser/env.c" "src/parser/CMakeFiles/parser.dir/env.c.o" "gcc" "src/parser/CMakeFiles/parser.dir/env.c.o.d"
+  "/Users/biiku/code/projects/bik/src/parser/expr.c" "src/parser/CMakeFiles/parser.dir/expr.c.o" "gcc" "src/parser/CMakeFiles/parser.dir/expr.c.o.d"
   "/Users/biiku/code/projects/bik/src/parser/parser.c" "src/parser/CMakeFiles/parser.dir/parser.c.o" "gcc" "src/parser/CMakeFiles/parser.dir/parser.c.o.d"
+  "/Users/biiku/code/projects/bik/src/parser/utils.c" "src/parser/CMakeFiles/parser.dir/utils.c.o" "gcc" "src/parser/CMakeFiles/parser.dir/utils.c.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

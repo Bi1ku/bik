@@ -1,97 +1,13 @@
-#include "../../include/generator/eval.h"
 #include "../../include/lexer/tokens.h"
 #include "../../include/parser/ast.h"
 #include "../../include/parser/env.h"
+#include "../../include/parser/expr.h"
+#include "../../include/parser/utils.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 NodeList *parse_line(NodeList *nodes, TokenList *tokens, Env *env);
-
-Token peek(TokenList *tokens) { return (tokens->tokens)[0]; }
-
-Token eat(TokenList *tokens) {
-  Token token = peek(tokens);
-
-  for (int i = 1; i < tokens->size; i++) {
-    tokens->tokens[i - 1] = tokens->tokens[i];
-  }
-  tokens->size--;
-
-  return token;
-}
-
-Token expect(TokenList *tokens, TokenType type) {
-  Token token = eat(tokens);
-  if (token.type != type) {
-    printf("ERROR: Expected token of type %d but got %d\n", type, token.type);
-    exit(EXIT_FAILURE);
-  }
-  return token;
-}
-
-Node *parse_additive(TokenList *tokens);
-
-Node *parse_values(TokenList *tokens) {
-  switch (peek(tokens).type) {
-  case NUM: {
-    char *value = eat(tokens).value;
-
-    if (strchr(value, '.') != NULL)
-      return create_expr_node(create_float_expr(atof(value)));
-
-    return create_expr_node(create_int_expr(atoi(value)));
-  }
-
-  case STR:
-    return create_expr_node(create_string_expr(eat(tokens).value));
-
-  case IDENTIFIER:
-    return create_expr_node(create_identifier_expr(eat(tokens).value));
-
-  case PAREN_L:
-    eat(tokens);
-    Node *sub_expr = parse_additive(tokens);
-    if (peek(tokens).type == PAREN_R)
-      eat(tokens);
-    else {
-      printf("Expected ')'");
-      exit(0);
-    }
-    return sub_expr;
-
-  default:
-    printf("ERROR: Unexpected token \"%s\"", peek(tokens).value);
-    exit(EXIT_FAILURE);
-  }
-}
-
-Node *parse_multiplicative(TokenList *tokens) {
-  Node *left = parse_values(tokens);
-
-  while (strcmp(peek(tokens).value, "*") == 0 ||
-         strcmp(peek(tokens).value, "/") == 0 ||
-         strcmp(peek(tokens).value, "%") == 0) {
-    char *op = eat(tokens).value;
-    Node *right = parse_values(tokens);
-    left = create_expr_node(create_bin_expr(left->expr, right->expr, op));
-  }
-
-  return left;
-}
-
-Node *parse_additive(TokenList *tokens) {
-  Node *left = parse_multiplicative(tokens);
-
-  while (strcmp(peek(tokens).value, "+") == 0 ||
-         strcmp(peek(tokens).value, "-") == 0) {
-    char *op = eat(tokens).value;
-    Node *right = parse_multiplicative(tokens);
-    left = create_expr_node(create_bin_expr(left->expr, right->expr, op));
-  }
-
-  return left;
-}
 
 NodeList *parse_func_args(TokenList *tokens) {
   NodeList *nodes = create_node_list(5);

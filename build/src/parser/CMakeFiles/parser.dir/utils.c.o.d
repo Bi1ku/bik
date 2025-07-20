@@ -1,11 +1,6 @@
-src/parser/CMakeFiles/parser.dir/parser.c.o: \
-  /Users/biiku/code/projects/bik/src/parser/parser.c \
+src/parser/CMakeFiles/parser.dir/utils.c.o: \
+  /Users/biiku/code/projects/bik/src/parser/utils.c \
   /Users/biiku/code/projects/bik/src/parser/../../include/lexer/tokens.h \
-  /Users/biiku/code/projects/bik/src/parser/../../include/parser/ast.h \
-  /Users/biiku/code/projects/bik/src/parser/../../include/parser/env.h \
-  /Users/biiku/code/projects/bik/src/parser/../../include/parser/expr.h \
-  /Users/biiku/code/projects/bik/src/parser/../../include/parser/../lexer/tokens.h \
-  /Users/biiku/code/projects/bik/src/parser/../../include/parser/utils.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdio.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_stdio.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_bounds.h \

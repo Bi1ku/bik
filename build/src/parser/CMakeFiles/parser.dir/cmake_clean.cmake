@@ -3,8 +3,12 @@ file(REMOVE_RECURSE
   "CMakeFiles/parser.dir/ast.c.o.d"
   "CMakeFiles/parser.dir/env.c.o"
   "CMakeFiles/parser.dir/env.c.o.d"
+  "CMakeFiles/parser.dir/expr.c.o"
+  "CMakeFiles/parser.dir/expr.c.o.d"
   "CMakeFiles/parser.dir/parser.c.o"
   "CMakeFiles/parser.dir/parser.c.o.d"
+  "CMakeFiles/parser.dir/utils.c.o"
+  "CMakeFiles/parser.dir/utils.c.o.d"
   "libparser.a"
   "libparser.pdb"
 )
