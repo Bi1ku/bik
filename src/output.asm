@@ -3,10 +3,8 @@ section .data
 	suggo_my_eggos: .word -36
 	x: .word 7
 	p: .word 9
-	suiiiiii: .word 6969405.000000
+	suiiiiii: .asciz "-15.000000complex mathz\n"
 
 section .text
 solve:
 ligma:
-	l.d $f0, 6969405.000000
-	jr $ra

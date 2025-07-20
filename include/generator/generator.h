@@ -3,7 +3,8 @@
 
 #include "../parser/ast.h"
 #include "../parser/env.h"
+#include <stdio.h>
 
-void generate(char *filename, Env *env, NodeList *program);
+void generate(FILE *out, Env *env, NodeList *program);
 
 #endif

@@ -194,6 +194,9 @@ src/generator/CMakeFiles/generator.dir/generator.c.o: /Users/biiku/code/projects
   /Library/Developer/CommandLineTools/usr/lib/clang/17/include/ptrcheck.h \
   /Library/Developer/CommandLineTools/usr/lib/clang/17/include/stdint.h \
   /Users/biiku/code/projects/bik/include/parser/ast.h \
+  /Users/biiku/code/projects/bik/include/parser/env.h \
+  /Users/biiku/code/projects/bik/include/generator/eval.h \
+  /Users/biiku/code/projects/bik/include/parser/ast.h \
   /Users/biiku/code/projects/bik/include/parser/env.h
 
 
