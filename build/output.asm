@@ -15,7 +15,7 @@ main:
 	syscall
 	li $v0, 4
 	la $a0, type
-	syscall	
+	syscall
 	li $v0, 10
 	syscall
 solve:

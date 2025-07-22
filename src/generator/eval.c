@@ -10,7 +10,6 @@ Expr *copy_expr(Expr *src) {
 
   *expr = *src;
   if (expr->type == STRING)
-
     expr->str = strdup(src->str);
   else if (expr->type == IDENTIFIER_EX)
     expr->identifier = strdup(src->identifier);
