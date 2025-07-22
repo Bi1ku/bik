@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-char *keywords[] = {"func", "ret"};
+char *keywords[] = {"func", "ret", "log"};
 
 int shift(char *str) {
   if (str == NULL) {
@@ -123,7 +123,7 @@ TokenList *tokenize(char *path) {
           }
 
           // for params
-          else if (mutable[0] == ',' || mutable[0] == ')') {
+          else if ((mutable[0] == ',' && !quotes) || mutable[0] == ')') {
             comma = true;
             add_to_token_list(tokens, create_token(IDENTIFIER, buffer));
             if (mutable[0] == ',')
@@ -144,7 +144,7 @@ TokenList *tokenize(char *path) {
 
         if (!comma) {
           if (quotes) {
-            printf("Quotes are wrong");
+            printf("ERROR: Quotes are wrong");
             exit(EXIT_FAILURE);
           }
 

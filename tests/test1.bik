@@ -3,10 +3,18 @@ suggo_my_eggos = 5 - (5 * 8) - 9 / 5;
 
 solve = func (a, b, c) {
   x = 7;
+  test = 8;
+  ret x;
 };
+
+log (yo_mama);
 
 ligma = func (zoo, wee, mama) {
   p = 9;
-  suiiiiii = yo_mama + 6969420;
+  suiiiiii = yo_mama + 6969420 / 3;
   ret suiiiiii;
 };
+
+
+type = "hello, world!";
+log (type);

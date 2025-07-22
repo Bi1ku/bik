@@ -3,7 +3,7 @@
 
 typedef enum { EXPR, STMT } NodeType;
 
-typedef enum { PROGRAM, ASSIGN, FUNC, PARAM, RET } StmtType;
+typedef enum { PROGRAM, ASSIGN, FUNC, PARAM, RET, LOG } StmtType;
 typedef enum { INT, FLOAT, STRING, BIN, IDENTIFIER_EX } ExprType;
 
 typedef struct NodeList NodeList;
@@ -45,6 +45,7 @@ typedef struct {
     Assign *assign;
     Func *func;
     char *param;
+    Expr *log;
   };
 } Stmt;
 
@@ -80,5 +81,6 @@ Stmt *create_program();
 Stmt *create_param_stmt(char *symbol);
 Stmt *create_func_stmt(char *name, NodeList *params, NodeList *body);
 Stmt *create_ret_stmt(Expr *expr);
+Stmt *create_log_stmt(Expr *expr);
 
 #endif

@@ -41,12 +41,30 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
       expect(tokens, BLOCK_END);
 
       return create_stmt_node(create_func_stmt("test", params, program));
+    }
 
-    } else if (strcmp(peek(tokens).value, "ret") == 0) {
+    else if (strcmp(peek(tokens).value, "ret") == 0) {
       eat(tokens);
       Node *expr = parse_additive(tokens);
       return create_stmt_node(create_ret_stmt(expr->expr));
-    } else {
+    }
+
+    else if (strcmp(peek(tokens).value, "log") == 0) {
+      eat(tokens);
+      expect(tokens, PAREN_L);
+      Node *node = parse_additive(tokens);
+
+      if (node->type == STMT) {
+        printf("ERROR: Expected to parse an expression but got statement "
+               "instead.");
+        exit(EXIT_FAILURE);
+      }
+
+      expect(tokens, PAREN_R);
+      return create_stmt_node(create_log_stmt(node->expr));
+    }
+
+    else {
       exit(EXIT_FAILURE);
     }
     break;

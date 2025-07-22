@@ -194,6 +194,7 @@ src/generator/CMakeFiles/generator.dir/generator.c.o
  /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/stdio.h
  /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/wait.h
  /Library/Developer/CommandLineTools/usr/lib/clang/17/include/ptrcheck.h
+ /Library/Developer/CommandLineTools/usr/lib/clang/17/include/stdbool.h
  /Library/Developer/CommandLineTools/usr/lib/clang/17/include/stdint.h
  /Users/biiku/code/projects/bik/include/parser/ast.h
  /Users/biiku/code/projects/bik/include/parser/env.h

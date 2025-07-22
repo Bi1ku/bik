@@ -78,6 +78,13 @@ Stmt *create_func_stmt(char *name, NodeList *params, NodeList *body) {
   return stmt;
 }
 
+Stmt *create_log_stmt(Expr *expr) {
+  Stmt *stmt = malloc(sizeof(Stmt));
+  stmt->type = LOG;
+  stmt->log = expr;
+  return stmt;
+}
+
 Stmt *create_param_stmt(char *symbol) {
   Stmt *stmt = malloc(sizeof(Stmt));
   stmt->type = PARAM;

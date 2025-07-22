@@ -1,10 +1,18 @@
-section .data
-	yo_mama: .word -15.000000
+.data
+	yo_mama: .float -15.000000
 	suggo_my_eggos: .word -36
 	x: .word 7
+	test: .word 8
 	p: .word 9
-	suiiiiii: .asciz "-15.000000complex mathz\n"
+	suiiiiii: .float 2323125.000000
 
-section .text
+.text
 solve:
+	li $v0, 7
+	jr $ra
 ligma:
+	l.d $f0, 2323110.000000
+	jr $ra
+ligma:
+	l.d $f1, 2323110.000000
+	jr $ra

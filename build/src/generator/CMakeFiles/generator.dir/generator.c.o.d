@@ -5,6 +5,7 @@ src/generator/CMakeFiles/generator.dir/generator.c.o: \
   /Users/biiku/code/projects/bik/src/generator/../../include/generator/../parser/env.h \
   /Users/biiku/code/projects/bik/src/generator/../../include/parser/ast.h \
   /Users/biiku/code/projects/bik/src/generator/../../include/parser/env.h \
+  /Library/Developer/CommandLineTools/usr/lib/clang/17/include/stdbool.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdio.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_stdio.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_bounds.h \
