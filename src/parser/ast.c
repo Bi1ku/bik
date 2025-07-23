@@ -66,14 +66,25 @@ Stmt *create_ret_stmt(Expr *expr) {
   return stmt;
 }
 
-Stmt *create_func_stmt(char *name, NodeList *params, NodeList *body) {
+Stmt *create_func_decl_stmt(char *name, NodeList *params, NodeList *body) {
   Stmt *stmt = malloc(sizeof(Stmt));
-  stmt->type = FUNC;
+  stmt->type = FUNC_DECL;
 
-  stmt->func = malloc(sizeof(Func));
-  stmt->func->name = name;
-  stmt->func->params = params;
-  stmt->func->body = body;
+  stmt->func_decl = malloc(sizeof(FuncDecl));
+  stmt->func_decl->name = name;
+  stmt->func_decl->params = params;
+  stmt->func_decl->body = body;
+
+  return stmt;
+}
+
+Stmt *create_func_call_stmt(char *name, NodeList *args) {
+  Stmt *stmt = malloc(sizeof(Stmt));
+  stmt->type = FUNC_CALL;
+
+  stmt->func_call = malloc(sizeof(FuncCall));
+  stmt->func_call->name = name;
+  stmt->func_call->args = args;
 
   return stmt;
 }

@@ -44,9 +44,14 @@ void generate_log(FILE *out, Expr *expr, Env *env, char *var_name) {
 
 void generate_stmt(FILE *out, Stmt *stmt, Env *env) {
   switch (stmt->type) {
-  case FUNC:
-    fprintf(out, "%s:\n", stmt->func->name);
-    generate_from_nodes(out, env, stmt->func->body);
+  case FUNC_DECL:
+    fprintf(out, "%s:\n", stmt->func_decl->name);
+    generate_from_nodes(out, env, stmt->func_decl->body);
+    break;
+
+  case FUNC_CALL:
+    // TODO: args
+    fprintf(out, "\tjal %s\n", stmt->func_call->name);
     break;
 
   case RET:
@@ -71,7 +76,7 @@ void generate_funcs(FILE *out, Env *env, NodeList *program) {
   for (int i = 0; i < program->size; i++) {
     Node node = program->nodes[i];
 
-    if (node.stmt->type == FUNC)
+    if (node.stmt->type == FUNC_DECL)
       generate_stmt(out, node.stmt, env);
   }
 }

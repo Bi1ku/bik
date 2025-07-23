@@ -6,6 +6,7 @@
 	p: .word 9
 	suiiiiii: .float 2323125.000000
 	type: .asciiz "hello, world!"
+	res: .asciiz "test 123"
 
 .text
 .globl main
@@ -16,6 +17,7 @@ main:
 	li $v0, 4
 	la $a0, type
 	syscall
+	jal fart
 	li $v0, 10
 	syscall
 solve:
@@ -24,3 +26,7 @@ solve:
 ligma:
 	l.s $f0, suiiiiii
 	jr $ra
+fart:
+	li $v0, 4
+	la $a0, res
+	syscall

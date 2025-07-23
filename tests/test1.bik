@@ -18,3 +18,10 @@ ligma = func (zoo, wee, mama) {
 
 type = "hello, world!";
 log (type);
+
+fart = func () {
+  res = "test 123";
+  log (res);
+};
+
+fart ();

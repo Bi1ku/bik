@@ -7,6 +7,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/parser.dir/expr.c.o.d"
   "CMakeFiles/parser.dir/parser.c.o"
   "CMakeFiles/parser.dir/parser.c.o.d"
+  "CMakeFiles/parser.dir/stmt.c.o"
+  "CMakeFiles/parser.dir/stmt.c.o.d"
   "CMakeFiles/parser.dir/utils.c.o"
   "CMakeFiles/parser.dir/utils.c.o.d"
   "libparser.a"

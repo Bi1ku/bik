@@ -5,13 +5,28 @@
 #include <stdlib.h>
 #include <string.h>
 
-NodeList *parse_func_args(TokenList *tokens) {
+NodeList *parse_func_params(TokenList *tokens) {
   NodeList *nodes = create_node_list(5);
 
-  while (strcmp(peek(tokens).value, ")") != 0) {
+  while (peek(tokens).type != PAREN_R) {
     if (peek(tokens).type == IDENTIFIER)
       add_node_to_node_list(
           nodes, create_stmt_node(create_param_stmt(eat(tokens).value)));
+    else
+      expect(tokens, COMMA);
+  }
+  expect(tokens, PAREN_R);
+
+  return nodes;
+}
+
+NodeList *parse_func_args(TokenList *tokens) {
+  NodeList *nodes = create_node_list(5);
+
+  while (peek(tokens).type != PAREN_R) {
+    if (peek(tokens).type == IDENTIFIER)
+      add_node_to_node_list(nodes,
+                            create_expr_node(parse_additive(tokens)->expr));
     else
       expect(tokens, COMMA);
   }
@@ -26,7 +41,7 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
     if (strcmp(peek(tokens).value, "func") == 0) {
       eat(tokens);
       expect(tokens, PAREN_L);
-      NodeList *params = parse_func_args(tokens);
+      NodeList *params = parse_func_params(tokens);
       expect(tokens, BLOCK_START);
 
       NodeList *program = create_program()->program;
@@ -36,7 +51,8 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
       }
       expect(tokens, BLOCK_END);
 
-      return create_stmt_node(create_func_stmt("test", params, program));
+      // name filled out later
+      return create_stmt_node(create_func_decl_stmt("-", params, program));
     }
 
     else if (strcmp(peek(tokens).value, "ret") == 0) {
@@ -80,14 +96,23 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
         return create_stmt_node(create_assign_stmt(name, rest->expr));
       }
 
-      else if (rest->stmt->type == FUNC) {
-        rest->stmt->func->name = strdup(name);
+      else if (rest->stmt->type == FUNC_DECL) {
+        rest->stmt->func_decl->name = strdup(name);
         remove_node_from_node_list(nodes, temp->size - 1);
         return rest;
       }
 
       remove_node_from_node_list(nodes, temp->size - 1);
       return parse_additive(tokens);
+    }
+
+    // FUNC CALL
+    else if (tokens->tokens[1].type == PAREN_L) {
+      char *name = eat(tokens).value;
+      expect(tokens, PAREN_L);
+      NodeList *args = parse_func_args(tokens);
+
+      return create_stmt_node(create_func_call_stmt(name, args));
     }
 
   default:
