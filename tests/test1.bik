@@ -15,13 +15,14 @@ ligma = func (str zoo, int wee, deci mama) {
   ret suiiiiii;
 };
 
-
 type = "hello, world!";
 log (type);
 
-fart = func () {
+fart = func (deci a) {
   res = "test 123";
   log (res);
 };
 
-fart ();
+rando_float = 1.12;
+fart (rando_float);
+log (rando_float);

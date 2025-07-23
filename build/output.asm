@@ -7,6 +7,7 @@
 	suiiiiii: .float 2323125.000000
 	type: .asciiz "hello, world!"
 	res: .asciiz "test 123"
+	rando_float: .float 1.120000
 
 .text
 .globl main
@@ -17,14 +18,18 @@ main:
 	li $v0, 4
 	la $a0, type
 	syscall
+	lwc1 $f0, 1.120000
 	jal fart
+	li $v0, 2
+	lwc1 $f12, rando_float
+	syscall
 	li $v0, 10
 	syscall
 solve:
 	li $v0, 7
 	jr $ra
 ligma:
-	l.s $f0, suiiiiii
+	l.s $f1, suiiiiii
 	jr $ra
 fart:
 	li $v0, 4

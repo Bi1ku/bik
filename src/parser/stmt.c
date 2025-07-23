@@ -40,14 +40,18 @@ NodeList *parse_func_args(TokenList *tokens) {
   NodeList *nodes = create_node_list(5);
 
   while (peek(tokens).type != PAREN_R) {
-    if (peek(tokens).type == IDENTIFIER)
+    if (peek(tokens).type == IDENTIFIER || peek(tokens).type == NUM ||
+        peek(tokens).type == STR) {
       add_node_to_node_list(nodes,
                             create_expr_node(parse_additive(tokens)->expr));
-    else
-      expect(tokens, COMMA);
-  }
-  expect(tokens, PAREN_R);
+    }
 
+    else {
+      expect(tokens, COMMA);
+    }
+  }
+
+  expect(tokens, PAREN_R);
   return nodes;
 }
 

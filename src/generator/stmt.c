@@ -42,6 +42,37 @@ void generate_log(FILE *out, Expr *expr, Env *env, char *var_name) {
   }
 }
 
+void generate_args(FILE *out, Expr *arg, Env *env) {
+  switch (arg->type) {
+  case INT:
+    fprintf(out, "\tli $a%d, %d\n", a_reg, arg->integer);
+    a_reg++;
+    break;
+
+  case FLOAT:
+    // bruh
+    fprintf(out, "\tlwc1 $f%d, %f\n", f_reg, arg->floating);
+    f_reg++;
+    break;
+
+  case IDENTIFIER_EX: {
+    Expr *var = get_var(env->items, arg->identifier);
+    generate_args(out, var, env);
+    break;
+  }
+
+  case BIN: {
+    Expr *res = eval(arg->bin, env->items);
+    generate_args(out, res, env);
+    break;
+  }
+
+  default:
+    printf("ERROR: Unsure how to generate asm with arg type %d", arg->type);
+    exit(EXIT_FAILURE);
+  }
+}
+
 void generate_stmt(FILE *out, Stmt *stmt, Env *env) {
   switch (stmt->type) {
   case FUNC_DECL:
@@ -50,7 +81,12 @@ void generate_stmt(FILE *out, Stmt *stmt, Env *env) {
     break;
 
   case FUNC_CALL:
-    // TODO: args
+    for (int i = 0; i < stmt->func_call->args->size; i++) {
+      Expr *arg = stmt->func_call->args->nodes[i].expr;
+
+      generate_args(out, arg, env);
+    }
+
     fprintf(out, "\tjal %s\n", stmt->func_call->name);
     break;
 
