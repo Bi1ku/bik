@@ -18,6 +18,16 @@ typedef struct NodeList NodeList;
 typedef struct Expr Expr;
 
 typedef struct {
+  char *val;
+  char *mem;
+} Str;
+
+typedef struct {
+  float val;
+  char *mem;
+} Float;
+
+typedef struct {
   char *name;
   ExprType type;
 } Param;
@@ -50,8 +60,8 @@ struct Expr {
     Bin *bin;
     char *identifier;
     int integer;
-    float floating;
-    char *str;
+    Float *floating;
+    Str *str;
   };
 };
 
@@ -91,9 +101,9 @@ Node *create_expr_node(Expr *expr);
 
 Expr *create_bin_expr(Expr *left, Expr *right, char *op);
 Expr *create_int_expr(int value);
-Expr *create_float_expr(float value);
+Expr *create_float_expr(float value, char *mem);
+Expr *create_string_expr(char *value, char *mem);
 Expr *create_identifier_expr(char *symbol);
-Expr *create_string_expr(char *value);
 
 Stmt *create_func_decl_stmt(char *name, NodeList *params, NodeList *body);
 Stmt *create_func_call_stmt(char *name, NodeList *args);

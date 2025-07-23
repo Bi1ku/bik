@@ -1,1 +1,8 @@
-log("HELLO, WORLD");
+log("hello, world!");
+
+x = func(int a, int c) {
+  log ("yoooo!");
+  ret 1.1;
+};
+
+x(1, 2);

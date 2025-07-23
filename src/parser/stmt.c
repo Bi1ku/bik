@@ -36,15 +36,19 @@ NodeList *parse_func_params(TokenList *tokens) {
   return nodes;
 }
 
-NodeList *parse_func_args(TokenList *tokens) {
+NodeList *parse_func_args(TokenList *tokens, VarList *vars) {
   NodeList *nodes = create_node_list(5);
 
   while (peek(tokens).type != PAREN_R) {
-    if (peek(tokens).type == IDENTIFIER || peek(tokens).type == NUM ||
-        peek(tokens).type == STR) {
-      add_node_to_node_list(nodes,
-                            create_expr_node(parse_additive(tokens)->expr));
+    if (peek(tokens).type == IDENTIFIER) {
+      add_node_to_node_list(
+          nodes, create_expr_node(parse_additive(tokens, NULL, vars)->expr));
     }
+
+    else if (peek(tokens).type == NUM || peek(tokens).type == STR)
+      add_node_to_node_list(
+          nodes,
+          create_expr_node(parse_additive(tokens, gen_id(), vars)->expr));
 
     else {
       expect(tokens, COMMA);
@@ -77,14 +81,14 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
 
     else if (strcmp(peek(tokens).value, "ret") == 0) {
       eat(tokens);
-      Node *expr = parse_additive(tokens);
+      Node *expr = parse_additive(tokens, gen_id(), env->items);
       return create_stmt_node(create_ret_stmt(expr->expr));
     }
 
     else if (strcmp(peek(tokens).value, "log") == 0) {
       eat(tokens);
       expect(tokens, PAREN_L);
-      Node *node = parse_additive(tokens);
+      Node *node = parse_additive(tokens, gen_id(), env->items);
 
       if (node->type == STMT) {
         printf("ERROR: Expected to parse an expression but got statement "
@@ -123,19 +127,19 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
       }
 
       remove_node_from_node_list(nodes, temp->size - 1);
-      return parse_additive(tokens);
+      return parse_additive(tokens, NULL, env->items);
     }
 
     // FUNC CALL
     else if (tokens->tokens[1].type == PAREN_L) {
       char *name = eat(tokens).value;
       expect(tokens, PAREN_L);
-      NodeList *args = parse_func_args(tokens);
+      NodeList *args = parse_func_args(tokens, env->items);
 
       return create_stmt_node(create_func_call_stmt(name, args));
     }
 
   default:
-    return parse_additive(tokens);
+    return parse_additive(tokens, NULL, env->items);
   }
 }

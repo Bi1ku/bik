@@ -3,9 +3,9 @@ src/parser/CMakeFiles/parser.dir/stmt.c.o: \
   /Users/biiku/code/projects/bik/src/parser/../../include/parser/expr.h \
   /Users/biiku/code/projects/bik/src/parser/../../include/parser/../lexer/tokens.h \
   /Users/biiku/code/projects/bik/src/parser/../../include/parser/ast.h \
+  /Users/biiku/code/projects/bik/src/parser/../../include/parser/env.h \
   /Users/biiku/code/projects/bik/src/parser/../../include/parser/parser.h \
   /Users/biiku/code/projects/bik/src/parser/../../include/parser/../parser/env.h \
-  /Users/biiku/code/projects/bik/src/parser/../../include/parser/../parser/ast.h \
   /Users/biiku/code/projects/bik/src/parser/../../include/parser/utils.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/stdio.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_stdio.h \

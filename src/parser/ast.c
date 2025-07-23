@@ -140,10 +140,14 @@ Expr *create_int_expr(int value) {
   return expr;
 }
 
-Expr *create_float_expr(float value) {
+Expr *create_float_expr(float value, char *mem) {
   Expr *expr = malloc(sizeof(Expr));
   expr->type = FLOAT;
-  expr->floating = value;
+
+  expr->floating = malloc(sizeof(Float));
+  expr->floating->val = value;
+  expr->floating->mem = mem;
+
   return expr;
 }
 
@@ -154,9 +158,12 @@ Expr *create_identifier_expr(char *symbol) {
   return expr;
 }
 
-Expr *create_string_expr(char *value) {
+Expr *create_string_expr(char *value, char *mem) {
   Expr *expr = malloc(sizeof(Expr));
   expr->type = STRING;
-  expr->str = value;
+
+  expr->str = malloc(sizeof(Str));
+  expr->str->val = value;
+  expr->str->mem = mem;
   return expr;
 }

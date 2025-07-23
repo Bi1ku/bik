@@ -128,7 +128,7 @@ TokenList *tokenize(char *path) {
           }
 
           else if (!quotes && (mutable[0] == '(' || mutable[0] == ')' ||
-                               mutable[0] == ','))
+                               mutable[0] == ',' || mutable[0] == '='))
             break;
 
           else {

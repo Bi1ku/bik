@@ -7,10 +7,11 @@
 void generate_log(FILE *out, Expr *expr, Env *env, char *var_name) {
   switch (expr->type) {
   case STRING:
-    if (var_name) {
-      fprintf(out, "\tli $v0, 4\n");
+    fprintf(out, "\tli $v0, 4\n");
+    if (var_name)
       fprintf(out, "\tla $a0, %s\n", var_name);
-    }
+    else
+      fprintf(out, "\tla $a0, %s\n", expr->str->mem);
     fprintf(out, "\tsyscall\n");
     break;
 
@@ -21,10 +22,11 @@ void generate_log(FILE *out, Expr *expr, Env *env, char *var_name) {
     break;
 
   case FLOAT:
-    if (var_name) {
-      fprintf(out, "\tli $v0, 2\n");
+    fprintf(out, "\tli $v0, 2\n");
+    if (var_name)
       fprintf(out, "\tlwc1 $f12, %s\n", var_name);
-    }
+    else
+      fprintf(out, "\tlwc1 $f12, %s\n", expr->floating->mem);
     fprintf(out, "\tsyscall\n");
     break;
 
@@ -51,7 +53,7 @@ void generate_args(FILE *out, Expr *arg, Env *env) {
 
   case FLOAT:
     // bruh
-    fprintf(out, "\tlwc1 $f%d, %f\n", f_reg, arg->floating);
+    fprintf(out, "\tlwc1 $f%d, %f\n", f_reg, arg->floating->val);
     f_reg++;
     break;
 

@@ -10,7 +10,7 @@ Expr *copy_expr(Expr *src) {
 
   *expr = *src;
   if (expr->type == STRING)
-    expr->str = strdup(src->str);
+    expr->str->val = strdup(src->str->val);
   else if (expr->type == IDENTIFIER_EX)
     expr->identifier = strdup(src->identifier);
 
@@ -28,27 +28,27 @@ Expr *calculate(Expr *left, Expr *right, char op) {
     if (x->type == STRING) {
       if (y->type == INT) {
         sprintf(buffer, "%d", y->integer);
-        x->str = strcat(x->str, buffer);
+        x->str->val = strcat(x->str->val, buffer);
       }
 
       else if (y->type == FLOAT) {
-        sprintf(buffer, "%f", y->floating);
-        x->str = strcat(x->str, buffer);
+        sprintf(buffer, "%f", y->floating->val);
+        x->str->val = strcat(x->str->val, buffer);
       }
 
       else
-        strcat(x->str, y->str);
+        strcat(x->str->val, y->str->val);
     }
 
     else if (y->type == STRING) {
       if (x->type == INT) {
         sprintf(buffer, "%d", x->integer);
-        x->str = strcat(buffer, y->str);
+        x->str->val = strcat(buffer, y->str->val);
       }
 
       else if (x->type == FLOAT) {
-        sprintf(buffer, "%f", x->floating);
-        x->str = strcat(buffer, y->str);
+        sprintf(buffer, "%f", x->floating->val);
+        x->str->val = strcat(buffer, y->str->val);
       }
 
       x->type = STRING;
@@ -56,13 +56,13 @@ Expr *calculate(Expr *left, Expr *right, char op) {
 
     else {
       if (x->type == INT && y->type == FLOAT) {
-        x->floating = x->integer + y->floating;
+        x->floating->val = x->integer + y->floating->val;
         x->type = FLOAT;
       } else if (x->type == FLOAT && y->type == INT) {
-        x->floating = x->floating + y->integer;
+        x->floating->val = x->floating->val + y->integer;
         x->type = FLOAT;
       } else if (x->type == FLOAT && y->type == FLOAT) {
-        x->floating = x->floating + y->floating;
+        x->floating->val = x->floating->val + y->floating->val;
         x->type = FLOAT;
       } else {
         x->integer = x->integer + y->integer;
@@ -76,13 +76,13 @@ Expr *calculate(Expr *left, Expr *right, char op) {
 
   case '-':
     if (x->type == INT && y->type == FLOAT) {
-      x->floating = x->integer - y->floating;
+      x->floating->val = x->integer - y->floating->val;
       x->type = FLOAT;
     } else if (x->type == FLOAT && y->type == INT) {
-      x->floating = x->floating - y->integer;
+      x->floating->val = x->floating->val - y->integer;
       x->type = FLOAT;
     } else if (x->type == FLOAT && y->type == FLOAT) {
-      x->floating = x->floating - y->floating;
+      x->floating->val = x->floating->val - y->floating->val;
       x->type = FLOAT;
     } else if (x->type == INT && y->type == INT) {
       x->integer = x->integer - y->integer;
@@ -99,13 +99,13 @@ Expr *calculate(Expr *left, Expr *right, char op) {
 
   case '*':
     if (x->type == INT && y->type == FLOAT) {
-      x->floating = x->integer * y->floating;
+      x->floating->val = x->integer * y->floating->val;
       x->type = FLOAT;
     } else if (x->type == FLOAT && y->type == INT) {
-      x->floating = x->floating * y->integer;
+      x->floating->val = x->floating->val * y->integer;
       x->type = FLOAT;
     } else if (x->type == FLOAT && y->type == FLOAT) {
-      x->floating = x->floating * y->floating;
+      x->floating->val = x->floating->val * y->floating->val;
       x->type = FLOAT;
     } else if (x->type == INT && y->type == INT) {
       x->integer = x->integer * y->integer;
@@ -122,13 +122,13 @@ Expr *calculate(Expr *left, Expr *right, char op) {
 
   case '/':
     if (x->type == INT && y->type == FLOAT) {
-      x->floating = x->integer / y->floating;
+      x->floating->val = x->integer / y->floating->val;
       x->type = FLOAT;
     } else if (x->type == FLOAT && y->type == INT) {
-      x->floating = x->floating / y->integer;
+      x->floating->val = x->floating->val / y->integer;
       x->type = FLOAT;
     } else if (x->type == FLOAT && y->type == FLOAT) {
-      x->floating = x->floating / y->floating;
+      x->floating->val = x->floating->val / y->floating->val;
       x->type = FLOAT;
     } else if (x->type == INT && y->type == INT) {
       x->integer = x->integer / y->integer;

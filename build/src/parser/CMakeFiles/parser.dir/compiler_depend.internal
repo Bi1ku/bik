@@ -276,6 +276,7 @@ src/parser/CMakeFiles/parser.dir/expr.c.o
  /Users/biiku/code/projects/bik/include/lexer/tokens.h
  /Users/biiku/code/projects/bik/include/lexer/tokens.h
  /Users/biiku/code/projects/bik/include/parser/ast.h
+ /Users/biiku/code/projects/bik/include/parser/env.h
  /Users/biiku/code/projects/bik/include/parser/utils.h
 
 src/parser/CMakeFiles/parser.dir/parser.c.o
@@ -420,9 +421,9 @@ src/parser/CMakeFiles/parser.dir/stmt.c.o
  /Library/Developer/CommandLineTools/usr/lib/clang/17/include/ptrcheck.h
  /Library/Developer/CommandLineTools/usr/lib/clang/17/include/stdint.h
  /Users/biiku/code/projects/bik/include/lexer/tokens.h
- /Users/biiku/code/projects/bik/include/parser/ast.h
  /Users/biiku/code/projects/bik/include/parser/env.h
  /Users/biiku/code/projects/bik/include/parser/ast.h
+ /Users/biiku/code/projects/bik/include/parser/env.h
  /Users/biiku/code/projects/bik/include/parser/expr.h
  /Users/biiku/code/projects/bik/include/parser/parser.h
  /Users/biiku/code/projects/bik/include/parser/utils.h

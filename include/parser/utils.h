@@ -6,5 +6,6 @@
 Token peek(TokenList *tokens);
 Token eat(TokenList *tokens);
 Token expect(TokenList *tokens, TokenType type);
+char *gen_id();
 
 #endif

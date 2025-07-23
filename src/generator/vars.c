@@ -10,7 +10,7 @@ void generate_vars(FILE *out, Env *env) {
     if (name != NULL) {
       switch (value->type) {
       case STRING:
-        fprintf(out, "\t%s: .asciiz \"%s\"\n", name, value->str);
+        fprintf(out, "\t%s: .asciiz \"%s\"\n", name, value->str->val);
         break;
 
       case INT:
@@ -18,7 +18,7 @@ void generate_vars(FILE *out, Env *env) {
         break;
 
       case FLOAT:
-        fprintf(out, "\t%s: .float %lf\n", name, value->floating);
+        fprintf(out, "\t%s: .float %lf\n", name, value->floating->val);
         break;
 
       default:
