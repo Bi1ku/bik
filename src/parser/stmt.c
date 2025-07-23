@@ -9,14 +9,30 @@ NodeList *parse_func_params(TokenList *tokens) {
   NodeList *nodes = create_node_list(5);
 
   while (peek(tokens).type != PAREN_R) {
-    if (peek(tokens).type == IDENTIFIER)
-      add_node_to_node_list(
-          nodes, create_stmt_node(create_param_stmt(eat(tokens).value)));
+    if (peek(tokens).type == KEYWORD) {
+      char *type = eat(tokens).value;
+
+      if (strcmp(type, "int") == 0)
+        add_node_to_node_list(
+            nodes, create_stmt_node(create_param_stmt(eat(tokens).value, INT)));
+      else if (strcmp(type, "deci") == 0)
+        add_node_to_node_list(nodes, create_stmt_node(create_param_stmt(
+                                         eat(tokens).value, FLOAT)));
+      else if (strcmp(type, "str") == 0)
+        add_node_to_node_list(nodes, create_stmt_node(create_param_stmt(
+                                         eat(tokens).value, STRING)));
+      else {
+        printf("ERROR: Unknown type '%s' in function parameters.\n",
+               peek(tokens).value);
+        exit(EXIT_FAILURE);
+      }
+    }
+
     else
       expect(tokens, COMMA);
   }
-  expect(tokens, PAREN_R);
 
+  expect(tokens, PAREN_R);
   return nodes;
 }
 

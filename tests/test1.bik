@@ -1,7 +1,7 @@
 yo_mama = 7 - 8 / 2 * 5.5;
 suggo_my_eggos = 5 - (5 * 8) - 9 / 5;
 
-solve = func (a, b, c) {
+solve = func (deci a, str b, int c) {
   x = 7;
   test = 8;
   ret x;
@@ -9,7 +9,7 @@ solve = func (a, b, c) {
 
 log (yo_mama);
 
-ligma = func (zoo, wee, mama) {
+ligma = func (str zoo, int wee, deci mama) {
   p = 9;
   suiiiiii = yo_mama + 6969420 / 3;
   ret suiiiiii;

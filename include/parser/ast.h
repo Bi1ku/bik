@@ -19,6 +19,11 @@ typedef struct Expr Expr;
 
 typedef struct {
   char *name;
+  ExprType type;
+} Param;
+
+typedef struct {
+  char *name;
   NodeList *params;
   NodeList *body;
 } FuncDecl;
@@ -58,7 +63,7 @@ typedef struct {
     Assign *assign;
     FuncDecl *func_decl;
     FuncCall *func_call;
-    char *param;
+    Param *param;
     Expr *log;
   };
 } Stmt;
@@ -92,7 +97,7 @@ Expr *create_string_expr(char *value);
 
 Stmt *create_func_decl_stmt(char *name, NodeList *params, NodeList *body);
 Stmt *create_func_call_stmt(char *name, NodeList *args);
-Stmt *create_param_stmt(char *symbol);
+Stmt *create_param_stmt(char *symbol, ExprType type);
 Stmt *create_assign_stmt(char *symbol, Expr *expr);
 Stmt *create_ret_stmt(Expr *expr);
 Stmt *create_log_stmt(Expr *expr);

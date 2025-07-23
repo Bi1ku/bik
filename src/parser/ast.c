@@ -96,10 +96,14 @@ Stmt *create_log_stmt(Expr *expr) {
   return stmt;
 }
 
-Stmt *create_param_stmt(char *symbol) {
+Stmt *create_param_stmt(char *symbol, ExprType type) {
   Stmt *stmt = malloc(sizeof(Stmt));
+
   stmt->type = PARAM;
-  stmt->param = symbol;
+  stmt->param = malloc(sizeof(Param));
+  stmt->param->name = symbol;
+  stmt->param->type = type;
+
   return stmt;
 }
 
