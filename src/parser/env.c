@@ -1,6 +1,4 @@
-#include "../../include/parser/env.h"
 #include "../../include/generator/eval.h"
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
