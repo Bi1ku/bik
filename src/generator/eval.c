@@ -56,7 +56,9 @@ Expr *calculate(Expr *left, Expr *right, char op) {
 
     else {
       if (x->type == INT && y->type == FLOAT) {
-        x->floating->val = x->integer + y->floating->val;
+        int temp = x->integer;
+        x->floating = malloc(sizeof(Float));
+        x->floating->val = temp - y->floating->val;
         x->type = FLOAT;
       } else if (x->type == FLOAT && y->type == INT) {
         x->floating->val = x->floating->val + y->integer;
@@ -76,7 +78,9 @@ Expr *calculate(Expr *left, Expr *right, char op) {
 
   case '-':
     if (x->type == INT && y->type == FLOAT) {
-      x->floating->val = x->integer - y->floating->val;
+      int temp = x->integer;
+      x->floating = malloc(sizeof(Float));
+      x->floating->val = temp * y->floating->val;
       x->type = FLOAT;
     } else if (x->type == FLOAT && y->type == INT) {
       x->floating->val = x->floating->val - y->integer;
@@ -99,7 +103,9 @@ Expr *calculate(Expr *left, Expr *right, char op) {
 
   case '*':
     if (x->type == INT && y->type == FLOAT) {
-      x->floating->val = x->integer * y->floating->val;
+      int temp = x->integer;
+      x->floating = malloc(sizeof(Float));
+      x->floating->val = temp * y->floating->val;
       x->type = FLOAT;
     } else if (x->type == FLOAT && y->type == INT) {
       x->floating->val = x->floating->val * y->integer;
@@ -122,7 +128,9 @@ Expr *calculate(Expr *left, Expr *right, char op) {
 
   case '/':
     if (x->type == INT && y->type == FLOAT) {
-      x->floating->val = x->integer / y->floating->val;
+      int temp = x->integer;
+      x->floating = malloc(sizeof(Float));
+      x->floating->val = temp * y->floating->val;
       x->type = FLOAT;
     } else if (x->type == FLOAT && y->type == INT) {
       x->floating->val = x->floating->val / y->integer;

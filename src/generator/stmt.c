@@ -8,10 +8,8 @@ void generate_log(FILE *out, Expr *expr, Env *env, char *var_name) {
   switch (expr->type) {
   case STRING:
     fprintf(out, "\tli $v0, 4\n");
-    if (var_name)
-      fprintf(out, "\tla $a0, %s\n", var_name);
-    else
-      fprintf(out, "\tla $a0, %s\n", expr->str->mem);
+    var_name ? fprintf(out, "\tla $a0, %s\n", var_name)
+             : fprintf(out, "\tla $a0, %s\n", expr->str->mem);
     fprintf(out, "\tsyscall\n");
     break;
 
@@ -23,10 +21,8 @@ void generate_log(FILE *out, Expr *expr, Env *env, char *var_name) {
 
   case FLOAT:
     fprintf(out, "\tli $v0, 2\n");
-    if (var_name)
-      fprintf(out, "\tlwc1 $f12, %s\n", var_name);
-    else
-      fprintf(out, "\tlwc1 $f12, %s\n", expr->floating->mem);
+    var_name ? fprintf(out, "\tlwc1 $f12, %s\n", var_name)
+             : fprintf(out, "\tlwc1 $f12, %s\n", expr->floating->mem);
     fprintf(out, "\tsyscall\n");
     break;
 
@@ -44,7 +40,7 @@ void generate_log(FILE *out, Expr *expr, Env *env, char *var_name) {
   }
 }
 
-void generate_args(FILE *out, Expr *arg, Env *env) {
+void generate_args(FILE *out, Expr *arg, Env *env, char *var_name) {
   switch (arg->type) {
   case INT:
     fprintf(out, "\tli $a%d, %d\n", a_reg, arg->integer);
@@ -52,20 +48,20 @@ void generate_args(FILE *out, Expr *arg, Env *env) {
     break;
 
   case FLOAT:
-    // bruh
-    fprintf(out, "\tlwc1 $f%d, %f\n", f_reg, arg->floating->val);
+    var_name ? fprintf(out, "\tlwc1 $f%d, %s\n", f_reg, var_name)
+             : fprintf(out, "\tlwc1 $f%d, %s\n", f_reg, arg->floating->mem);
     f_reg++;
     break;
 
   case IDENTIFIER_EX: {
     Expr *var = get_var(env->items, arg->identifier);
-    generate_args(out, var, env);
+    generate_args(out, var, env, arg->identifier);
     break;
   }
 
   case BIN: {
     Expr *res = eval(arg->bin, env->items);
-    generate_args(out, res, env);
+    generate_args(out, res, env, NULL);
     break;
   }
 
@@ -86,7 +82,7 @@ void generate_stmt(FILE *out, Stmt *stmt, Env *env) {
     for (int i = 0; i < stmt->func_call->args->size; i++) {
       Expr *arg = stmt->func_call->args->nodes[i].expr;
 
-      generate_args(out, arg, env);
+      generate_args(out, arg, env, NULL);
     }
 
     fprintf(out, "\tjal %s\n", stmt->func_call->name);
