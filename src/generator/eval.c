@@ -5,92 +5,75 @@
 #include <stdlib.h>
 #include <string.h>
 
-Expr *copy_expr(Expr *src) {
-  Expr *expr = malloc(sizeof(Expr));
-
-  *expr = *src;
-  if (expr->type == STRING)
-    expr->str->val = strdup(src->str->val);
-  else if (expr->type == IDENTIFIER_EX)
-    expr->identifier = strdup(src->identifier);
-
-  return expr;
-}
-
 Expr *calculate(Expr *left, Expr *right, char op) {
-  Expr *x = copy_expr(left);
-  Expr *y = copy_expr(right);
+  Expr *res = malloc(sizeof(Expr));
 
   switch (op) {
   case '+': {
-    char buffer[100];
+    char *buffer = malloc(100 * sizeof(char));
 
-    if (x->type == STRING) {
-      if (y->type == INT) {
-        sprintf(buffer, "%d", y->integer);
-        x->str->val = strcat(x->str->val, buffer);
+    res->type = STRING;
+    res->str = malloc(sizeof(Str));
+
+    if (left->type == STRING) {
+      if (right->type == INT) {
+        sprintf(buffer, "%d", right->integer);
+        res->str->val = strdup(left->str->val);
+        strcat(res->str->val, buffer);
+      } else if (right->type == FLOAT) {
+        sprintf(buffer, "%f", right->floating->val);
+        res->str->val = strdup(left->str->val);
+        strcat(res->str->val, buffer);
+      } else {
+        res->str->val = strdup(left->str->val);
+        strcat(res->str->val, right->str->val);
       }
-
-      else if (y->type == FLOAT) {
-        sprintf(buffer, "%f", y->floating->val);
-        x->str->val = strcat(x->str->val, buffer);
-      }
-
-      else
-        strcat(x->str->val, y->str->val);
     }
 
-    else if (y->type == STRING) {
-      if (x->type == INT) {
-        sprintf(buffer, "%d", x->integer);
-        x->str->val = strcat(buffer, y->str->val);
+    else if (right->type == STRING) {
+      if (left->type == INT) {
+        sprintf(buffer, "%d", left->integer);
+        res->str->val = strcat(buffer, right->str->val);
+      } else if (left->type == FLOAT) {
+        sprintf(buffer, "%f", left->floating->val);
+        res->str->val = strcat(buffer, right->str->val);
       }
-
-      else if (x->type == FLOAT) {
-        sprintf(buffer, "%f", x->floating->val);
-        x->str->val = strcat(buffer, y->str->val);
-      }
-
-      x->type = STRING;
     }
 
     else {
-      if (x->type == INT && y->type == FLOAT) {
-        int temp = x->integer;
-        x->floating = malloc(sizeof(Float));
-        x->floating->val = temp - y->floating->val;
-        x->type = FLOAT;
-      } else if (x->type == FLOAT && y->type == INT) {
-        x->floating->val = x->floating->val + y->integer;
-        x->type = FLOAT;
-      } else if (x->type == FLOAT && y->type == FLOAT) {
-        x->floating->val = x->floating->val + y->floating->val;
-        x->type = FLOAT;
-      } else {
-        x->integer = x->integer + y->integer;
-        x->type = INT;
+      res->floating = malloc(sizeof(Float));
+      res->type = FLOAT;
+
+      if (left->type == INT && right->type == FLOAT)
+        res->floating->val = left->integer + right->floating->val;
+      else if (left->type == FLOAT && right->type == INT)
+        res->floating->val = left->floating->val + right->integer;
+      else if (left->type == FLOAT && right->type == FLOAT)
+        res->floating->val = left->floating->val + right->floating->val;
+      else {
+        free(res->floating);
+        res->type = INT;
+        res->integer = left->integer + right->integer;
       }
     }
 
-    free(y);
-    return x;
+    return res;
   }
 
   case '-':
-    if (x->type == INT && y->type == FLOAT) {
-      int temp = x->integer;
-      x->floating = malloc(sizeof(Float));
-      x->floating->val = temp * y->floating->val;
-      x->type = FLOAT;
-    } else if (x->type == FLOAT && y->type == INT) {
-      x->floating->val = x->floating->val - y->integer;
-      x->type = FLOAT;
-    } else if (x->type == FLOAT && y->type == FLOAT) {
-      x->floating->val = x->floating->val - y->floating->val;
-      x->type = FLOAT;
-    } else if (x->type == INT && y->type == INT) {
-      x->integer = x->integer - y->integer;
-      x->type = INT;
+    res->floating = malloc(sizeof(Float));
+    res->type = FLOAT;
+
+    if (left->type == INT && right->type == FLOAT)
+      res->floating->val = left->integer - right->floating->val;
+    else if (left->type == FLOAT && right->type == INT)
+      res->floating->val = left->floating->val - right->integer;
+    else if (left->type == FLOAT && right->type == FLOAT)
+      res->floating->val = left->floating->val - right->floating->val;
+    else if (left->type == INT && right->type == INT) {
+      free(res->floating);
+      res->type = INT;
+      res->integer = left->integer - right->integer;
     }
 
     else {
@@ -98,24 +81,22 @@ Expr *calculate(Expr *left, Expr *right, char op) {
       exit(EXIT_FAILURE);
     }
 
-    free(y);
-    return x;
+    return res;
 
   case '*':
-    if (x->type == INT && y->type == FLOAT) {
-      int temp = x->integer;
-      x->floating = malloc(sizeof(Float));
-      x->floating->val = temp * y->floating->val;
-      x->type = FLOAT;
-    } else if (x->type == FLOAT && y->type == INT) {
-      x->floating->val = x->floating->val * y->integer;
-      x->type = FLOAT;
-    } else if (x->type == FLOAT && y->type == FLOAT) {
-      x->floating->val = x->floating->val * y->floating->val;
-      x->type = FLOAT;
-    } else if (x->type == INT && y->type == INT) {
-      x->integer = x->integer * y->integer;
-      x->type = INT;
+    res->floating = malloc(sizeof(Float));
+    res->type = FLOAT;
+
+    if (left->type == INT && right->type == FLOAT)
+      res->floating->val = left->integer * right->floating->val;
+    else if (left->type == FLOAT && right->type == INT)
+      res->floating->val = left->floating->val * right->integer;
+    else if (left->type == FLOAT && right->type == FLOAT)
+      res->floating->val = left->floating->val * right->floating->val;
+    else if (left->type == INT && right->type == INT) {
+      free(res->floating);
+      res->type = INT;
+      res->integer = left->integer * right->integer;
     }
 
     else {
@@ -123,24 +104,22 @@ Expr *calculate(Expr *left, Expr *right, char op) {
       exit(EXIT_FAILURE);
     }
 
-    free(y);
-    return x;
+    return res;
 
   case '/':
-    if (x->type == INT && y->type == FLOAT) {
-      int temp = x->integer;
-      x->floating = malloc(sizeof(Float));
-      x->floating->val = temp * y->floating->val;
-      x->type = FLOAT;
-    } else if (x->type == FLOAT && y->type == INT) {
-      x->floating->val = x->floating->val / y->integer;
-      x->type = FLOAT;
-    } else if (x->type == FLOAT && y->type == FLOAT) {
-      x->floating->val = x->floating->val / y->floating->val;
-      x->type = FLOAT;
-    } else if (x->type == INT && y->type == INT) {
-      x->integer = x->integer / y->integer;
-      x->type = INT;
+    res->floating = malloc(sizeof(Float));
+    res->type = FLOAT;
+
+    if (left->type == INT && right->type == FLOAT)
+      res->floating->val = left->integer / right->floating->val;
+    else if (left->type == FLOAT && right->type == INT)
+      res->floating->val = left->floating->val / right->integer;
+    else if (left->type == FLOAT && right->type == FLOAT)
+      res->floating->val = left->floating->val / right->floating->val;
+    else if (left->type == INT && right->type == INT) {
+      free(res->floating);
+      res->type = INT;
+      res->integer = left->integer / right->integer;
     }
 
     else {
@@ -148,8 +127,7 @@ Expr *calculate(Expr *left, Expr *right, char op) {
       exit(EXIT_FAILURE);
     }
 
-    free(y);
-    return x;
+    return res;
 
   default:
     printf("ERROR: Unexpected operand '%c'", op);
@@ -158,37 +136,24 @@ Expr *calculate(Expr *left, Expr *right, char op) {
 }
 
 Expr *get_val(Expr *expr, VarList *vars) {
-  if (expr->type == INT || expr->type == FLOAT || expr->type == STRING)
-    return expr;
-
-  else if (expr->type == IDENTIFIER_EX)
+  switch (expr->type) {
+  case IDENTIFIER_EX:
     return get_var(vars, expr->identifier);
 
-  else if (expr->type == BIN)
+  case BIN:
     return eval(expr->bin, vars);
 
-  else {
+  default:
+    if (expr->type == INT || expr->type == FLOAT || expr->type == STRING)
+      return expr;
+
     printf("ERROR: Trying to get invalid expression type!");
     exit(EXIT_FAILURE);
   }
 }
 
 Expr *eval(Bin *bin_expr, VarList *vars) {
-  Expr *res;
+  Expr *res = get_val(bin_expr->left, vars);
   Expr *right = get_val(bin_expr->right, vars);
-
-  res = get_val(bin_expr->left, vars);
-  if (strcmp(bin_expr->op, "+") == 0)
-    res = calculate(res, right, '+');
-
-  else if (strcmp(bin_expr->op, "-") == 0)
-    res = calculate(res, right, '-');
-
-  else if (strcmp(bin_expr->op, "*") == 0)
-    res = calculate(res, right, '*');
-
-  else if (strcmp(bin_expr->op, "/") == 0)
-    res = calculate(res, right, '/');
-
-  return res;
+  return calculate(res, right, bin_expr->op[0]);
 }

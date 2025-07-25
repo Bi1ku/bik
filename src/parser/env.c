@@ -1,4 +1,5 @@
 #include "../../include/generator/eval.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -41,14 +42,12 @@ Var *create_var(char *key, Expr *expr, VarList *vars) {
   case BIN: {
     Expr *res = eval(expr->bin, vars);
     Var *var = create_var(key, res, vars);
-    add_to_env(vars, var);
     return var;
   }
 
   case IDENTIFIER_EX: {
     Expr *expr = get_var(vars, expr->identifier);
     Var *var = create_var(key, expr, vars);
-    add_to_env(vars, var);
     return var;
   }
 
