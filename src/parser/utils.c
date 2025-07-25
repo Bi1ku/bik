@@ -26,3 +26,13 @@ Token expect(TokenList *tokens, TokenType type) {
 
   return token;
 }
+
+char *gen_id() {
+  char *res = malloc(sizeof(char) * 16);
+
+  for (int i = 0; i < 16; i++) {
+    res[i] = 'A' + (random() % 26);
+  }
+
+  return res;
+}

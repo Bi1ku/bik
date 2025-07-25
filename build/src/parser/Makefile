@@ -226,6 +226,30 @@ parser.c.s:
 	cd /Users/biiku/code/projects/bik/build && $(MAKE) $(MAKESILENT) -f src/parser/CMakeFiles/parser.dir/build.make src/parser/CMakeFiles/parser.dir/parser.c.s
 .PHONY : parser.c.s
 
+stmt.o: stmt.c.o
+.PHONY : stmt.o
+
+# target to build an object file
+stmt.c.o:
+	cd /Users/biiku/code/projects/bik/build && $(MAKE) $(MAKESILENT) -f src/parser/CMakeFiles/parser.dir/build.make src/parser/CMakeFiles/parser.dir/stmt.c.o
+.PHONY : stmt.c.o
+
+stmt.i: stmt.c.i
+.PHONY : stmt.i
+
+# target to preprocess a source file
+stmt.c.i:
+	cd /Users/biiku/code/projects/bik/build && $(MAKE) $(MAKESILENT) -f src/parser/CMakeFiles/parser.dir/build.make src/parser/CMakeFiles/parser.dir/stmt.c.i
+.PHONY : stmt.c.i
+
+stmt.s: stmt.c.s
+.PHONY : stmt.s
+
+# target to generate assembly for a file
+stmt.c.s:
+	cd /Users/biiku/code/projects/bik/build && $(MAKE) $(MAKESILENT) -f src/parser/CMakeFiles/parser.dir/build.make src/parser/CMakeFiles/parser.dir/stmt.c.s
+.PHONY : stmt.c.s
+
 utils.o: utils.c.o
 .PHONY : utils.o
 
@@ -271,6 +295,9 @@ help:
 	@echo "... parser.o"
 	@echo "... parser.i"
 	@echo "... parser.s"
+	@echo "... stmt.o"
+	@echo "... stmt.i"
+	@echo "... stmt.s"
 	@echo "... utils.o"
 	@echo "... utils.i"
 	@echo "... utils.s"

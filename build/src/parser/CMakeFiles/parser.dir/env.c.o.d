@@ -1,7 +1,5 @@
 src/parser/CMakeFiles/parser.dir/env.c.o: \
   /Users/biiku/code/projects/bik/src/parser/env.c \
-  /Users/biiku/code/projects/bik/src/parser/../../include/parser/env.h \
-  /Users/biiku/code/projects/bik/src/parser/../../include/parser/ast.h \
   /Users/biiku/code/projects/bik/src/parser/../../include/generator/eval.h \
   /Users/biiku/code/projects/bik/src/parser/../../include/generator/../parser/ast.h \
   /Users/biiku/code/projects/bik/src/parser/../../include/generator/../parser/env.h \

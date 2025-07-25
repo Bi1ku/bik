@@ -160,7 +160,7 @@ CMakeFiles/execute.dir/all: src/parser/CMakeFiles/parser.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/execute.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/biiku/code/projects/bik/build/CMakeFiles 14
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/biiku/code/projects/bik/build/CMakeFiles 18
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/execute.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/biiku/code/projects/bik/build/CMakeFiles 0
 .PHONY : CMakeFiles/execute.dir/rule
@@ -187,7 +187,7 @@ CMakeFiles/execute.dir/clean:
 src/lexer/CMakeFiles/lexer.dir/all:
 	$(MAKE) $(MAKESILENT) -f src/lexer/CMakeFiles/lexer.dir/build.make src/lexer/CMakeFiles/lexer.dir/depend
 	$(MAKE) $(MAKESILENT) -f src/lexer/CMakeFiles/lexer.dir/build.make src/lexer/CMakeFiles/lexer.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/biiku/code/projects/bik/build/CMakeFiles --progress-num=6,7,8 "Built target lexer"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/biiku/code/projects/bik/build/CMakeFiles --progress-num=9,10,11 "Built target lexer"
 .PHONY : src/lexer/CMakeFiles/lexer.dir/all
 
 # Build rule for subdir invocation for target.
@@ -204,7 +204,7 @@ lexer: src/lexer/CMakeFiles/lexer.dir/rule
 # codegen rule for target.
 src/lexer/CMakeFiles/lexer.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f src/lexer/CMakeFiles/lexer.dir/build.make src/lexer/CMakeFiles/lexer.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/biiku/code/projects/bik/build/CMakeFiles --progress-num=6,7,8 "Finished codegen for target lexer"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/biiku/code/projects/bik/build/CMakeFiles --progress-num=9,10,11 "Finished codegen for target lexer"
 .PHONY : src/lexer/CMakeFiles/lexer.dir/codegen
 
 # clean rule for target.
@@ -219,12 +219,12 @@ src/lexer/CMakeFiles/lexer.dir/clean:
 src/generator/CMakeFiles/generator.dir/all:
 	$(MAKE) $(MAKESILENT) -f src/generator/CMakeFiles/generator.dir/build.make src/generator/CMakeFiles/generator.dir/depend
 	$(MAKE) $(MAKESILENT) -f src/generator/CMakeFiles/generator.dir/build.make src/generator/CMakeFiles/generator.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/biiku/code/projects/bik/build/CMakeFiles --progress-num=3,4,5 "Built target generator"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/biiku/code/projects/bik/build/CMakeFiles --progress-num=3,4,5,6,7,8 "Built target generator"
 .PHONY : src/generator/CMakeFiles/generator.dir/all
 
 # Build rule for subdir invocation for target.
 src/generator/CMakeFiles/generator.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/biiku/code/projects/bik/build/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/biiku/code/projects/bik/build/CMakeFiles 6
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/generator/CMakeFiles/generator.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/biiku/code/projects/bik/build/CMakeFiles 0
 .PHONY : src/generator/CMakeFiles/generator.dir/rule
@@ -236,7 +236,7 @@ generator: src/generator/CMakeFiles/generator.dir/rule
 # codegen rule for target.
 src/generator/CMakeFiles/generator.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f src/generator/CMakeFiles/generator.dir/build.make src/generator/CMakeFiles/generator.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/biiku/code/projects/bik/build/CMakeFiles --progress-num=3,4,5 "Finished codegen for target generator"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/biiku/code/projects/bik/build/CMakeFiles --progress-num=3,4,5,6,7,8 "Finished codegen for target generator"
 .PHONY : src/generator/CMakeFiles/generator.dir/codegen
 
 # clean rule for target.
@@ -251,12 +251,12 @@ src/generator/CMakeFiles/generator.dir/clean:
 src/parser/CMakeFiles/parser.dir/all:
 	$(MAKE) $(MAKESILENT) -f src/parser/CMakeFiles/parser.dir/build.make src/parser/CMakeFiles/parser.dir/depend
 	$(MAKE) $(MAKESILENT) -f src/parser/CMakeFiles/parser.dir/build.make src/parser/CMakeFiles/parser.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/biiku/code/projects/bik/build/CMakeFiles --progress-num=9,10,11,12,13,14 "Built target parser"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/biiku/code/projects/bik/build/CMakeFiles --progress-num=12,13,14,15,16,17,18 "Built target parser"
 .PHONY : src/parser/CMakeFiles/parser.dir/all
 
 # Build rule for subdir invocation for target.
 src/parser/CMakeFiles/parser.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/biiku/code/projects/bik/build/CMakeFiles 6
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/biiku/code/projects/bik/build/CMakeFiles 7
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/parser/CMakeFiles/parser.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/biiku/code/projects/bik/build/CMakeFiles 0
 .PHONY : src/parser/CMakeFiles/parser.dir/rule
@@ -268,7 +268,7 @@ parser: src/parser/CMakeFiles/parser.dir/rule
 # codegen rule for target.
 src/parser/CMakeFiles/parser.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f src/parser/CMakeFiles/parser.dir/build.make src/parser/CMakeFiles/parser.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/biiku/code/projects/bik/build/CMakeFiles --progress-num=9,10,11,12,13,14 "Finished codegen for target parser"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/biiku/code/projects/bik/build/CMakeFiles --progress-num=12,13,14,15,16,17,18 "Finished codegen for target parser"
 .PHONY : src/parser/CMakeFiles/parser.dir/codegen
 
 # clean rule for target.

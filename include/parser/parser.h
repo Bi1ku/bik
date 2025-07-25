@@ -6,5 +6,6 @@
 #include "ast.h"
 
 NodeList *parse(TokenList *tokens, Env *env);
+NodeList *parse_line(NodeList *nodes, TokenList *tokens, Env *env);
 
 #endif

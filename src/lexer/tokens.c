@@ -38,9 +38,9 @@ char *get_string_token_type(int index) {
   case 0:
     return "BIN_OP";
   case 1:
-    return "PAREN_L";
-  case 2:
     return "PAREN_R";
+  case 2:
+    return "PAREN_L";
   case 3:
     return "NUM";
   case 4:
