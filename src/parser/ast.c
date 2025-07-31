@@ -66,22 +66,44 @@ Stmt *create_ret_stmt(Expr *expr) {
   return stmt;
 }
 
-Stmt *create_func_stmt(char *name, NodeList *params, NodeList *body) {
+Stmt *create_func_decl_stmt(char *name, NodeList *params, NodeList *body) {
   Stmt *stmt = malloc(sizeof(Stmt));
-  stmt->type = FUNC;
+  stmt->type = FUNC_DECL;
 
-  stmt->func = malloc(sizeof(Func));
-  stmt->func->name = name;
-  stmt->func->params = params;
-  stmt->func->body = body;
+  stmt->func_decl = malloc(sizeof(FuncDecl));
+  stmt->func_decl->name = name;
+  stmt->func_decl->params = params;
+  stmt->func_decl->body = body;
 
   return stmt;
 }
 
-Stmt *create_param_stmt(char *symbol) {
+Stmt *create_func_call_stmt(char *name, NodeList *args) {
   Stmt *stmt = malloc(sizeof(Stmt));
+  stmt->type = FUNC_CALL;
+
+  stmt->func_call = malloc(sizeof(FuncCall));
+  stmt->func_call->name = name;
+  stmt->func_call->args = args;
+
+  return stmt;
+}
+
+Stmt *create_log_stmt(Expr *expr) {
+  Stmt *stmt = malloc(sizeof(Stmt));
+  stmt->type = LOG;
+  stmt->log = expr;
+  return stmt;
+}
+
+Stmt *create_param_stmt(char *symbol, ExprType type) {
+  Stmt *stmt = malloc(sizeof(Stmt));
+
   stmt->type = PARAM;
-  stmt->param = symbol;
+  stmt->param = malloc(sizeof(Param));
+  stmt->param->name = symbol;
+  stmt->param->type = type;
+
   return stmt;
 }
 
@@ -118,10 +140,14 @@ Expr *create_int_expr(int value) {
   return expr;
 }
 
-Expr *create_float_expr(float value) {
+Expr *create_float_expr(float value, char *mem) {
   Expr *expr = malloc(sizeof(Expr));
   expr->type = FLOAT;
-  expr->floating = value;
+
+  expr->floating = malloc(sizeof(Float));
+  expr->floating->val = value;
+  expr->floating->mem = mem;
+
   return expr;
 }
 
@@ -132,9 +158,12 @@ Expr *create_identifier_expr(char *symbol) {
   return expr;
 }
 
-Expr *create_string_expr(char *value) {
+Expr *create_string_expr(char *value, char *mem) {
   Expr *expr = malloc(sizeof(Expr));
   expr->type = STRING;
-  expr->str = value;
+
+  expr->str = malloc(sizeof(Str));
+  expr->str->val = value;
+  expr->str->mem = mem;
   return expr;
 }

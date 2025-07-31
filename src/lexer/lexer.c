@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-char *keywords[] = {"func", "ret"};
+char *keywords[] = {"func", "ret", "log", "str", "int", "deci"};
 
 int shift(char *str) {
   if (str == NULL) {
@@ -89,6 +89,11 @@ TokenList *tokenize(char *path) {
       shift(mutable);
       break;
 
+    case ',':
+      add_to_token_list(tokens, create_token(COMMA, ","));
+      shift(mutable);
+      break;
+
     case ';':
       add_to_token_list(tokens, create_token(NEWLINE, "newline"));
       shift(mutable);
@@ -114,25 +119,17 @@ TokenList *tokenize(char *path) {
       else if (is_skippable(mutable[0]) != 0) {
         bool quotes = false;
         bool is_str = false;
-        bool comma = false;
+        bool params = false;
 
-        while ((mutable[0] != ' ' || quotes) && mutable[0] != ';') {
+        while (quotes || (mutable[0] != ' ' && mutable[0] != ';')) {
           if (mutable[0] == '"') {
             quotes = !quotes;
             is_str = true;
           }
 
-          // for params
-          else if (mutable[0] == ',' || mutable[0] == ')') {
-            comma = true;
-            add_to_token_list(tokens, create_token(IDENTIFIER, buffer));
-            if (mutable[0] == ',')
-              add_to_token_list(tokens, create_token(COMMA, ","));
-            else
-              add_to_token_list(tokens, create_token(PAREN_R, ")"));
-            shift(mutable);
+          else if (!quotes && (mutable[0] == '(' || mutable[0] == ')' ||
+                               mutable[0] == ',' || mutable[0] == '='))
             break;
-          }
 
           else {
             buffer[i] = mutable[0];
@@ -142,9 +139,9 @@ TokenList *tokenize(char *path) {
           shift(mutable);
         }
 
-        if (!comma) {
+        if (!params) {
           if (quotes) {
-            printf("Quotes are wrong");
+            printf("ERROR: Quotes are wrong");
             exit(EXIT_FAILURE);
           }
 

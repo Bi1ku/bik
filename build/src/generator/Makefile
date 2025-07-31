@@ -154,6 +154,30 @@ eval.c.s:
 	cd /Users/biiku/code/projects/bik/build && $(MAKE) $(MAKESILENT) -f src/generator/CMakeFiles/generator.dir/build.make src/generator/CMakeFiles/generator.dir/eval.c.s
 .PHONY : eval.c.s
 
+expr.o: expr.c.o
+.PHONY : expr.o
+
+# target to build an object file
+expr.c.o:
+	cd /Users/biiku/code/projects/bik/build && $(MAKE) $(MAKESILENT) -f src/generator/CMakeFiles/generator.dir/build.make src/generator/CMakeFiles/generator.dir/expr.c.o
+.PHONY : expr.c.o
+
+expr.i: expr.c.i
+.PHONY : expr.i
+
+# target to preprocess a source file
+expr.c.i:
+	cd /Users/biiku/code/projects/bik/build && $(MAKE) $(MAKESILENT) -f src/generator/CMakeFiles/generator.dir/build.make src/generator/CMakeFiles/generator.dir/expr.c.i
+.PHONY : expr.c.i
+
+expr.s: expr.c.s
+.PHONY : expr.s
+
+# target to generate assembly for a file
+expr.c.s:
+	cd /Users/biiku/code/projects/bik/build && $(MAKE) $(MAKESILENT) -f src/generator/CMakeFiles/generator.dir/build.make src/generator/CMakeFiles/generator.dir/expr.c.s
+.PHONY : expr.c.s
+
 generator.o: generator.c.o
 .PHONY : generator.o
 
@@ -178,6 +202,54 @@ generator.c.s:
 	cd /Users/biiku/code/projects/bik/build && $(MAKE) $(MAKESILENT) -f src/generator/CMakeFiles/generator.dir/build.make src/generator/CMakeFiles/generator.dir/generator.c.s
 .PHONY : generator.c.s
 
+stmt.o: stmt.c.o
+.PHONY : stmt.o
+
+# target to build an object file
+stmt.c.o:
+	cd /Users/biiku/code/projects/bik/build && $(MAKE) $(MAKESILENT) -f src/generator/CMakeFiles/generator.dir/build.make src/generator/CMakeFiles/generator.dir/stmt.c.o
+.PHONY : stmt.c.o
+
+stmt.i: stmt.c.i
+.PHONY : stmt.i
+
+# target to preprocess a source file
+stmt.c.i:
+	cd /Users/biiku/code/projects/bik/build && $(MAKE) $(MAKESILENT) -f src/generator/CMakeFiles/generator.dir/build.make src/generator/CMakeFiles/generator.dir/stmt.c.i
+.PHONY : stmt.c.i
+
+stmt.s: stmt.c.s
+.PHONY : stmt.s
+
+# target to generate assembly for a file
+stmt.c.s:
+	cd /Users/biiku/code/projects/bik/build && $(MAKE) $(MAKESILENT) -f src/generator/CMakeFiles/generator.dir/build.make src/generator/CMakeFiles/generator.dir/stmt.c.s
+.PHONY : stmt.c.s
+
+vars.o: vars.c.o
+.PHONY : vars.o
+
+# target to build an object file
+vars.c.o:
+	cd /Users/biiku/code/projects/bik/build && $(MAKE) $(MAKESILENT) -f src/generator/CMakeFiles/generator.dir/build.make src/generator/CMakeFiles/generator.dir/vars.c.o
+.PHONY : vars.c.o
+
+vars.i: vars.c.i
+.PHONY : vars.i
+
+# target to preprocess a source file
+vars.c.i:
+	cd /Users/biiku/code/projects/bik/build && $(MAKE) $(MAKESILENT) -f src/generator/CMakeFiles/generator.dir/build.make src/generator/CMakeFiles/generator.dir/vars.c.i
+.PHONY : vars.c.i
+
+vars.s: vars.c.s
+.PHONY : vars.s
+
+# target to generate assembly for a file
+vars.c.s:
+	cd /Users/biiku/code/projects/bik/build && $(MAKE) $(MAKESILENT) -f src/generator/CMakeFiles/generator.dir/build.make src/generator/CMakeFiles/generator.dir/vars.c.s
+.PHONY : vars.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -190,9 +262,18 @@ help:
 	@echo "... eval.o"
 	@echo "... eval.i"
 	@echo "... eval.s"
+	@echo "... expr.o"
+	@echo "... expr.i"
+	@echo "... expr.s"
 	@echo "... generator.o"
 	@echo "... generator.i"
 	@echo "... generator.s"
+	@echo "... stmt.o"
+	@echo "... stmt.i"
+	@echo "... stmt.s"
+	@echo "... vars.o"
+	@echo "... vars.i"
+	@echo "... vars.s"
 .PHONY : help
 
 

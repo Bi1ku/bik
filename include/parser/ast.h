@@ -3,17 +3,45 @@
 
 typedef enum { EXPR, STMT } NodeType;
 
-typedef enum { PROGRAM, ASSIGN, FUNC, PARAM, RET } StmtType;
+typedef enum {
+  PROGRAM,
+  ASSIGN,
+  FUNC_DECL,
+  PARAM,
+  RET,
+  LOG,
+  FUNC_CALL
+} StmtType;
 typedef enum { INT, FLOAT, STRING, BIN, IDENTIFIER_EX } ExprType;
 
 typedef struct NodeList NodeList;
 typedef struct Expr Expr;
 
 typedef struct {
+  char *val;
+  char *mem;
+} Str;
+
+typedef struct {
+  float val;
+  char *mem;
+} Float;
+
+typedef struct {
+  char *name;
+  ExprType type;
+} Param;
+
+typedef struct {
   char *name;
   NodeList *params;
   NodeList *body;
-} Func;
+} FuncDecl;
+
+typedef struct {
+  char *name;
+  NodeList *args;
+} FuncCall;
 
 typedef struct {
   char *symbol;
@@ -32,8 +60,8 @@ struct Expr {
     Bin *bin;
     char *identifier;
     int integer;
-    float floating;
-    char *str;
+    Float *floating;
+    Str *str;
   };
 };
 
@@ -43,8 +71,10 @@ typedef struct {
     Expr *ret;
     NodeList *program;
     Assign *assign;
-    Func *func;
-    char *param;
+    FuncDecl *func_decl;
+    FuncCall *func_call;
+    Param *param;
+    Expr *log;
   };
 } Stmt;
 
@@ -71,14 +101,16 @@ Node *create_expr_node(Expr *expr);
 
 Expr *create_bin_expr(Expr *left, Expr *right, char *op);
 Expr *create_int_expr(int value);
-Expr *create_float_expr(float value);
+Expr *create_float_expr(float value, char *mem);
+Expr *create_string_expr(char *value, char *mem);
 Expr *create_identifier_expr(char *symbol);
-Expr *create_string_expr(char *value);
 
+Stmt *create_func_decl_stmt(char *name, NodeList *params, NodeList *body);
+Stmt *create_func_call_stmt(char *name, NodeList *args);
+Stmt *create_param_stmt(char *symbol, ExprType type);
 Stmt *create_assign_stmt(char *symbol, Expr *expr);
-Stmt *create_program();
-Stmt *create_param_stmt(char *symbol);
-Stmt *create_func_stmt(char *name, NodeList *params, NodeList *body);
 Stmt *create_ret_stmt(Expr *expr);
+Stmt *create_log_stmt(Expr *expr);
+Stmt *create_program();
 
 #endif
