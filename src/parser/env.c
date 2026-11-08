@@ -8,6 +8,7 @@ Env *create_env(Env *parent, int init_size) {
   env->parent = parent;
 
   env->items = malloc(sizeof(VarList));
+  env->classes = create_node_list(5);
 
   // env->items->items = malloc(sizeof(Item) * init_size); // when changing to
   // pointer
@@ -15,6 +16,30 @@ Env *create_env(Env *parent, int init_size) {
   env->items->size = 0;
 
   return env;
+}
+
+ClassDecl *get_class(Env *env, char *name) {
+  for (int i = 0; i < env->classes->size; i++) {
+    Stmt *stmt = env->classes->nodes[i].stmt;
+    if (stmt->type == CLASS_DECL && strcmp(stmt->class_decl->name, name) == 0)
+      return stmt->class_decl;
+  }
+  return env->parent == NULL ? NULL : get_class(env->parent, name);
+}
+
+void add_class(Env *env, ClassDecl *class_decl) {
+  for (int i = 0; i < env->classes->size; i++) {
+    Stmt *stmt = env->classes->nodes[i].stmt;
+    if (stmt->type == CLASS_DECL &&
+        strcmp(stmt->class_decl->name, class_decl->name) == 0) {
+      stmt->class_decl = class_decl;
+      return;
+    }
+  }
+  Stmt *stmt = malloc(sizeof(Stmt));
+  stmt->type = CLASS_DECL;
+  stmt->class_decl = class_decl;
+  add_node_to_node_list(env->classes, create_stmt_node(stmt));
 }
 
 Expr *get_var(VarList *vars, char *key) {
@@ -46,9 +71,12 @@ Var *create_var(char *key, Expr *expr, VarList *vars) {
   }
 
   case IDENTIFIER_EX: {
-    Expr *expr = get_var(vars, expr->identifier);
-    Var *var = create_var(key, expr, vars);
-    return var;
+    Expr *value = get_var(vars, expr->identifier);
+    if (value == NULL) {
+      printf("ERROR: Unknown variable '%s'.\n", expr->identifier);
+      exit(EXIT_FAILURE);
+    }
+    return create_var(key, value, vars);
   }
 
   default: {

@@ -30,8 +30,14 @@ Node *parse_values(TokenList *tokens, char *mem, VarList *vars) {
     return create_expr_node(expr);
   }
 
-  case IDENTIFIER:
-    return create_expr_node(create_identifier_expr(eat(tokens).value));
+  case IDENTIFIER: {
+    char *name = eat(tokens).value;
+    for (int i = 0; name[i] != '\0'; i++) {
+      if (name[i] == '.')
+        name[i] = '_';
+    }
+    return create_expr_node(create_identifier_expr(name));
+  }
 
   case PAREN_L:
     eat(tokens);

@@ -88,35 +88,55 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
       char *class_name = eat(tokens).value;
       expect(tokens, BLOCK_START);
 
+      Env *class_env = create_env(env, env->items->capacity);
+      for (int i = 0; i < env->items->size; i++)
+        add_to_env(class_env->items, env->items->items[i]);
+
+      NodeList *fields = create_node_list(5);
       NodeList *methods = create_node_list(5);
       while (peek(tokens).type != BLOCK_END && peek(tokens).type != END) {
-        int first_method = methods->size;
-        parse_line(methods, tokens, env);
+        NodeList *members = create_node_list(5);
+        parse_line(members, tokens, class_env);
         if (peek(tokens).type == NEWLINE)
           eat(tokens);
 
-        if (methods->size == first_method ||
-            methods->nodes[first_method].type != STMT ||
-            methods->nodes[first_method].stmt->type != FUNC_DECL) {
-          printf("ERROR: Class bodies currently contain named methods only.\n");
+        if (members->size == 0) {
+          printf("ERROR: Expected a field or method in class body.\n");
           exit(EXIT_FAILURE);
         }
 
-        for (int i = first_method; i < methods->size; i++) {
-          Node *method = &methods->nodes[i];
-          if (method->type != STMT || method->stmt->type != FUNC_DECL) {
-            printf("ERROR: Class bodies currently contain named methods only.\n");
+        for (int i = 0; i < members->size; i++) {
+          Node *member = &members->nodes[i];
+          if (member->type != STMT) {
+            printf("ERROR: Class members must be fields or named methods.\n");
             exit(EXIT_FAILURE);
           }
-          char *method_name = method->stmt->func_decl->name;
-          size_t size = strlen(class_name) + strlen(method_name) + 2;
-          char *qualified = malloc(size);
-          snprintf(qualified, size, "%s_%s", class_name, method_name);
-          method->stmt->func_decl->name = qualified;
+          if (member->stmt->type == ASSIGN) {
+            Assign *field = member->stmt->assign;
+            Expr *value = get_var(class_env->items, field->symbol);
+            if (value == NULL) {
+              printf("ERROR: Class field initializers must be constant values.\n");
+              exit(EXIT_FAILURE);
+            }
+            field->expr = value;
+            add_node_to_node_list(fields, member);
+          } else if (member->stmt->type == FUNC_DECL) {
+            char *method_name = member->stmt->func_decl->name;
+            size_t size = strlen(class_name) + strlen(method_name) + 2;
+            char *qualified = malloc(size);
+            snprintf(qualified, size, "%s_%s", class_name, method_name);
+            member->stmt->func_decl->name = qualified;
+            add_node_to_node_list(methods, member);
+          } else {
+            printf("ERROR: Class members must be fields or named methods.\n");
+            exit(EXIT_FAILURE);
+          }
         }
       }
       expect(tokens, BLOCK_END);
-      return create_stmt_node(create_class_decl_stmt(class_name, methods));
+      Stmt *stmt = create_class_decl_stmt(class_name, fields, methods);
+      add_class(env, stmt->class_decl);
+      return create_stmt_node(stmt);
     }
 
     else if (strcmp(peek(tokens).value, "ret") == 0) {
@@ -171,12 +191,26 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
   case IDENTIFIER:
     if (tokens->tokens[1].type == ASSIGNMENT) {
       char *name = eat(tokens).value;
+      for (int i = 0; name[i] != '\0'; i++) {
+        if (name[i] == '.')
+          name[i] = '_';
+      }
       eat(tokens);
 
       NodeList *temp = parse_line(nodes, tokens, env);
       Node *rest = &temp->nodes[temp->size - 1];
 
       if (rest->type == EXPR) {
+        if (rest->expr->type == OBJECT) {
+          NodeList *fields = rest->expr->object->class_decl->fields;
+          for (int i = 0; i < fields->size; i++) {
+            Assign *field = fields->nodes[i].stmt->assign;
+            size_t size = strlen(name) + strlen(field->symbol) + 2;
+            char *field_name = malloc(size);
+            snprintf(field_name, size, "%s_%s", name, field->symbol);
+            create_var(field_name, field->expr, env->items);
+          }
+        }
         create_var(name, rest->expr, env->items);
         // expr node must be at end after assignment
         remove_node_from_node_list(nodes, temp->size - 1);
@@ -202,6 +236,15 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
       }
       expect(tokens, PAREN_L);
       NodeList *args = parse_func_args(tokens, env->items);
+
+      ClassDecl *class_decl = get_class(env, name);
+      if (class_decl != NULL) {
+        if (args->size != 0) {
+          printf("ERROR: Class constructors do not take arguments yet.\n");
+          exit(EXIT_FAILURE);
+        }
+        return create_expr_node(create_object_expr(class_decl));
+      }
 
       return create_stmt_node(create_func_call_stmt(name, args));
     }

@@ -69,6 +69,10 @@ void generate_log(FILE *out, Expr *expr, Env *env, char *var_name) {
     fprintf(out, "\tsyscall\n");
     break;
   }
+
+  case OBJECT:
+    fprintf(stderr, "ERROR: Objects cannot be logged directly; select a field.\n");
+    exit(EXIT_FAILURE);
   }
 }
 

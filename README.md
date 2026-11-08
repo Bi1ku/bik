@@ -19,7 +19,7 @@ The compiler is still under development, and MIPS generation is not yet complete
 * `log()` statements
 * Integer functions with up to four parameters, calls, and return statements
 * Integer `if` conditions and recursive function calls
-* Classes for grouping named methods
+* Classes with default fields, instances, and named methods
 * Basic MIPS `.data` and `.text` generation
 
 ## Tech Stack
@@ -74,17 +74,26 @@ countdown = func(int n) {
 
 The current function-call generator supports up to four integer arguments.
 
-Classes group named methods. Call a method using `ClassName.method()`:
+Classes can define fields with default values and named methods. Each call to
+the class name creates an instance with its own fields. Access fields with dot
+notation and call class methods using `ClassName.method()`:
 
 ```text
 class Math {
+  scale = 1;
   add = func(int left, int right) {
     ret left + right;
   };
 };
 
+first = Math();
+first.scale = 2;
+log(first.scale);
 Math.add(2, 3);
 ```
+
+Instances currently use default field values, and methods are class-level rather
+than bound to an individual instance.
 
 Passing a source file through the command line is not yet supported.
 

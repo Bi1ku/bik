@@ -21,6 +21,9 @@ void generate_vars(FILE *out, Env *env) {
         fprintf(out, "\t%s: .float %lf\n", name, value->floating->val);
         break;
 
+      case OBJECT:
+        break;
+
       default:
         printf("ERROR: Not Valid!");
         exit(EXIT_FAILURE);

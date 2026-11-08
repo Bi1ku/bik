@@ -8,7 +8,7 @@
 - learn more about cmakelists
 - ENV items list to pointer
 - NodeList to pointer
-- objects and instance fields
+- instance methods and constructors
 - standard library
 - Objects & arrays -> ASM
 - Function scopes -> ASM
