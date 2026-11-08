@@ -105,8 +105,8 @@ TokenList *tokenize(char *path) {
       int i = 0;
 
       // floats & ints
-      if (isnumber(mutable[0]) != 0) {
-        while (isnumber(mutable[0]) != 0 || mutable[0] == '.') {
+      if (isdigit((unsigned char)mutable[0]) != 0) {
+        while (isdigit((unsigned char)mutable[0]) != 0 || mutable[0] == '.') {
           buffer[i] = mutable[0];
           i++;
           shift(mutable);
@@ -183,11 +183,35 @@ char *read(char *path) {
     exit(EXIT_FAILURE);
   }
 
-  char *buffer = malloc(sizeof(char) * 100); // todo: realloc later?
-  char line[100];
-  while (fgets(line, sizeof(line), file) != NULL) {
-    strcat(buffer, line);
+  if (fseek(file, 0, SEEK_END) != 0) {
+    fclose(file);
+    printf("ERROR: Cannot seek in file %s\n", path);
+    exit(EXIT_FAILURE);
   }
 
+  long file_size = ftell(file);
+  if (file_size < 0 || fseek(file, 0, SEEK_SET) != 0) {
+    fclose(file);
+    printf("ERROR: Cannot read file %s\n", path);
+    exit(EXIT_FAILURE);
+  }
+
+  char *buffer = malloc((size_t)file_size + 1);
+  if (buffer == NULL) {
+    fclose(file);
+    printf("ERROR: Could not allocate memory for file %s\n", path);
+    exit(EXIT_FAILURE);
+  }
+
+  size_t bytes_read = fread(buffer, 1, (size_t)file_size, file);
+  if (bytes_read != (size_t)file_size) {
+    free(buffer);
+    fclose(file);
+    printf("ERROR: Could not read file %s\n", path);
+    exit(EXIT_FAILURE);
+  }
+
+  buffer[bytes_read] = '\0';
+  fclose(file);
   return buffer;
 }
