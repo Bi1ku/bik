@@ -5,6 +5,8 @@
 int t_reg = 0;
 int f_reg = 0;
 int a_reg = 0;
+int label_index = 0;
+FuncDecl *current_func = NULL;
 
 void generate_from_nodes(FILE *out, Env *env, NodeList *program) {
   for (int i = 0; i < program->size; i++) {

@@ -10,7 +10,8 @@ typedef enum {
   PARAM,
   RET,
   LOG,
-  FUNC_CALL
+  FUNC_CALL,
+  IF
 } StmtType;
 typedef enum { INT, FLOAT, STRING, BIN, IDENTIFIER_EX } ExprType;
 
@@ -52,6 +53,13 @@ typedef struct {
   Expr *left;
   Expr *right;
   char *op;
+  NodeList *body;
+} IfStmt;
+
+typedef struct {
+  Expr *left;
+  Expr *right;
+  char *op;
 } Bin;
 
 struct Expr {
@@ -75,6 +83,7 @@ typedef struct {
     FuncCall *func_call;
     Param *param;
     Expr *log;
+    IfStmt *if_stmt;
   };
 } Stmt;
 
@@ -111,6 +120,7 @@ Stmt *create_param_stmt(char *symbol, ExprType type);
 Stmt *create_assign_stmt(char *symbol, Expr *expr);
 Stmt *create_ret_stmt(Expr *expr);
 Stmt *create_log_stmt(Expr *expr);
+Stmt *create_if_stmt(Expr *left, char *op, Expr *right, NodeList *body);
 Stmt *create_program();
 
 #endif

@@ -8,10 +8,10 @@
 - learn more about cmakelists
 - ENV items list to pointer
 - NodeList to pointer
-- functions
+- objects, classes, and methods
 - standard library
 - Objects & arrays -> ASM
-- Functions & scopes -> ASM
+- Function scopes -> ASM
 - Native functions -> ASM
 - env scopes
 - fix placeholder

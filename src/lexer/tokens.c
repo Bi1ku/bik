@@ -61,6 +61,8 @@ char *get_string_token_type(int index) {
     return "BLOCK_END";
   case 12:
     return "COMMA";
+  case 13:
+    return "COMPARE";
   default:
     return "UNKNOWN";
   }

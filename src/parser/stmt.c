@@ -100,6 +100,29 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
       return create_stmt_node(create_log_stmt(node->expr));
     }
 
+    else if (strcmp(peek(tokens).value, "if") == 0) {
+      eat(tokens);
+      expect(tokens, PAREN_L);
+      Expr *left = parse_additive(tokens, NULL, env->items)->expr;
+      if (peek(tokens).type != COMPARE) {
+        printf("ERROR: Expected a comparison operator in if condition.\n");
+        exit(EXIT_FAILURE);
+      }
+      char *op = eat(tokens).value;
+      Expr *right = parse_additive(tokens, NULL, env->items)->expr;
+      expect(tokens, PAREN_R);
+      expect(tokens, BLOCK_START);
+
+      NodeList *body = create_node_list(5);
+      while (peek(tokens).type != BLOCK_END && peek(tokens).type != END) {
+        parse_line(body, tokens, env);
+        if (peek(tokens).type == NEWLINE)
+          eat(tokens);
+      }
+      expect(tokens, BLOCK_END);
+      return create_stmt_node(create_if_stmt(left, op, right, body));
+    }
+
     else {
       exit(EXIT_FAILURE);
     }

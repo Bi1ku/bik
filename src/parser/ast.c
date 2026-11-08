@@ -96,6 +96,17 @@ Stmt *create_log_stmt(Expr *expr) {
   return stmt;
 }
 
+Stmt *create_if_stmt(Expr *left, char *op, Expr *right, NodeList *body) {
+  Stmt *stmt = malloc(sizeof(Stmt));
+  stmt->type = IF;
+  stmt->if_stmt = malloc(sizeof(IfStmt));
+  stmt->if_stmt->left = left;
+  stmt->if_stmt->op = op;
+  stmt->if_stmt->right = right;
+  stmt->if_stmt->body = body;
+  return stmt;
+}
+
 Stmt *create_param_stmt(char *symbol, ExprType type) {
   Stmt *stmt = malloc(sizeof(Stmt));
 

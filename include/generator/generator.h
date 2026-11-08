@@ -8,6 +8,8 @@
 extern int t_reg;
 extern int f_reg;
 extern int a_reg;
+extern int label_index;
+extern FuncDecl *current_func;
 
 void generate_from_nodes(FILE *out, Env *env, NodeList *program);
 void generate(FILE *out, Env *env, NodeList *program);

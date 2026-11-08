@@ -15,6 +15,7 @@ typedef enum {
   BLOCK_START,
   BLOCK_END,
   COMMA,
+  COMPARE,
 } TokenType;
 
 typedef struct {

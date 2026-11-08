@@ -17,7 +17,8 @@ The compiler is still under development, and MIPS generation is not yet complete
 * Arithmetic operations with compile-time constant folding
 * String concatenation with automatic number conversion
 * `log()` statements
-* Early support for functions, typed parameters, calls, and return statements
+* Integer functions with up to four parameters, calls, and return statements
+* Integer `if` conditions and recursive function calls
 * Basic MIPS `.data` and `.text` generation
 
 ## Tech Stack
@@ -58,6 +59,19 @@ cd build-local
 ```
 
 The compiler prints the generated tokens and writes the resulting assembly to `build-local/output.asm`.
+
+Integer functions can call themselves and branch on a comparison:
+
+```text
+countdown = func(int n) {
+  if (n > 0) {
+    log(n);
+    countdown(n - 1);
+  };
+};
+```
+
+The current function-call generator supports up to four integer arguments.
 
 Passing a source file through the command line is not yet supported.
 

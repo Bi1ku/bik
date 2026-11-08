@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-char *keywords[] = {"func", "ret", "log", "str", "int", "deci"};
+char *keywords[] = {"func", "ret", "log", "str", "int", "deci", "if"};
 
 int shift(char *str) {
   if (str == NULL) {
@@ -75,9 +75,37 @@ TokenList *tokenize(char *path) {
       break;
 
     case '=':
-      add_to_token_list(tokens, create_token(ASSIGNMENT, "="));
+      if (mutable[1] == '=') {
+        add_to_token_list(tokens, create_token(COMPARE, "=="));
+        shift(mutable);
+        shift(mutable);
+      } else {
+        add_to_token_list(tokens, create_token(ASSIGNMENT, "="));
+        shift(mutable);
+      }
+      break;
+
+    case '!':
+      if (mutable[1] == '=') {
+        add_to_token_list(tokens, create_token(COMPARE, "!="));
+        shift(mutable);
+        shift(mutable);
+      } else {
+        shift(mutable);
+      }
+      break;
+
+    case '<':
+    case '>': {
+      char op[3] = {mutable[0], '\0', '\0'};
+      if (mutable[1] == '=') {
+        op[1] = '=';
+        shift(mutable);
+      }
+      add_to_token_list(tokens, create_token(COMPARE, op));
       shift(mutable);
       break;
+    }
 
     case '{':
       add_to_token_list(tokens, create_token(BLOCK_START, "{"));

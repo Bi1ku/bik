@@ -6,5 +6,6 @@
 #include <stdio.h>
 
 void generate_expr(FILE *out, Expr *expr, Env *env, bool ret, char *var_name);
+void generate_int_expr(FILE *out, Expr *expr, Env *env, int depth);
 
 #endif
