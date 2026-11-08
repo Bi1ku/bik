@@ -107,6 +107,15 @@ Stmt *create_if_stmt(Expr *left, char *op, Expr *right, NodeList *body) {
   return stmt;
 }
 
+Stmt *create_class_decl_stmt(char *name, NodeList *methods) {
+  Stmt *stmt = malloc(sizeof(Stmt));
+  stmt->type = CLASS_DECL;
+  stmt->class_decl = malloc(sizeof(ClassDecl));
+  stmt->class_decl->name = name;
+  stmt->class_decl->methods = methods;
+  return stmt;
+}
+
 Stmt *create_param_stmt(char *symbol, ExprType type) {
   Stmt *stmt = malloc(sizeof(Stmt));
 

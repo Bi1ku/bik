@@ -162,5 +162,7 @@ void generate_funcs(FILE *out, Env *env, NodeList *program) {
 
     if (node.type == STMT && node.stmt->type == FUNC_DECL)
       generate_stmt(out, node.stmt, env);
+    else if (node.type == STMT && node.stmt->type == CLASS_DECL)
+      generate_funcs(out, env, node.stmt->class_decl->methods);
   }
 }

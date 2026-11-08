@@ -12,7 +12,8 @@ void generate_from_nodes(FILE *out, Env *env, NodeList *program) {
   for (int i = 0; i < program->size; i++) {
     Node node = program->nodes[i];
 
-    if (node.type == STMT && node.stmt->type != FUNC_DECL)
+    if (node.type == STMT && node.stmt->type != FUNC_DECL &&
+        node.stmt->type != CLASS_DECL)
       generate_stmt(out, node.stmt, env);
     else if (node.type == EXPR)
       generate_expr(out, node.expr, env, false, NULL);

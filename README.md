@@ -19,6 +19,7 @@ The compiler is still under development, and MIPS generation is not yet complete
 * `log()` statements
 * Integer functions with up to four parameters, calls, and return statements
 * Integer `if` conditions and recursive function calls
+* Classes for grouping named methods
 * Basic MIPS `.data` and `.text` generation
 
 ## Tech Stack
@@ -72,6 +73,18 @@ countdown = func(int n) {
 ```
 
 The current function-call generator supports up to four integer arguments.
+
+Classes group named methods. Call a method using `ClassName.method()`:
+
+```text
+class Math {
+  add = func(int left, int right) {
+    ret left + right;
+  };
+};
+
+Math.add(2, 3);
+```
 
 Passing a source file through the command line is not yet supported.
 

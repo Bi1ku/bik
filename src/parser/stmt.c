@@ -79,6 +79,46 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
       return create_stmt_node(create_func_decl_stmt("-", params, program));
     }
 
+    else if (strcmp(peek(tokens).value, "class") == 0) {
+      eat(tokens);
+      if (peek(tokens).type != IDENTIFIER) {
+        printf("ERROR: Expected a class name.\n");
+        exit(EXIT_FAILURE);
+      }
+      char *class_name = eat(tokens).value;
+      expect(tokens, BLOCK_START);
+
+      NodeList *methods = create_node_list(5);
+      while (peek(tokens).type != BLOCK_END && peek(tokens).type != END) {
+        int first_method = methods->size;
+        parse_line(methods, tokens, env);
+        if (peek(tokens).type == NEWLINE)
+          eat(tokens);
+
+        if (methods->size == first_method ||
+            methods->nodes[first_method].type != STMT ||
+            methods->nodes[first_method].stmt->type != FUNC_DECL) {
+          printf("ERROR: Class bodies currently contain named methods only.\n");
+          exit(EXIT_FAILURE);
+        }
+
+        for (int i = first_method; i < methods->size; i++) {
+          Node *method = &methods->nodes[i];
+          if (method->type != STMT || method->stmt->type != FUNC_DECL) {
+            printf("ERROR: Class bodies currently contain named methods only.\n");
+            exit(EXIT_FAILURE);
+          }
+          char *method_name = method->stmt->func_decl->name;
+          size_t size = strlen(class_name) + strlen(method_name) + 2;
+          char *qualified = malloc(size);
+          snprintf(qualified, size, "%s_%s", class_name, method_name);
+          method->stmt->func_decl->name = qualified;
+        }
+      }
+      expect(tokens, BLOCK_END);
+      return create_stmt_node(create_class_decl_stmt(class_name, methods));
+    }
+
     else if (strcmp(peek(tokens).value, "ret") == 0) {
       eat(tokens);
       Node *expr = parse_additive(tokens, gen_id(), env->items);
@@ -156,6 +196,10 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
     // FUNC CALL
     else if (tokens->tokens[1].type == PAREN_L) {
       char *name = eat(tokens).value;
+      for (int i = 0; name[i] != '\0'; i++) {
+        if (name[i] == '.')
+          name[i] = '_';
+      }
       expect(tokens, PAREN_L);
       NodeList *args = parse_func_args(tokens, env->items);
 

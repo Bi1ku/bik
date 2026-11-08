@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-char *keywords[] = {"func", "ret", "log", "str", "int", "deci", "if"};
+char *keywords[] = {"func", "ret", "log", "str", "int", "deci", "if", "class"};
 
 int shift(char *str) {
   if (str == NULL) {
