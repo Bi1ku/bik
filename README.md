@@ -17,9 +17,9 @@ The compiler is still under development, and MIPS generation is not yet complete
 * Arithmetic operations with compile-time constant folding, unary signs, and integer remainder (`%`)
 * String concatenation with automatic number conversion
 * `log()` statements
-* Integer functions with up to four parameters, calls, and return statements
+* Integer functions with up to four parameters, nested expression calls, and return values
 * Integer `if` conditions and recursive function calls
-* Classes with default fields, instances, and named methods
+* Classes with default fields, independent instances, single inheritance, and method overrides
 * Basic MIPS `.data` and `.text` generation
 
 ## Tech Stack
@@ -30,7 +30,8 @@ The compiler is still under development, and MIPS generation is not yet complete
 
 ## Installation
 
-Make sure a C compiler and CMake are installed, then clone and build the project:
+Make sure a C compiler, CMake 3.12+, and Python 3 are installed, then clone and
+build the project. SPIM is needed to run the generated assembly.
 
 ```bash
 git clone https://github.com/Bi1ku/bik.git
@@ -39,6 +40,35 @@ cd bik
 cmake -S . -B build-local
 cmake --build build-local
 ```
+
+## Demo
+
+The character demo includes a `Character → Warrior → Paladin` hierarchy and a
+`Mage` branch. It uses inherited defaults, overridden damage methods, calls
+through instances, and independent health values:
+
+```bash
+./build-local/execute tests/programs/inheritance.bik -o build-local/demo.asm
+spim -file build-local/demo.asm
+```
+
+```text
+paladin: ready for battle
+health: 180, armor: 10
+enemy after paladin strike: 63
+enemy after mage strike: 36
+independent health: 75 / 180
+mage mana: 80
+```
+
+There is also a recursive factorial, Fibonacci, and greatest-common-divisor demo:
+
+```bash
+./build-local/execute tests/programs/recursion.bik -o build-local/recursion.asm
+spim -file build-local/recursion.asm
+```
+
+It prints `5040 144 21`.
 
 ## Usage
 
@@ -71,7 +101,10 @@ countdown = func(int n) {
 };
 ```
 
-The current function-call generator supports up to four integer arguments.
+Calls can appear inside arithmetic, conditions, arguments, assignments, and
+`log()`. Arguments and return values are integers, with up to four arguments.
+Functions can call functions declared later, including mutual recursion.
+Falling off the end of a function returns zero.
 
 Classes can define fields with default values and named methods. Each call to
 the class name creates an instance with its own fields. Access fields with dot
@@ -91,12 +124,35 @@ log(first.scale);
 Math.add(2, 3);
 ```
 
-Instances currently use default field values, and methods are class-level rather
-than bound to an individual instance.
+Use `extends` to inherit from a previously declared class. A child can replace
+field defaults and methods; further descendants inherit those replacements:
+
+```text
+class ScaledMath extends Math {
+  scale = 3;
+  add = func(int left, int right) {
+    ret (left + right) * 3;
+  };
+};
+
+calculator = ScaledMath();
+log(calculator.scale);
+log(calculator.add(2, 3));
+```
+
+`instance.method()` selects the method from that instance's class. Methods still
+use explicit arguments: there is no implicit `self`, `super`, or constructor
+body yet. Integer assignments and field updates run in statement order. Strings
+and decimals retain compile-time initialization; function-local variable scopes
+and runtime updates to non-integer values are still unfinished. The original
+`tests/test1.bik` is an older syntax sample with unsupported non-integer calls;
+use the demos above for executable examples.
 
 ## Tests
 
-The regression suite uses Python 3 and runs through CTest:
+The regression suite checks inheritance, overrides, recursive algorithms, argument
+order, all six comparisons, deep expressions, large inputs, and invalid programs.
+It uses Python 3 and runs through CTest:
 
 ```bash
 ctest --test-dir build-local --output-on-failure

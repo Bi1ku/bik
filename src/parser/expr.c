@@ -2,6 +2,7 @@
 #include "../../include/parser/ast.h"
 #include "../../include/parser/env.h"
 #include "../../include/parser/utils.h"
+#include "../../include/parser/stmt.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -48,6 +49,11 @@ Node *parse_values(TokenList *tokens, char *mem, VarList *vars) {
     for (int i = 0; name[i] != '\0'; i++) {
       if (name[i] == '.')
         name[i] = '_';
+    }
+    if (peek(tokens).type == PAREN_L) {
+      eat(tokens);
+      NodeList *args = parse_func_args(tokens, vars);
+      return create_expr_node(create_call_expr(name, args));
     }
     return create_expr_node(create_identifier_expr(name));
   }

@@ -8,7 +8,8 @@
 - learn more about cmakelists
 - ENV items list to pointer [DONE]
 - NodeList to pointer [DONE]
-- instance methods and constructors
+- implicit self, super, and constructors
+- single inheritance and method overrides [DONE]
 - standard library
 - Objects & arrays -> ASM
 - Function scopes -> ASM
@@ -17,4 +18,4 @@
 - fix placeholder
 - integer remainder [DONE]
 
-- ARGS in FUNCTIONS
+- integer arguments and expression calls [DONE]

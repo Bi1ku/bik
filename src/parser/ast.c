@@ -195,3 +195,12 @@ Expr *create_string_expr(char *value, char *mem) {
   expr->str->mem = mem;
   return expr;
 }
+
+Expr *create_call_expr(char *name, NodeList *args) {
+  Expr *expr = malloc(sizeof(Expr));
+  expr->type = CALL;
+  expr->call = malloc(sizeof(FuncCall));
+  expr->call->name = name;
+  expr->call->args = args;
+  return expr;
+}

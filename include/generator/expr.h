@@ -1,5 +1,5 @@
-#ifndef EXPR_H
-#define EXPR_H
+#ifndef GENERATOR_EXPR_H
+#define GENERATOR_EXPR_H
 
 #include "../../include/parser/env.h"
 #include <stdbool.h>

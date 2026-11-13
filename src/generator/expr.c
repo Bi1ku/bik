@@ -1,5 +1,6 @@
 #include "../../include/generator/eval.h"
 #include "../../include/generator/generator.h"
+#include "../../include/generator/stmt.h"
 #include "../../include/parser/env.h"
 #include <stdbool.h>
 #include <stdio.h>
@@ -19,11 +20,6 @@ static int parameter_index(const char *name) {
 }
 
 void generate_int_expr(FILE *out, Expr *expr, Env *env, int depth) {
-  if (depth > 8) {
-    fprintf(stderr, "ERROR: Expression is too deeply nested for register allocation.\n");
-    exit(EXIT_FAILURE);
-  }
-
   switch (expr->type) {
   case INT:
     fprintf(out, "\tli $t%d, %d\n", depth, expr->integer);
@@ -32,7 +28,7 @@ void generate_int_expr(FILE *out, Expr *expr, Env *env, int depth) {
   case IDENTIFIER_EX: {
     int index = parameter_index(expr->identifier);
     if (index >= 0) {
-      fprintf(out, "\tmove $t%d, $a%d\n", depth, index);
+      fprintf(out, "\tlw $t%d, %d($fp)\n", depth, 8 + 4 * index);
       return;
     }
 
@@ -49,26 +45,32 @@ void generate_int_expr(FILE *out, Expr *expr, Env *env, int depth) {
     exit(EXIT_FAILURE);
   }
 
+  case CALL:
+    generate_call(out, expr->call, env);
+    fprintf(out, "\tmove $t%d, $v0\n", depth);
+    return;
+
   case BIN: {
-    generate_int_expr(out, expr->bin->left, env, depth);
-    generate_int_expr(out, expr->bin->right, env, depth + 1);
+    generate_int_expr(out, expr->bin->left, env, 0);
+    fprintf(out, "\taddiu $sp, $sp, -8\n\tsw $t0, 0($sp)\n");
+    generate_int_expr(out, expr->bin->right, env, 0);
+    fprintf(out, "\tmove $t1, $t0\n\tlw $t0, 0($sp)\n\taddiu $sp, $sp, 8\n");
     if (strcmp(expr->bin->op, "+") == 0)
-      fprintf(out, "\taddu $t%d, $t%d, $t%d\n", depth, depth, depth + 1);
+      fprintf(out, "\taddu $t0, $t0, $t1\n");
     else if (strcmp(expr->bin->op, "-") == 0)
-      fprintf(out, "\tsubu $t%d, $t%d, $t%d\n", depth, depth, depth + 1);
-    else if (strcmp(expr->bin->op, "*") == 0) {
-      fprintf(out, "\tmult $t%d, $t%d\n", depth, depth + 1);
-      fprintf(out, "\tmflo $t%d\n", depth);
-    } else if (strcmp(expr->bin->op, "/") == 0) {
-      fprintf(out, "\tdiv $t%d, $t%d\n", depth, depth + 1);
-      fprintf(out, "\tmflo $t%d\n", depth);
-    } else if (strcmp(expr->bin->op, "%") == 0) {
-      fprintf(out, "\tdiv $t%d, $t%d\n", depth, depth + 1);
-      fprintf(out, "\tmfhi $t%d\n", depth);
-    } else {
+      fprintf(out, "\tsubu $t0, $t0, $t1\n");
+    else if (strcmp(expr->bin->op, "*") == 0)
+      fprintf(out, "\tmult $t0, $t1\n\tmflo $t0\n");
+    else if (strcmp(expr->bin->op, "/") == 0)
+      fprintf(out, "\tdiv $t0, $t1\n\tmflo $t0\n");
+    else if (strcmp(expr->bin->op, "%") == 0)
+      fprintf(out, "\tdiv $t0, $t1\n\tmfhi $t0\n");
+    else {
       fprintf(stderr, "ERROR: Unsupported integer operator '%s'.\n", expr->bin->op);
       exit(EXIT_FAILURE);
     }
+    if (depth != 0)
+      fprintf(out, "\tmove $t%d, $t0\n", depth);
     return;
   }
 

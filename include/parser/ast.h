@@ -14,7 +14,7 @@ typedef enum {
   IF,
   CLASS_DECL
 } StmtType;
-typedef enum { INT, FLOAT, STRING, BIN, IDENTIFIER_EX, OBJECT } ExprType;
+typedef enum { INT, FLOAT, STRING, BIN, IDENTIFIER_EX, OBJECT, CALL } ExprType;
 
 typedef struct NodeList NodeList;
 typedef struct Expr Expr;
@@ -82,6 +82,7 @@ struct Expr {
     Float *floating;
     Str *str;
     ObjectValue *object;
+    FuncCall *call;
   };
 };
 
@@ -136,6 +137,7 @@ Stmt *create_log_stmt(Expr *expr);
 Stmt *create_if_stmt(Expr *left, char *op, Expr *right, NodeList *body);
 Stmt *create_class_decl_stmt(char *name, NodeList *fields, NodeList *methods);
 Expr *create_object_expr(ClassDecl *class_decl);
+Expr *create_call_expr(char *name, NodeList *args);
 Stmt *create_program();
 
 #endif

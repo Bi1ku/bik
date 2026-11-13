@@ -8,28 +8,32 @@
 NodeList *parse_func_params(TokenList *tokens) {
   NodeList *nodes = create_node_list(5);
 
-  while (peek(tokens).type != PAREN_R) {
-    if (peek(tokens).type == KEYWORD) {
-      char *type = eat(tokens).value;
-
+  if (peek(tokens).type != PAREN_R) {
+    while (1) {
+      char *type = expect(tokens, KEYWORD).value;
+      ExprType param_type;
       if (strcmp(type, "int") == 0)
-        add_node_to_node_list(
-            nodes, create_stmt_node(create_param_stmt(eat(tokens).value, INT)));
+        param_type = INT;
       else if (strcmp(type, "deci") == 0)
-        add_node_to_node_list(nodes, create_stmt_node(create_param_stmt(
-                                         eat(tokens).value, FLOAT)));
+        param_type = FLOAT;
       else if (strcmp(type, "str") == 0)
-        add_node_to_node_list(nodes, create_stmt_node(create_param_stmt(
-                                         eat(tokens).value, STRING)));
+        param_type = STRING;
       else {
-        printf("ERROR: Unknown type '%s' in function parameters.\n",
-               peek(tokens).value);
+        fprintf(stderr, "ERROR: Unknown parameter type '%s'.\n", type);
         exit(EXIT_FAILURE);
       }
+      char *name = expect(tokens, IDENTIFIER).value;
+      for (int i = 0; i < nodes->size; i++) {
+        if (strcmp(nodes->nodes[i].stmt->param->name, name) == 0) {
+          fprintf(stderr, "ERROR: Duplicate parameter '%s'.\n", name);
+          exit(EXIT_FAILURE);
+        }
+      }
+      add_node_to_node_list(nodes, create_stmt_node(create_param_stmt(name, param_type)));
+      if (peek(tokens).type != COMMA)
+        break;
+      eat(tokens);
     }
-
-    else
-      expect(tokens, COMMA);
   }
 
   expect(tokens, PAREN_R);
@@ -39,19 +43,13 @@ NodeList *parse_func_params(TokenList *tokens) {
 NodeList *parse_func_args(TokenList *tokens, VarList *vars) {
   NodeList *nodes = create_node_list(5);
 
-  while (peek(tokens).type != PAREN_R) {
-    if (peek(tokens).type == IDENTIFIER) {
+  if (peek(tokens).type != PAREN_R) {
+    while (1) {
       add_node_to_node_list(
-          nodes, create_expr_node(parse_additive(tokens, NULL, vars)->expr));
-    }
-
-    else if (peek(tokens).type == NUM || peek(tokens).type == STR)
-      add_node_to_node_list(
-          nodes,
-          create_expr_node(parse_additive(tokens, gen_id(), vars)->expr));
-
-    else {
-      expect(tokens, COMMA);
+          nodes, create_expr_node(parse_additive(tokens, gen_id(), vars)->expr));
+      if (peek(tokens).type != COMMA)
+        break;
+      eat(tokens);
     }
   }
 
@@ -86,6 +84,20 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
         exit(EXIT_FAILURE);
       }
       char *class_name = eat(tokens).value;
+      ClassDecl *parent = NULL;
+      if (peek(tokens).type == KEYWORD && strcmp(peek(tokens).value, "extends") == 0) {
+        eat(tokens);
+        char *parent_name = expect(tokens, IDENTIFIER).value;
+        parent = get_class(env, parent_name);
+        if (parent == NULL || strcmp(class_name, parent_name) == 0) {
+          fprintf(stderr, "ERROR: Invalid parent class '%s'.\n", parent_name);
+          exit(EXIT_FAILURE);
+        }
+      }
+      if (get_class(env, class_name) != NULL) {
+        fprintf(stderr, "ERROR: Duplicate class '%s'.\n", class_name);
+        exit(EXIT_FAILURE);
+      }
       expect(tokens, BLOCK_START);
 
       Env *class_env = create_env(env, env->items->capacity);
@@ -94,6 +106,23 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
 
       NodeList *fields = create_node_list(5);
       NodeList *methods = create_node_list(5);
+      if (parent != NULL) {
+        for (int i = 0; i < parent->fields->size; i++) {
+          Node *field = &parent->fields->nodes[i];
+          add_node_to_node_list(fields, field);
+          create_var(field->stmt->assign->symbol, field->stmt->assign->expr,
+                     class_env->items);
+        }
+        for (int i = 0; i < parent->methods->size; i++) {
+          FuncDecl *method = parent->methods->nodes[i].stmt->func_decl;
+          char *name = method->name + strlen(parent->name) + 1;
+          size_t size = strlen(class_name) + strlen(name) + 2;
+          char *qualified = malloc(size);
+          snprintf(qualified, size, "%s_%s", class_name, name);
+          add_node_to_node_list(methods, create_stmt_node(
+              create_func_decl_stmt(qualified, method->params, method->body)));
+        }
+      }
       while (peek(tokens).type != BLOCK_END && peek(tokens).type != END) {
         NodeList *members = create_node_list(5);
         parse_line(members, tokens, class_env);
@@ -114,19 +143,36 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
           if (member->stmt->type == ASSIGN) {
             Assign *field = member->stmt->assign;
             Expr *value = get_var(class_env->items, field->symbol);
-            if (value == NULL) {
+            int field_index = get_index_of_var(class_env->items, field->symbol);
+            if (value == NULL || class_env->items->items[field_index]->runtime) {
               printf("ERROR: Class field initializers must be constant values.\n");
               exit(EXIT_FAILURE);
             }
             field->expr = value;
-            add_node_to_node_list(fields, member);
+            int index = -1;
+            for (int j = 0; j < fields->size; j++) {
+              if (strcmp(fields->nodes[j].stmt->assign->symbol, field->symbol) == 0)
+                index = j;
+            }
+            if (index >= 0)
+              fields->nodes[index] = *member;
+            else
+              add_node_to_node_list(fields, member);
           } else if (member->stmt->type == FUNC_DECL) {
             char *method_name = member->stmt->func_decl->name;
             size_t size = strlen(class_name) + strlen(method_name) + 2;
             char *qualified = malloc(size);
             snprintf(qualified, size, "%s_%s", class_name, method_name);
             member->stmt->func_decl->name = qualified;
-            add_node_to_node_list(methods, member);
+            int index = -1;
+            for (int j = 0; j < methods->size; j++) {
+              if (strcmp(methods->nodes[j].stmt->func_decl->name, qualified) == 0)
+                index = j;
+            }
+            if (index >= 0)
+              methods->nodes[index] = *member;
+            else
+              add_node_to_node_list(methods, member);
           } else {
             printf("ERROR: Class members must be fields or named methods.\n");
             exit(EXIT_FAILURE);
@@ -135,6 +181,16 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
       }
       expect(tokens, BLOCK_END);
       Stmt *stmt = create_class_decl_stmt(class_name, fields, methods);
+      for (int i = 0; i < class_env->items->size; i++) {
+        Var *var = class_env->items->items[i];
+        char *mem = NULL;
+        if (var->value->type == STRING)
+          mem = var->value->str->mem;
+        else if (var->value->type == FLOAT)
+          mem = var->value->floating->mem;
+        if (mem != NULL && strcmp(mem, var->key) == 0)
+          add_to_env(env->items, var);
+      }
       add_class(env, stmt->class_decl);
       return create_stmt_node(stmt);
     }
@@ -227,26 +283,19 @@ Node *parse_stmt(NodeList *nodes, TokenList *tokens, Env *env) {
       return parse_additive(tokens, NULL, env->items);
     }
 
-    // FUNC CALL
     else if (tokens->tokens[1].type == PAREN_L) {
-      char *name = eat(tokens).value;
-      for (int i = 0; name[i] != '\0'; i++) {
-        if (name[i] == '.')
-          name[i] = '_';
-      }
+      ClassDecl *class_decl = get_class(env, peek(tokens).value);
+      if (class_decl == NULL)
+        return parse_additive(tokens, NULL, env->items);
+
+      eat(tokens);
       expect(tokens, PAREN_L);
       NodeList *args = parse_func_args(tokens, env->items);
-
-      ClassDecl *class_decl = get_class(env, name);
-      if (class_decl != NULL) {
-        if (args->size != 0) {
-          printf("ERROR: Class constructors do not take arguments yet.\n");
-          exit(EXIT_FAILURE);
-        }
-        return create_expr_node(create_object_expr(class_decl));
+      if (args->size != 0) {
+        fprintf(stderr, "ERROR: Class constructors do not take arguments yet.\n");
+        exit(EXIT_FAILURE);
       }
-
-      return create_stmt_node(create_func_call_stmt(name, args));
+      return create_expr_node(create_object_expr(class_decl));
     }
 
   default:

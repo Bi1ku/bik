@@ -7,6 +7,7 @@ typedef struct Env Env;
 typedef struct {
   char *key;
   Expr *value;
+  int runtime;
 } Var;
 
 typedef struct {
@@ -19,6 +20,7 @@ struct Env {
   Env *parent;
   VarList *items;
   NodeList *classes;
+  NodeList *functions;
 };
 
 Env *create_env(Env *parent, int init_size);

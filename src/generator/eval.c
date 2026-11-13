@@ -30,7 +30,7 @@ Expr *calculate(Expr *left, Expr *right, char op) {
     }
 
     else {
-      res->floating = malloc(sizeof(Float));
+      res->floating = calloc(1, sizeof(Float));
       res->type = FLOAT;
 
       if (left->type == INT && right->type == FLOAT)
@@ -50,7 +50,7 @@ Expr *calculate(Expr *left, Expr *right, char op) {
   }
 
   case '-':
-    res->floating = malloc(sizeof(Float));
+    res->floating = calloc(1, sizeof(Float));
     res->type = FLOAT;
 
     if (left->type == INT && right->type == FLOAT)
@@ -73,7 +73,7 @@ Expr *calculate(Expr *left, Expr *right, char op) {
     return res;
 
   case '*':
-    res->floating = malloc(sizeof(Float));
+    res->floating = calloc(1, sizeof(Float));
     res->type = FLOAT;
 
     if (left->type == INT && right->type == FLOAT)
@@ -114,7 +114,7 @@ Expr *calculate(Expr *left, Expr *right, char op) {
       fprintf(stderr, "ERROR: Division by zero.\n");
       exit(EXIT_FAILURE);
     }
-    res->floating = malloc(sizeof(Float));
+    res->floating = calloc(1, sizeof(Float));
     res->type = FLOAT;
 
     if (left->type == INT && right->type == FLOAT)

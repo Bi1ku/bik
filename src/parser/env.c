@@ -9,6 +9,7 @@ Env *create_env(Env *parent, int init_size) {
 
   env->items = malloc(sizeof(VarList));
   env->classes = create_node_list(5);
+  env->functions = create_node_list(5);
 
   env->items->items = malloc(sizeof(Var *) * init_size);
   env->items->capacity = init_size;
@@ -61,7 +62,24 @@ int get_index_of_var(VarList *items, char *key) {
   return -1;
 }
 
+static int is_runtime(Expr *expr, VarList *vars) {
+  if (expr->type == CALL)
+    return 1;
+  if (expr->type == IDENTIFIER_EX) {
+    int index = get_index_of_var(vars, expr->identifier);
+    return index >= 0 && vars->items[index]->runtime;
+  }
+  return expr->type == BIN &&
+         (is_runtime(expr->bin->left, vars) || is_runtime(expr->bin->right, vars));
+}
+
 Var *create_var(char *key, Expr *expr, VarList *vars) {
+  if (is_runtime(expr, vars)) {
+    Var *var = create_var(key, create_int_expr(0), vars);
+    var->runtime = 1;
+    return var;
+  }
+
   switch (expr->type) {
   case BIN: {
     Expr *res = eval(expr->bin, vars);
@@ -82,6 +100,7 @@ Var *create_var(char *key, Expr *expr, VarList *vars) {
     Var *var = malloc(sizeof(Var));
     var->key = key;
     var->value = expr;
+    var->runtime = 0;
     add_to_env(vars, var);
     return var;
   }

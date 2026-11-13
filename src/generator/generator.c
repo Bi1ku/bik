@@ -21,6 +21,7 @@ void generate_from_nodes(FILE *out, Env *env, NodeList *program) {
 }
 
 void generate(FILE *out, Env *env, NodeList *program) {
+  collect_funcs(env, program);
   fprintf(out, ".data\n");
   generate_vars(out, env);
 

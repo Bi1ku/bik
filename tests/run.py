@@ -167,6 +167,138 @@ log(second.value);
             with self.subTest(source=source):
                 self.reject(source, message)
 
+    def test_recursive_algorithms(self):
+        source = Path(__file__).with_name("programs") / "recursion.bik"
+        self.run_program(source.read_text(), "5040 144 21\n")
+
+    def test_inheritance_demo(self):
+        source = Path(__file__).with_name("programs") / "inheritance.bik"
+        self.run_program(source.read_text(),
+                         "paladin: ready for battle\n"
+                         "health: 180, armor: 10\n"
+                         "enemy after paladin strike: 63\n"
+                         "enemy after mage strike: 36\n"
+                         "independent health: 75 / 180\n"
+                         "mage mana: 80\n")
+
+    def test_nested_calls_and_argument_order(self):
+        self.run_program("""
+identity = func(int n) { ret n; };
+pack = func(int a, int b, int c, int d) {
+  ret a * 1000 + b * 100 + c * 10 + d;
+};
+rotate = func(int a, int b, int c, int d) {
+  log(d);
+  ret pack(b, a, identity(d), identity(c));
+};
+log(rotate(1, 2, 3, 4));
+log(pack(identity(1), identity(2), identity(3), identity(4)));
+""", "421431234")
+
+    def test_calls_in_conditions_and_assignments(self):
+        self.run_program("""
+twice = func(int n) { ret n * 2; };
+x = twice(3);
+y = 24 / x;
+if (twice(x) == twice(y + 2)) { log(x + y); };
+x = twice(y);
+log(x);
+""", "108")
+
+    def test_mutual_recursion(self):
+        self.run_program("""
+even = func(int n) {
+  if (n == 0) { ret 1; };
+  ret odd(n - 1);
+};
+odd = func(int n) {
+  if (n == 0) { ret 0; };
+  ret even(n - 1);
+};
+log(even(20));
+log(odd(20));
+log(odd(21));
+""", "101")
+
+    def test_deep_expression(self):
+        expression = "1"
+        for _ in range(40):
+            expression = f"1+({expression})"
+        self.run_program(f"log({expression});", "41")
+
+    def test_all_comparisons(self):
+        for op, true_pair, false_pair in [
+            ("==", (2, 2), (2, 3)), ("!=", (2, 3), (2, 2)),
+            ("<", (-1, 2), (2, 2)), (">", (3, 2), (2, 2)),
+            ("<=", (2, 2), (3, 2)), (">=", (2, 2), (1, 2)),
+        ]:
+            with self.subTest(op=op):
+                a, b = true_pair
+                c, d = false_pair
+                self.run_program(f"if({a}{op}{b}){{log(1);}};"
+                                 f"if({c}{op}{d}){{log(0);}};", "1")
+
+    def test_inherited_overrides_leave_parent_unchanged(self):
+        self.run_program("""
+class Base {
+  value = 3;
+  score = func(int n) { ret n + 1; };
+};
+class Child extends Base {
+  value = 8;
+  score = func(int n) { ret n * 2; };
+};
+class Leaf extends Child {};
+base = Base(); child = Child(); leaf = Leaf();
+log(base.value); log(child.value); log(leaf.value);
+log(base.score(3)); log(child.score(3)); log(leaf.score(3));
+log(Base.score(3)); log(Child.score(3));
+""", "38846646")
+
+    def test_inherited_decimal_defaults(self):
+        self.run_program("""
+class Base { ratio = 1.5 + 0.5; };
+class Child extends Base {};
+child = Child();
+log(child.ratio);
+""", "2.00000000")
+
+    def test_integer_updates_follow_statement_order(self):
+        self.run_program("""
+x = 1; log(x);
+x = x + 2; log(x);
+if (x > 9) { x = 99; };
+log(x);
+class Counter { count = 10; };
+c = Counter(); log(c.count);
+c.count = c.count - 3; log(c.count);
+c = Counter(); log(c.count);
+""", "13310710")
+
+    def test_call_and_inheritance_errors(self):
+        cases = [
+            ("log(missing(1));", "Unknown function"),
+            ("f=func(int n){ret n;};f();", "expects 1 arguments"),
+            ("f=func(){ret 1;};f(1,2,3,4,5);", "at most four arguments"),
+            ("f=func(int a,int b,int c,int d,int e){ret a;};", "four parameters"),
+            ("f=func(deci n){ret n;};", "parameters must be integers"),
+            ("f=func(int n){ret n;};f(1.5);", "Expected an integer"),
+            ("f=func(int n,int n){ret n;};", "Duplicate parameter"),
+            ("f=func(){ret 1;};f=func(){ret 2;};", "Duplicate function"),
+            ("ret 1;", "Return outside"),
+            ("log(unknown);", "Unknown variable"),
+            ("f=func(int n){ret n;};f(1,);", "Unexpected token"),
+            ("f=func(int n){ret n;};f(1 2);", "Expected token"),
+            ("class Child extends Missing {};", "Invalid parent"),
+            ("class Self extends Self {};", "Invalid parent"),
+            ("class A {};class A {};", "Duplicate class"),
+            ("class A {};a=A(1);", "constructors do not take arguments"),
+            ("f=func(){ret 2;};class A {value=f();};", "must be constant"),
+        ]
+        for source, message in cases:
+            with self.subTest(source=source):
+                self.reject(source, message)
+
 
 if __name__ == "__main__":
     unittest.main(argv=[__file__, *remaining])

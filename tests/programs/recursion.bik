@@ -1,0 +1,21 @@
+factorial = func(int n) {
+  if (n <= 1) { ret 1; };
+  ret n * factorial(n - 1);
+};
+
+fibonacci = func(int n) {
+  if (n < 2) { ret n; };
+  ret fibonacci(n - 1) + fibonacci(n - 2);
+};
+
+gcd = func(int a, int b) {
+  if (b == 0) { ret a; };
+  ret gcd(b, a % b);
+};
+
+log(factorial(7));
+log(" ");
+log(fibonacci(12));
+log(" ");
+log(gcd(1071, 462));
+log("\n");

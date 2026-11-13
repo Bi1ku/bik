@@ -1,0 +1,65 @@
+class Character {
+  name = "wanderer";
+  health = 100;
+  power = 12;
+  armor = 3;
+
+  damage = func(int power, int armor) {
+    ret power - armor;
+  };
+
+  banner = func() {
+    log("ready for battle");
+  };
+};
+
+class Warrior extends Character {
+  name = "warrior";
+  health = 180;
+  power = 20;
+
+  damage = func(int power, int armor) {
+    ret power * 2 - armor;
+  };
+};
+
+class Paladin extends Warrior {
+  name = "paladin";
+  armor = 10;
+};
+
+class Mage extends Character {
+  name = "mage";
+  mana = 80;
+  power = 30;
+};
+
+hero = Paladin();
+backup = Paladin();
+mage = Mage();
+enemy = Character();
+
+log(hero.name);
+log(": ");
+hero.banner();
+log("\nhealth: ");
+log(hero.health);
+log(", armor: ");
+log(hero.armor);
+
+enemy.health = enemy.health - hero.damage(hero.power, enemy.armor);
+log("\nenemy after paladin strike: ");
+log(enemy.health);
+
+enemy.health = enemy.health - mage.damage(mage.power, enemy.armor);
+log("\nenemy after mage strike: ");
+log(enemy.health);
+
+hero.health = 75;
+log("\nindependent health: ");
+log(hero.health);
+log(" / ");
+log(backup.health);
+log("\nmage mana: ");
+log(mage.mana);
+log("\n");
