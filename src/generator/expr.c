@@ -42,7 +42,7 @@ void generate_int_expr(FILE *out, Expr *expr, Env *env, int depth) {
       exit(EXIT_FAILURE);
     }
     if (value->type == INT) {
-      fprintf(out, "\tlw $t%d, %s\n", depth, expr->identifier);
+      fprintf(out, "\tlw $t%d, __bik_var_%s\n", depth, expr->identifier);
       return;
     }
     fprintf(stderr, "ERROR: Variable '%s' is not an integer.\n", expr->identifier);

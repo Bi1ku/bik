@@ -6,8 +6,8 @@
 - Generate basic ASM code [IN PROGRESS]
 - rename item -> var, var -> VarValue
 - learn more about cmakelists
-- ENV items list to pointer
-- NodeList to pointer
+- ENV items list to pointer [DONE]
+- NodeList to pointer [DONE]
 - instance methods and constructors
 - standard library
 - Objects & arrays -> ASM
@@ -15,6 +15,6 @@
 - Native functions -> ASM
 - env scopes
 - fix placeholder
-- moduluo?
+- integer remainder [DONE]
 
 - ARGS in FUNCTIONS

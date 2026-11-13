@@ -10,6 +10,19 @@ Node *parse_additive(TokenList *tokens, char *mem, VarList *vars);
 
 Node *parse_values(TokenList *tokens, char *mem, VarList *vars) {
   switch (peek(tokens).type) {
+  case BIN_OP:
+    if (strcmp(peek(tokens).value, "+") == 0) {
+      eat(tokens);
+      return parse_values(tokens, mem, vars);
+    }
+    if (strcmp(peek(tokens).value, "-") == 0) {
+      eat(tokens);
+      Expr *value = parse_values(tokens, mem, vars)->expr;
+      return create_expr_node(create_bin_expr(create_int_expr(0), value, "-"));
+    }
+    fprintf(stderr, "ERROR: Expected a value.\n");
+    exit(EXIT_FAILURE);
+
   case NUM: {
     char *value = eat(tokens).value;
 
@@ -46,7 +59,7 @@ Node *parse_values(TokenList *tokens, char *mem, VarList *vars) {
       eat(tokens);
     else {
       printf("Expected ')'");
-      exit(0);
+      exit(EXIT_FAILURE);
     }
     return sub_expr;
 

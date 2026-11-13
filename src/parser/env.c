@@ -10,8 +10,7 @@ Env *create_env(Env *parent, int init_size) {
   env->items = malloc(sizeof(VarList));
   env->classes = create_node_list(5);
 
-  // env->items->items = malloc(sizeof(Item) * init_size); // when changing to
-  // pointer
+  env->items->items = malloc(sizeof(Var *) * init_size);
   env->items->capacity = init_size;
   env->items->size = 0;
 
@@ -91,8 +90,7 @@ Var *create_var(char *key, Expr *expr, VarList *vars) {
 
 void resize_items(VarList *items) {
   items->capacity *= 2;
-  // items->items = realloc(items->items, items->capacity * sizeof(Item)); //
-  //  put back in when pointer
+  items->items = realloc(items->items, items->capacity * sizeof(Var *));
 }
 
 void add_to_env(VarList *var_list, Var *var) {

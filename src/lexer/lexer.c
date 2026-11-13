@@ -13,7 +13,7 @@ int shift(char *str) {
     exit(EXIT_FAILURE);
   }
 
-  for (int i = 1; i < strlen(str); i++) {
+  for (size_t i = 1; i < strlen(str); i++) {
     str[i - 1] = str[i];
   }
   str[strlen(str) - 1] = '\0';
@@ -22,7 +22,7 @@ int shift(char *str) {
 }
 
 int is_skippable(char c) {
-  if (c == ' ' || c == '\n' || c == '\t')
+  if (isspace((unsigned char)c))
     return EXIT_SUCCESS;
 
   else
@@ -30,7 +30,6 @@ int is_skippable(char c) {
 }
 
 TokenList *tokenize(char *path) {
-  // TODO: Read from file path
   TokenList *tokens = create_token_list(10);
 
   char *mutable = malloc(strlen(path) + 1);
@@ -55,6 +54,11 @@ TokenList *tokenize(char *path) {
 
     case '-':
       add_to_token_list(tokens, create_token(BIN_OP, "-"));
+      shift(mutable);
+      break;
+
+    case '%':
+      add_to_token_list(tokens, create_token(BIN_OP, "%"));
       shift(mutable);
       break;
 
@@ -91,7 +95,8 @@ TokenList *tokenize(char *path) {
         shift(mutable);
         shift(mutable);
       } else {
-        shift(mutable);
+        fprintf(stderr, "ERROR: Expected '=' after '!'.\n");
+        exit(EXIT_FAILURE);
       }
       break;
 
@@ -129,76 +134,59 @@ TokenList *tokenize(char *path) {
 
     // More than one char long tokens
     default: {
-      char buffer[100] = "";
+      char *buffer = calloc(strlen(mutable) + 1, 1);
       int i = 0;
 
-      // floats & ints
-      if (isdigit((unsigned char)mutable[0]) != 0) {
-        while (isdigit((unsigned char)mutable[0]) != 0 || mutable[0] == '.') {
-          buffer[i] = mutable[0];
-          i++;
-          shift(mutable);
-        }
-
-        add_to_token_list(tokens, create_token(NUM, buffer));
-      }
-
-      //  keywords
-      else if (is_skippable(mutable[0]) != 0) {
-        bool quotes = false;
-        bool is_str = false;
-        bool params = false;
-
-        while (quotes || (mutable[0] != ' ' && mutable[0] != ';')) {
-          if (mutable[0] == '"') {
-            quotes = !quotes;
-            is_str = true;
-          }
-
-          else if (!quotes && (mutable[0] == '(' || mutable[0] == ')' ||
-                               mutable[0] == ',' || mutable[0] == '='))
-            break;
-
-          else {
-            buffer[i] = mutable[0];
-            i++;
-          }
-
-          shift(mutable);
-        }
-
-        if (!params) {
-          if (quotes) {
-            printf("ERROR: Quotes are wrong");
+      if (isdigit((unsigned char)mutable[0])) {
+        int dots = 0;
+        while (isdigit((unsigned char)mutable[0]) || mutable[0] == '.') {
+          if (mutable[0] == '.' && ++dots > 1) {
+            fprintf(stderr, "ERROR: Invalid number.\n");
             exit(EXIT_FAILURE);
           }
-
-          if (is_str) {
-            add_to_token_list(tokens, create_token(STR, buffer));
+          buffer[i++] = mutable[0];
+          shift(mutable);
+        }
+        add_to_token_list(tokens, create_token(NUM, buffer));
+      } else if (mutable[0] == '"') {
+        shift(mutable);
+        while (mutable[0] != '"' && mutable[0] != '\0') {
+          buffer[i++] = mutable[0];
+          shift(mutable);
+        }
+        if (mutable[0] == '\0') {
+          fprintf(stderr, "ERROR: Unterminated string.\n");
+          exit(EXIT_FAILURE);
+        }
+        shift(mutable);
+        add_to_token_list(tokens, create_token(STR, buffer));
+      } else if (isalpha((unsigned char)mutable[0]) || mutable[0] == '_') {
+        while (isalnum((unsigned char)mutable[0]) || mutable[0] == '_' ||
+               mutable[0] == '.') {
+          buffer[i++] = mutable[0];
+          shift(mutable);
+        }
+        bool found = false;
+        for (size_t j = 0; j < sizeof(keywords) / sizeof(keywords[0]); j++) {
+          if (strcmp(keywords[j], buffer) == 0) {
+            found = true;
             break;
           }
-
-          bool found = false;
-          for (int i = 0; i < sizeof(keywords) / sizeof(keywords[0]); i++) {
-            if (strcmp(keywords[i], buffer) == 0) {
-              found = true;
-              break;
-            }
-          }
-
-          if (found)
-            add_to_token_list(tokens, create_token(KEYWORD, buffer));
-          else
-            add_to_token_list(tokens, create_token(IDENTIFIER, buffer));
         }
-      } else
+        add_to_token_list(tokens, create_token(found ? KEYWORD : IDENTIFIER, buffer));
+      } else if (is_skippable(mutable[0]) == EXIT_SUCCESS) {
         shift(mutable);
-
+      } else {
+        fprintf(stderr, "ERROR: Unexpected character '%c'.\n", mutable[0]);
+        exit(EXIT_FAILURE);
+      }
+      free(buffer);
       break;
     }
     }
   }
 
+  free(mutable);
   add_to_token_list(tokens, create_token(END, "END"));
   return tokens;
 }

@@ -12,7 +12,7 @@ typedef struct {
 typedef struct {
   int capacity;
   int size;
-  Var *items[100]; // switch to pointer later
+  Var **items;
 } VarList;
 
 struct Env {

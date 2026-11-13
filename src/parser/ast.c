@@ -7,15 +7,14 @@ NodeList *create_node_list(int init_size) {
   NodeList *nodes = malloc(sizeof(NodeList));
   nodes->size = 0;
   nodes->capacity = init_size;
-  // nodes->nodes = malloc(init_size * sizeof(Node));
+  nodes->nodes = malloc(init_size * sizeof(Node));
 
   return nodes;
 }
 
 void resize_node_list(NodeList *nodes) {
   nodes->capacity *= 2;
-  // nodes->nodes = realloc(nodes->nodes, nodes->capacity * sizeof(Node));
-  // simply to visualize in debug mode [CHANGE LATER] to pointer
+  nodes->nodes = realloc(nodes->nodes, nodes->capacity * sizeof(Node));
 }
 
 void add_node_to_node_list(NodeList *nodes, Node *node) {

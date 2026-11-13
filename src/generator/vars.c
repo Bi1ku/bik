@@ -10,15 +10,15 @@ void generate_vars(FILE *out, Env *env) {
     if (name != NULL) {
       switch (value->type) {
       case STRING:
-        fprintf(out, "\t%s: .asciiz \"%s\"\n", name, value->str->val);
+        fprintf(out, "\t__bik_var_%s: .asciiz \"%s\"\n", name, value->str->val);
         break;
 
       case INT:
-        fprintf(out, "\t%s: .word %d\n", name, value->integer);
+        fprintf(out, "\t__bik_var_%s: .word %d\n", name, value->integer);
         break;
 
       case FLOAT:
-        fprintf(out, "\t%s: .float %lf\n", name, value->floating->val);
+        fprintf(out, "\t__bik_var_%s: .float %lf\n", name, value->floating->val);
         break;
 
       case OBJECT:

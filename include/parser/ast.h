@@ -111,7 +111,7 @@ typedef struct {
 struct NodeList {
   int capacity;
   int size;
-  Node nodes[100]; // change to pointer later
+  Node *nodes;
 };
 
 NodeList *create_node_list(int init_size);

@@ -14,7 +14,7 @@ The compiler is still under development, and MIPS generation is not yet complete
 * AST-based parser with operator precedence and parenthesized expressions
 * Integer, decimal, and string values
 * Variable assignments and identifier lookup
-* Arithmetic operations with compile-time constant folding
+* Arithmetic operations with compile-time constant folding, unary signs, and integer remainder (`%`)
 * String concatenation with automatic number conversion
 * `log()` statements
 * Integer functions with up to four parameters, calls, and return statements
@@ -102,10 +102,11 @@ The regression suite uses Python 3 and runs through CTest:
 ctest --test-dir build-local --output-on-failure
 ```
 
-You can also run it directly:
+Install SPIM to execute the generated MIPS and compare its output. Without
+SPIM, runtime checks are skipped. Require it when running the full suite:
 
 ```bash
-python3 tests/run.py --compiler build-local/execute -v
+python3 tests/run.py --compiler build-local/execute --require-spim -v
 ```
 
 ## License

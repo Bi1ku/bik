@@ -10,34 +10,23 @@ Expr *calculate(Expr *left, Expr *right, char op) {
 
   switch (op) {
   case '+': {
-    char *buffer = malloc(100 * sizeof(char));
-
-    res->type = STRING;
-    res->str = malloc(sizeof(Str));
-
-    if (left->type == STRING) {
-      if (right->type == INT) {
-        sprintf(buffer, "%d", right->integer);
-        res->str->val = strdup(left->str->val);
-        strcat(res->str->val, buffer);
-      } else if (right->type == FLOAT) {
-        sprintf(buffer, "%f", right->floating->val);
-        res->str->val = strdup(left->str->val);
-        strcat(res->str->val, buffer);
-      } else {
-        res->str->val = strdup(left->str->val);
-        strcat(res->str->val, right->str->val);
-      }
-    }
-
-    else if (right->type == STRING) {
-      if (left->type == INT) {
-        sprintf(buffer, "%d", left->integer);
-        res->str->val = strcat(buffer, right->str->val);
-      } else if (left->type == FLOAT) {
-        sprintf(buffer, "%f", left->floating->val);
-        res->str->val = strcat(buffer, right->str->val);
-      }
+    if (left->type == STRING || right->type == STRING) {
+      char left_number[64], right_number[64];
+      if (left->type == INT)
+        snprintf(left_number, sizeof(left_number), "%d", left->integer);
+      else if (left->type == FLOAT)
+        snprintf(left_number, sizeof(left_number), "%f", left->floating->val);
+      if (right->type == INT)
+        snprintf(right_number, sizeof(right_number), "%d", right->integer);
+      else if (right->type == FLOAT)
+        snprintf(right_number, sizeof(right_number), "%f", right->floating->val);
+      char *a = left->type == STRING ? left->str->val : left_number;
+      char *b = right->type == STRING ? right->str->val : right_number;
+      char *value = malloc(strlen(a) + strlen(b) + 1);
+      strcpy(value, a);
+      strcat(value, b);
+      free(res);
+      return create_string_expr(value, NULL);
     }
 
     else {
@@ -106,7 +95,25 @@ Expr *calculate(Expr *left, Expr *right, char op) {
 
     return res;
 
+  case '%':
+    if (left->type != INT || right->type != INT) {
+      fprintf(stderr, "ERROR: Remainder requires integers.\n");
+      exit(EXIT_FAILURE);
+    }
+    if (right->integer == 0) {
+      fprintf(stderr, "ERROR: Division by zero.\n");
+      exit(EXIT_FAILURE);
+    }
+    res->type = INT;
+    res->integer = left->integer % right->integer;
+    return res;
+
   case '/':
+    if ((right->type == INT && right->integer == 0) ||
+        (right->type == FLOAT && right->floating->val == 0)) {
+      fprintf(stderr, "ERROR: Division by zero.\n");
+      exit(EXIT_FAILURE);
+    }
     res->floating = malloc(sizeof(Float));
     res->type = FLOAT;
 
@@ -137,8 +144,14 @@ Expr *calculate(Expr *left, Expr *right, char op) {
 
 Expr *get_val(Expr *expr, VarList *vars) {
   switch (expr->type) {
-  case IDENTIFIER_EX:
-    return get_var(vars, expr->identifier);
+  case IDENTIFIER_EX: {
+    Expr *value = get_var(vars, expr->identifier);
+    if (value == NULL) {
+      fprintf(stderr, "ERROR: Unknown variable '%s'.\n", expr->identifier);
+      exit(EXIT_FAILURE);
+    }
+    return value;
+  }
 
   case BIN:
     return eval(expr->bin, vars);
