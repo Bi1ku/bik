@@ -42,7 +42,7 @@ cmake --build build-local
 
 ## Usage
 
-The current entry point compiles `tests/test1.bik`. Edit that file to experiment with the language:
+Pass a source file to the compiler:
 
 ```text
 value = 7 - 8 / 2 * 5.5;
@@ -52,14 +52,13 @@ log(value);
 log(message);
 ```
 
-Run the compiler from the build directory:
-
 ```bash
-cd build-local
-./execute
+./build-local/execute program.bik -o program.asm
 ```
 
-The compiler prints the generated tokens and writes the resulting assembly to `build-local/output.asm`.
+Output defaults to `output.asm`. Add `--tokens` to print the token stream, or
+`--help` for usage. Running without arguments from the build directory keeps
+the original `../tests/test1.bik` entry point.
 
 Integer functions can call themselves and branch on a comparison:
 
@@ -95,7 +94,19 @@ Math.add(2, 3);
 Instances currently use default field values, and methods are class-level rather
 than bound to an individual instance.
 
-Passing a source file through the command line is not yet supported.
+## Tests
+
+The regression suite uses Python 3 and runs through CTest:
+
+```bash
+ctest --test-dir build-local --output-on-failure
+```
+
+You can also run it directly:
+
+```bash
+python3 tests/run.py --compiler build-local/execute -v
+```
 
 ## License
 
